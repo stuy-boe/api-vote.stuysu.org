@@ -1,0 +1,19 @@
+{
+  "name": "vote.stuysu.org",
+  "version": "1.0.0",
+  "description": "The latest version of the Stuyvesant High School Board of Elections Voting Site.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/stuy-boe/vote.stuysu.org.git"
+  },
+  "author": "",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/stuy-boe/vote.stuysu.org/issues"
+  },
+  "homepage": "https://github.com/stuy-boe/vote.stuysu.org#readme"
+}
