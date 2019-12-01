@@ -13,7 +13,7 @@ const db = require("./config/database"),
 		secret: process.env.SESSION_SECRET || "some_semi_permanent_not_so_secret_secret",
 		name: "session",
 		resave: true,
-		saveUninitialized: true,
+		saveUninitialized: false,
 		store: sequelizeStore,
 		cookie: {
 			path: '/',
@@ -36,8 +36,7 @@ app.use(bodyParser.json());
 app.use(morgan("dev"));
 
 app.route("/").get((req,res) => {
-	req.session.num_views = typeof req.session.num_views != 'undefined' ? req.session.num_views + 1 : 0;
-	res.send("Hello World! " + req.session.num_views);
+	res.send("Hello World!");
 });
 
 app.use(express.static(path.join(__dirname, 'client/build')));
