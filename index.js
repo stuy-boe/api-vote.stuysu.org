@@ -1,36 +1,30 @@
-const db = require("./config/database");
-const bodyParser = require("body-parser");
-const cookieParser = require('cookie-parser');
-const path = require("path");
-const express = require("express");
-const app = express();
-const http = require('http');
-const server = http.createServer(app);
-const morgan = require("morgan");
+const db = require("./config/database"),
+	bodyParser = require("body-parser"),
+	cookieParser = require('cookie-parser'),
+	path = require("path"),
+	express = require("express"),
+	app = express(),
+	http = require('http'),
+	server = http.createServer(app),
+	morgan = require("morgan"),
+	expressSession = require("express-session"),
+	sequelizeStore = new (require('connect-session-sequelize')(expressSession.Store))({db: db.sequelize}),
+	session = expressSession({
+		secret: process.env.SESSION_SECRET || "some_semi_permanent_not_so_secret_secret",
+		name: "session",
+		resave: true,
+		saveUninitialized: true,
+		store: sequelizeStore,
+		cookie: {
+			path: '/',
+			httpOnly: true,
+			secure: false,
+			maxAge: Number(process.env.SESSION_MAX_AGE) || (15 * 86400 * 1000)
+		},
+		rolling: true
+	});
 
-const expressSession = require("express-session");
-
-const MySQLStore = require('express-mysql-session')(expressSession);
-const sessionStore = new MySQLStore({
-	clearExpired: true,
-	checkExpirationInterval: 900000,
-	expiration: Number(process.env.SESSION_MAX_AGE) || (15 * 86400 * 1000),
-	createDatabaseTable: true,
-}, db.pool);
-
-const session = expressSession({
-	secret: process.env.SESSION_SECRET ||"some_semi_permanent_not_so_secret_secret",
-	name: "session",
-	resave: true,
-	saveUninitialized: true,
-	store: sessionStore,
-	cookie: {
-		path: '/',
-		httpOnly: true,
-		secure: false,
-		maxAge: Number(process.env.SESSION_MAX_AGE) || (15 * 86400 * 1000)
-	}
-});
+sequelizeStore.sync();
 
 app.use(session);
 
@@ -42,7 +36,8 @@ app.use(bodyParser.json());
 app.use(morgan("dev"));
 
 app.route("/").get((req,res) => {
-	res.send("Hello World!")
+	req.session.num_views = typeof req.session.num_views != 'undefined' ? req.session.num_views + 1 : 0;
+	res.send("Hello World! " + req.session.num_views);
 });
 
 app.use(express.static(path.join(__dirname, 'client/build')));

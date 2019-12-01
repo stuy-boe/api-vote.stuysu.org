@@ -1,37 +1,26 @@
-const mysql = require("mysql");
+const Database = require('sequelize');
 
-const pool = mysql.createPool({
-	connectionLimit: process.env.MYSQL_CONN_LIMIT || 5,
-	host: (process.env.MYSQL_HOST || "localhost"),
-	user: (process.env.MYSQL_USER || "user"),
-	password: (process.env.MYSQL_PASS || "password"),
-	database: (process.env.MYSQL_DB || "database")
-});
-
-pool.getConnection(function(err, connection) {
-	if (err) throw err;
-	connection.release();
-});
-
-const promiseQuery = (query, params) => {
-	let conn;
-	return new Promise((resolve, reject) => {
-		pool.getConnection((err, c) => {
-			conn = c;
-			if(err){
-				reject(err);
-				conn.release();
-			} else {
-				conn.query(query, params, (err, rows) => {
-					err ? reject(err) : resolve(rows);
-					conn.release();
-				});
-			}
-		})
+const sequelize = new Database(
+	(process.env.SEQUELIZE_DB || "database"),
+	(process.env.SEQUELIZE_USER || "user"),
+	(process.env.SEQUELIZE_PASS || "password"),
+	{
+		host: (process.env.SEQUELIZE_HOST || "localhost"),
+		dialect: 'mysql',
+		pool: {
+			max: (Number(process.env.SEQUELIZE_CONN_LIMIT) || 5),
+			min: 0,
+			acquire: 30000,
+			idle: 10000
+		},
+		logging: (Boolean(process.env.SEQUELIZE_LOGGING) && process.env.SEQUELIZE_LOGGING !== "false" ? console.log : false)
 	});
-};
+
+const Students = require("./../models/students")(sequelize, Database);
+
+sequelize.sync();
 
 module.exports = {
-	promiseQuery,
-	pool: pool
+	sequelize,
+	Students
 };
