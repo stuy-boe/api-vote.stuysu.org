@@ -1,4 +1,6 @@
-const db = require("./config/database"),
+const
+	db = require("./config/database"),
+	app_port = process.env.PORT || 3001,
 	bodyParser = require("body-parser"),
 	cookieParser = require('cookie-parser'),
 	path = require("path"),
@@ -27,8 +29,6 @@ const db = require("./config/database"),
 sequelizeStore.sync();
 
 app.use(session);
-
-const app_port = process.env.PORT || 3001;
 
 app.use(cookieParser("some_semi_permanent_secret"));
 app.use(bodyParser.urlencoded({ extended: false }));
