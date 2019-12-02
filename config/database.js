@@ -1,4 +1,6 @@
 const Database = require('sequelize');
+const dotenv = require("dotenv");
+dotenv.config();
 
 const sequelize = new Database(
 	(process.env.SEQUELIZE_DB || "database"),

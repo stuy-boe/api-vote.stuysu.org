@@ -1,4 +1,5 @@
 const
+	dotenv = require('dotenv');
 	db = require("./config/database"),
 	app_port = process.env.PORT || 3001,
 	bodyParser = require("body-parser"),
@@ -26,6 +27,8 @@ const
 		rolling: true
 	});
 
+dotenv.config();
+
 sequelizeStore.sync();
 
 app.use(session);
@@ -33,7 +36,11 @@ app.use(session);
 app.use(cookieParser("some_semi_permanent_secret"));
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
-app.use(morgan(process.env.MORGAN_FORMAT || "dev"));
+app.use(morgan(
+	process.env.MORGAN_FORMAT || "dev",
+	{
+		skip: (req, res) => { return res.statusCode < 400 /* Ignore successful requests */ }
+	}));
 
 const handleDefaultNavigation = (req, res) => {
 	// TODO add in server side rendering
