@@ -19,10 +19,16 @@ const sequelize = new Database(
 	});
 
 const Students = require("./../models/students")(sequelize, Database);
+const Elections = require("./../models/elections")(sequelize, Database);
+const Candidates = require("./../models/candidates")(sequelize, Database);
+const Votes = require("./../models/votes")(sequelize, Database);
 
-sequelize.sync();
+sequelize.sync({force: true});
 
 module.exports = {
 	sequelize,
-	Students
+	Students,
+	Elections,
+	Candidates,
+	Votes
 };

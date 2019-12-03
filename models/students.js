@@ -1,10 +1,10 @@
-module.exports = (sequelize, type) => {
+module.exports = (sequelize, Database) => {
 	return sequelize.define('students', {
 		email: {
-			type: type.STRING,
+			type: Database.STRING,
 			primaryKey: true
 		},
-		grade: type.INTEGER,
+		grade: Database.STRING,
 	}, {
 		timestamps: false
 	})

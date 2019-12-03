@@ -11,7 +11,8 @@ const
 	server = http.createServer(app),
 	morgan = require("morgan"),
 	expressSession = require("express-session"),
-	sequelizeStore = new (require('connect-session-sequelize')(expressSession.Store))({db: db.sequelize}),
+	SequelizeConnectSession = require('connect-session-sequelize')(expressSession.Store),
+	sequelizeStore = new SequelizeConnectSession({db: db.sequelize}),
 	session = expressSession({
 		secret: process.env.SESSION_SECRET || "some_semi_permanent_not_so_secret_secret",
 		name: "session",

@@ -1,0 +1,18 @@
+steps:
+  - name: node:10.15.1
+    entrypoint: npm
+    args: ["install"]
+  - name: node:10.15.1
+    entrypoint: npm
+    args: ["run", "create-env"]
+    env:
+      - 'MORGAN_FORMAT=${_MORGAN_FORMAT}'
+      - 'SEQUELIZE_CONN_LIMIT=${_SEQUELIZE_CONN_LIMIT}'
+      - 'SEQUELIZE_DB=${_SEQUELIZE_DB}'
+      - 'SEQUELIZE_HOST=${_SEQUELIZE_HOST}'
+      - 'SEQUELIZE_LOGGING=${_SEQUELIZE_LOGGING}'
+      - 'SEQUELIZE_PASS=${_SEQUELIZE_PASS}'
+      - 'SEQUELIZE_USER=${_SEQUELIZE_USER}'
+  - name: "gcr.io/cloud-builders/gcloud"
+    args: ["app", "deploy"]
+timeout: "1600s"
