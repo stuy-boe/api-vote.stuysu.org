@@ -37,11 +37,14 @@ app.use(session);
 app.use(cookieParser("some_semi_permanent_secret"));
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
-app.use(morgan(
+app.use(
+	morgan(
 	process.env.MORGAN_FORMAT || "dev",
 	{
-		skip: (req, res) => { return res.statusCode < 400 /* Ignore successful requests */ }
-	}));
+		skip: (req, res) =>  res.statusCode < 400
+	}
+	)
+);
 
 const handleDefaultNavigation = (req, res) => {
 	// TODO add in server side rendering
