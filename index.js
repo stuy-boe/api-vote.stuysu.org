@@ -39,10 +39,10 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.use(
 	morgan(
-	process.env.MORGAN_FORMAT || "dev",
-	{
-		skip: (req, res) =>  res.statusCode < 400
-	}
+		process.env.MORGAN_FORMAT || "dev",
+		{
+			skip: (req, res) =>  res.statusCode < 400
+		}
 	)
 );
 
