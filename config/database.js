@@ -23,7 +23,7 @@ const Elections = require("./../models/elections")(sequelize, Database);
 const Candidates = require("./../models/candidates")(sequelize, Database);
 const Votes = require("./../models/votes")(sequelize, Database);
 
-sequelize.sync({force: true});
+sequelize.sync();
 
 module.exports = {
 	sequelize,
