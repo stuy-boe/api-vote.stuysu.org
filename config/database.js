@@ -15,6 +15,10 @@ const sequelize = new Database(
 			acquire: 30000,
 			idle: 10000
 		},
+		define: {
+			charset: 'utf8',
+			collate: 'utf8_general_ci'
+		},
 		logging: (Boolean(process.env.SEQUELIZE_LOGGING) && process.env.SEQUELIZE_LOGGING !== "false" ? console.log : false)
 	});
 
@@ -23,7 +27,10 @@ const Elections = require("./../models/elections")(sequelize, Database);
 const Candidates = require("./../models/candidates")(sequelize, Database);
 const Votes = require("./../models/votes")(sequelize, Database);
 
-sequelize.sync();
+Votes.belongsTo(Elections);
+Candidates.belongsTo(Elections);
+
+sequelize.sync({force: true});
 
 module.exports = {
 	sequelize,

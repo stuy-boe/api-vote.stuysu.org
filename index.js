@@ -1,5 +1,7 @@
 const
-	dotenv = require('dotenv');
+	fs = require("fs"),
+	meta = require("./config/meta"),
+	dotenv = require('dotenv'),
 	db = require("./config/database"),
 	app_port = process.env.PORT || 3001,
 	bodyParser = require("body-parser"),
@@ -46,13 +48,14 @@ app.use(
 	)
 );
 
+const index_file = fs.readFileSync("./client/build/index.html").toString();
+
 const handleDefaultNavigation = (req, res) => {
-	// TODO add in server side rendering
-	res.sendFile(path.join(__dirname, 'client/build/index.html'));
+	res.send(meta.fillPlaceholders(index_file, req.path));
 };
 
 // Catch the index page before it is handled statically
-// Otherwise server side rendering doesn't happen
+// Otherwise server side rendering doesn't happen(
 app.route("/").get(handleDefaultNavigation);
 
 app.use(express.static(path.join(__dirname, 'client/build')));
