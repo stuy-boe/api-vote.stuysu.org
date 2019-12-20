@@ -40,6 +40,9 @@ SEQUELIZE_DB=
 # Optional - Whether or not to log database queries to the console
 SEQUELIZE_LOGGING=false
 
+# Required - Used by express session to sign sessions
+# All processes of app must have the same secret
+SESSION_SECRET=
 ```
 There are many ways you can go about setting environment variables and you can do so in any way you'd like. You just need to make sure you define all of the required environment variables.
 
