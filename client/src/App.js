@@ -5,7 +5,7 @@ import {Content} from "./comps/Content";
 import {AppBar} from "./comps/menu/AppBar";
 import {NavDrawer} from "./comps/menu/NavDrawer";
 import {BrowserRouter} from "react-router-dom";
-import AppProvider from "./comps/AppContext";
+import AppProvider from "./comps/AppProvider";
 
 import {SnackbarQueue} from "@rmwc/snackbar";
 import {MessageQueue} from "./comps/MessageQueue";

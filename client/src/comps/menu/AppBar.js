@@ -14,6 +14,8 @@ export const AppBar = (props) => {
 				navigationIcon
 				onNav={props.toggleDrawer}
 				className={["AppBar"]}
+				fixed
+				style={{zIndex: 99}}
 			/>
 			<TopAppBarFixedAdjust/>
 		</div>

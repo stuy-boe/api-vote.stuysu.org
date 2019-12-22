@@ -10,17 +10,23 @@ class AppProvider extends React.Component {
 		super(props);
 		this.state = {
 			initialized: false,
-			path: []
+			path: splitUrl(window.location.pathname),
+			signed_in: true,
+			user: {name: "Frist Lsat", email: "user@email.com"}
 		};
 	}
 
 	componentDidMount() {
-		this.props.history.listen(location => {
+		this.unlistenPath = this.props.history.listen(location => {
 			this.setState(state => {
 				state.path = splitUrl(location.pathname);
 				return state;
 			});
 		});
+	}
+
+	componentWillUnmount() {
+		this.unlistenPath();
 	}
 
 	render(){
