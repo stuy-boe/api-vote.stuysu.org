@@ -10,7 +10,7 @@ export const AppBar = (props) => {
 	return (
 		<div>
 			<SimpleTopAppBar
-				title={`Board of Elections`}
+				title={<a style={{fontFamily: `'Sumana', serif`}}>Board of Elections</a>}
 				navigationIcon
 				onNav={props.toggleDrawer}
 				className={["AppBar"]}

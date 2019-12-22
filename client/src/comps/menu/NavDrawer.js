@@ -81,6 +81,14 @@ export const NavDrawer = (props) => {
 									graphic="where_to_vote"
 								/>
 							</Link>
+
+							<Link to={getModifiedPath(2, "results")} >
+								<SimpleListItem
+									activated={pathMatches(2, "results")}
+									text="Results"
+									graphic="ballot"
+								/>
+							</Link>
 						</CollapsibleList>
 
 						<Link to={"/contact"} >
@@ -103,7 +111,7 @@ export const NavDrawer = (props) => {
 				</DrawerContent>
 			</Drawer>
 
-			<DrawerAppContent style={{ minHeight: 'calc(100vh - 65px)', padding: '1rem' }}>
+			<DrawerAppContent style={{ padding: '1rem' }}>
 				{props.children}
 			</DrawerAppContent>
 		</div>

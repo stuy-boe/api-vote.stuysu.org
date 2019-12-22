@@ -30,7 +30,9 @@ const Votes = require("./../models/votes")(sequelize, Database);
 Votes.belongsTo(Elections);
 Candidates.belongsTo(Elections);
 
-sequelize.sync({force: true});
+sequelize.sync(
+	// {force: true}
+	);
 
 module.exports = {
 	sequelize,

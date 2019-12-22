@@ -1,9 +1,15 @@
 module.exports = (sequelize, Database) => {
 	return sequelize.define('elections', {
 		id: {
-			type: Database.STRING(8),
+			type: Database.INTEGER,
 			primaryKey: true,
-			unique: true
+			unique: true,
+			autoIncrement: true
+		},
+		public_url: {
+			type: Database.STRING(32),
+			unique: true,
+			allowNull: false
 		},
 		name: {
 			type: Database.STRING,

@@ -5,6 +5,8 @@ steps:
   - name: node:10.15.1
     entrypoint: npm
     args: ["run", "heroku-postbuild"]
+    env:
+      - 'REACT_APP_GOOGLE_CLIENT_ID=${_REACT_APP_GOOGLE_CLIENT_ID}'
   - name: node:10.15.1
     entrypoint: npm
     args: ["run", "create-env"]

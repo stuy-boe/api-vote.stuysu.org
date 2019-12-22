@@ -11,9 +11,10 @@ import {SnackbarQueue} from "@rmwc/snackbar";
 import {MessageQueue} from "./comps/MessageQueue";
 import '@material/snackbar/dist/mdc.snackbar.css';
 import '@material/button/dist/mdc.button.css';
+import {Obfuscator} from "./comps/Obfuscator";
 
 function App() {
-	const [drawerOpen, setDrawerOpen] = React.useState(true);
+	const [drawerOpen, setDrawerOpen] = React.useState(window.innerWidth > 600);
 
 	const toggleDrawer = () => setDrawerOpen(! drawerOpen);
 
@@ -23,6 +24,7 @@ function App() {
 				<AppProvider>
 					<AppBar toggleDrawer={toggleDrawer}/>
 					<NavDrawer drawerOpen={drawerOpen}>
+						<Obfuscator open={drawerOpen && window.innerWidth < 600}/>
 						<Content/>
 					</NavDrawer>
 				</AppProvider>

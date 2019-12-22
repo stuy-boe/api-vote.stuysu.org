@@ -11,6 +11,7 @@ class AppProvider extends React.Component {
 		this.state = {
 			initialized: false,
 			path: splitUrl(window.location.pathname),
+			previousPath: [],
 			signed_in: true,
 			user: {name: "Frist Lsat", email: "user@email.com"}
 		};
@@ -19,6 +20,7 @@ class AppProvider extends React.Component {
 	componentDidMount() {
 		this.unlistenPath = this.props.history.listen(location => {
 			this.setState(state => {
+				state.previousPath = [...state.path];
 				state.path = splitUrl(location.pathname);
 				return state;
 			});
