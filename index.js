@@ -54,11 +54,16 @@ const handleDefaultNavigation = (req, res) => {
 	res.send(meta.fillPlaceholders(index_file, req.path));
 };
 
+app.get("/api/state", (req, res) => {res.json({signed_in: false})});
+
 // Catch the index page before it is handled statically
 // Otherwise server side rendering doesn't happen(
 app.route("/").get(handleDefaultNavigation);
 
 app.use(express.static(path.join(__dirname, 'client/build')));
+
+// API ROUTES
+app.use(require("./routes/api"));
 
 // Fallback to react for non-static files
 app.route("*").get(handleDefaultNavigation);

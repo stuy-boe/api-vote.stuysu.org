@@ -19,6 +19,7 @@ steps:
       - 'SEQUELIZE_PASS=${_SEQUELIZE_PASS}'
       - 'SEQUELIZE_USER=${_SEQUELIZE_USER}'
       - 'SESSION_SECRET=${_SESSION_SECRET}'
+      - 'REACT_APP_GOOGLE_CLIENT_ID=${_REACT_APP_GOOGLE_CLIENT_ID}'
   - name: "gcr.io/cloud-builders/gcloud"
     args: ["app", "deploy"]
 timeout: "1600s"
