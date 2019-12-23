@@ -6,8 +6,8 @@ module.exports = (req, res) => {
 	return res.json({
 		signed_in: true,
 		user: {
-			email: req.session.user.email,
-			name: req.session.user.name
+			email: req.session.email,
+			name: req.session.name
 		},
 		admin: {
 			is_admin: false,

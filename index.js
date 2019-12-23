@@ -3,6 +3,7 @@ const
 	meta = require("./config/meta"),
 	dotenv = require('dotenv'),
 	db = require("./config/database"),
+	sessionValidator = require("./config/sessionValidator"),
 	app_port = process.env.PORT || 3001,
 	bodyParser = require("body-parser"),
 	cookieParser = require('cookie-parser'),
@@ -39,6 +40,8 @@ app.use(session);
 app.use(cookieParser("some_semi_permanent_secret"));
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
+app.use(sessionValidator);
+
 app.use(
 	morgan(
 		process.env.MORGAN_FORMAT || "dev",
@@ -54,16 +57,17 @@ const handleDefaultNavigation = (req, res) => {
 	res.send(meta.fillPlaceholders(index_file, req.path));
 };
 
-app.get("/api/state", (req, res) => {res.json({signed_in: false})});
-
 // Catch the index page before it is handled statically
-// Otherwise server side rendering doesn't happen(
+// Otherwise server side rendering doesn't happen
 app.route("/").get(handleDefaultNavigation);
 
 app.use(express.static(path.join(__dirname, 'client/build')));
 
 // API ROUTES
 app.use(require("./routes/api"));
+
+// AUTH ROUTES
+app.use(require("./routes/auth"));
 
 // Fallback to react for non-static files
 app.route("*").get(handleDefaultNavigation);

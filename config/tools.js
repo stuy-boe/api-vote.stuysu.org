@@ -1,3 +1,5 @@
+const crypto = require("crypto");
+
 module.exports = {
 	/**
 	 * Generates a random string of a certain length from a given character set

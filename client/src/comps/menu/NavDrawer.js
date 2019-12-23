@@ -9,6 +9,7 @@ import '@material/list/dist/mdc.list.css';
 import '@rmwc/list/collapsible-list.css';
 import {AppContext} from "../AppProvider";
 import {Link} from "react-router-dom";
+import {MessageQueue} from "../MessageQueue";
 
 export const NavDrawer = (props) => {
 	const context = React.useContext(AppContext);
@@ -23,6 +24,21 @@ export const NavDrawer = (props) => {
 		return "/" + new_path.join("/");
 	};
 
+	const attemptLogout = () => {
+		fetch("/auth/logout")
+			.then(res => res.json())
+			.then(data => {
+				if(data.success)
+					context.updateState();
+			})
+			.catch(() => {
+				MessageQueue.notify({
+					body: "Could not sign out. Check your network connection.",
+					actions: [{"icon": "close"}]
+				});
+			});
+	};
+
 	return (
 		<div style={{ }}>
 			<Drawer dismissible open={props.drawerOpen} className={["NavDrawer"]} style={{position: "fixed"}}>
@@ -35,7 +51,16 @@ export const NavDrawer = (props) => {
 				<DrawerContent className={["DrawerContent"]}>
 
 					<List>
-						{/*TODO ADD SIGNOUT and ADMIN and CAMPAIGNING ITEMS*/}
+						{/*TODO ADD ADMIN and CAMPAIGNING ITEMS*/}
+
+						{
+							context.signed_in &&
+							<SimpleListItem
+								graphic="power_settings_new"
+								text="Sign Out"
+								onClick={attemptLogout}
+							/>
+						}
 
 						<Link to={"/"}>
 							<SimpleListItem
@@ -56,7 +81,7 @@ export const NavDrawer = (props) => {
 									/>
 								</Link>
 							}
-							open={typeof context.path[1] !== "undefined"}
+							open={typeof context.path[1] !== "undefined" && pathMatches(0, "elections")}
 						>
 							<Link to={getModifiedPath(2, "")} >
 								<SimpleListItem
