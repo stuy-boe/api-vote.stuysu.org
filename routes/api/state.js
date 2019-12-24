@@ -10,12 +10,12 @@ module.exports = (req, res) => {
 			name: req.session.name
 		},
 		admin: {
-			is_admin: false,
-			admin_privileges: []
+			is_admin: true,
+			admin_privileges: "*"
 		},
 		campaign: {
-			is_manager: false,
-			manager_for: []
+			is_manager: true,
+			manager_for: ["1"]
 		}
 	});
 };

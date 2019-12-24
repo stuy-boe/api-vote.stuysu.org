@@ -1,25 +1,23 @@
 import React from "react";
-
-import {Drawer, DrawerHeader, DrawerTitle, DrawerSubtitle, DrawerContent} from "@rmwc/drawer";
+import {Drawer, DrawerAppContent, DrawerContent, DrawerHeader, DrawerSubtitle, DrawerTitle} from "@rmwc/drawer";
 import '@material/drawer/dist/mdc.drawer.css';
-import {DrawerAppContent} from "@rmwc/drawer";
 
-import {List, CollapsibleList, SimpleListItem} from "@rmwc/list";
+import {CollapsibleList, List, SimpleListItem} from "@rmwc/list";
 import '@material/list/dist/mdc.list.css';
 import '@rmwc/list/collapsible-list.css';
 import {AppContext} from "../AppProvider";
-import {Link} from "react-router-dom";
+import {useLocation, useRouteMatch} from "react-router-dom";
 import {MessageQueue} from "../MessageQueue";
+import {splitPath} from "../../tools/splitPath";
+import {MenuItem} from "./MenuItem";
 
 export const NavDrawer = (props) => {
 	const context = React.useContext(AppContext);
 
-	const pathMatches = (index, value, path = context.path) => {
-		return path[index] === value;
-	};
+	const location = useLocation();
 
 	const getModifiedPath = (index, val) => {
-		let new_path = [...context.path];
+		let new_path = splitPath(location.pathname);
 		new_path[index] = val;
 		return "/" + new_path.join("/");
 	};
@@ -39,6 +37,8 @@ export const NavDrawer = (props) => {
 			});
 	};
 
+	let electionIsSelected = useRouteMatch("/elections/:id");
+
 	return (
 		<div style={{ }}>
 			<Drawer dismissible open={props.drawerOpen} className={["NavDrawer"]} style={{position: "fixed"}}>
@@ -51,8 +51,6 @@ export const NavDrawer = (props) => {
 				<DrawerContent className={["DrawerContent"]}>
 
 					<List onClick={() => window.innerWidth < 600 && props.toggleDrawer()}>
-						{/*TODO ADD ADMIN and CAMPAIGNING ITEMS*/}
-
 						{
 							context.signed_in &&
 							<SimpleListItem
@@ -62,75 +60,96 @@ export const NavDrawer = (props) => {
 							/>
 						}
 
-						<Link to={"/"}>
-							<SimpleListItem
-								activated={typeof context.path[0] === "undefined"}
-								graphic="home"
-								text="Your Feed"
+						{
+							context.signed_in &&
+							context.admin.is_admin &&
+							<MenuItem
+								to={"/admin"}
+								text={"Admin"}
+								icon={"build"}
+								activeRoute={"/admin"}
 							/>
-						</Link>
+						}
+
+						{
+							context.signed_in &&
+							context.campaign.is_manager &&
+							<MenuItem
+								to={"/campaign"}
+								text={"Campaign"}
+								icon={"assignment_ind"}
+								activeRoute={"/campaign"}
+							/>
+						}
+
+
+						<MenuItem
+							to={"/"}
+							text={"Your Feed"}
+							icon={"home"}
+							activeRoute={"/"}
+							exactRoute
+						/>
 
 						<CollapsibleList
 							handle={
-								<Link to={"/elections"}>
-									<SimpleListItem
-										text="Elections"
-										graphic="how_to_vote"
-										metaIcon="chevron_right"
-										activated={pathMatches(0, "elections") && typeof context.path[1] === "undefined"}
-									/>
-								</Link>
+								<MenuItem
+									to={"/elections"}
+									text={"Elections"}
+									icon={"how_to_vote"}
+									activeRoute={"/elections"}
+									metaIcon={"chevron_right"}
+									exactRoute
+								/>
 							}
-							open={typeof context.path[1] !== "undefined" && pathMatches(0, "elections")}
+							open={electionIsSelected}
 						>
-							<Link to={getModifiedPath(2, "")} >
-								<SimpleListItem
-									activated={typeof context.path[2] === "undefined"}
-									text="Overview"
-									graphic="dashboard"
-								/>
-							</Link>
 
-							<Link to={getModifiedPath(2, "candidates")} >
-								<SimpleListItem
-									activated={pathMatches(2, "candidates")}
-									text="Candidates"
-									graphic="people"
-								/>
-							</Link>
+							<MenuItem
+								to={getModifiedPath(2, "")}
+								text={"Overview"}
+								icon={"dashboard"}
+								activeRoute={"/elections/:id"}
+								exactRoute
+							/>
 
-							<Link to={getModifiedPath(2, "vote")} >
-								<SimpleListItem
-									activated={pathMatches(2, "vote")}
-									text="Vote"
-									graphic="where_to_vote"
-								/>
-							</Link>
 
-							<Link to={getModifiedPath(2, "results")} >
-								<SimpleListItem
-									activated={pathMatches(2, "results")}
-									text="Results"
-									graphic="ballot"
-								/>
-							</Link>
+							<MenuItem
+								to={getModifiedPath(2, "candidates")}
+								text={"Candidates"}
+								icon={"people"}
+								activeRoute={"/elections/:id/candidates"}
+							/>
+
+							<MenuItem
+								to={getModifiedPath(2, "vote")}
+								text={"Vote"}
+								icon={"where_to_vote"}
+								activeRoute={"/elections/:id/vote"}
+							/>
+
+							<MenuItem
+								to={getModifiedPath(2, "results")}
+								text={"Results"}
+								icon={"ballot"}
+								activeRoute={"/elections/:id/results"}
+								fillParams
+							/>
 						</CollapsibleList>
 
-						<Link to={"/contact"} >
-							<SimpleListItem
-								activated={pathMatches(0, "contact")}
-								text="Contact Us"
-								graphic="chat_bubble"
-							/>
-						</Link>
+						<MenuItem
+							to={"/contact"}
+							text={"Contact Us"}
+							icon={"chat_bubble"}
+							activeRoute={"/contact"}
+						/>
 
-						<Link to={"/help"} >
-							<SimpleListItem
-								activated={pathMatches(0, "help")}
-								text="Help"
-								graphic="help"
-							/>
-						</Link>
+						<MenuItem
+							to={"/help"}
+							text={"Help"}
+							icon={"help"}
+							activeRoute={"/help"}
+						/>
 
 					</List>
 				</DrawerContent>
@@ -142,3 +161,4 @@ export const NavDrawer = (props) => {
 		</div>
 	);
 };
+

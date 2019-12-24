@@ -1,6 +1,4 @@
 import React from "react";
-import { withRouter } from 'react-router-dom';
-import { splitUrl } from "../tools/splitUrl";
 
 import {Button} from "@rmwc/button";
 import '@material/button/dist/mdc.button.css';
@@ -11,7 +9,7 @@ import '@rmwc/circular-progress/circular-progress.css';
 
 export const AppContext = React.createContext({initialized: false});
 
-class AppProvider extends React.Component {
+export class AppProvider extends React.Component {
 
 	constructor(props) {
 		super(props);
@@ -19,10 +17,10 @@ class AppProvider extends React.Component {
 		this.updateState = this.updateState.bind(this);
 		this.state = {
 			initialized: false,
-			path: splitUrl(window.location.pathname),
-			previousPath: [],
 			signed_in: false,
 			user: {},
+			admin: {},
+			campaign: {},
 			updateState: this.updateState,
 			error: false
 		};
@@ -43,14 +41,6 @@ class AppProvider extends React.Component {
 	}
 
 	componentDidMount() {
-		this.unlistenPath = this.props.history.listen(location => {
-			this.setState(state => {
-				state.previousPath = [...state.path];
-				state.path = splitUrl(location.pathname);
-				return state;
-			});
-		});
-
 		this.updateState();
 	}
 
@@ -95,7 +85,5 @@ class AppProvider extends React.Component {
 	}
 
 }
-
-export default withRouter(AppProvider);
 
 

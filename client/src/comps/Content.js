@@ -5,6 +5,7 @@ import {AppContext} from "./AppProvider";
 export const Content = (props) => {
 	const context = React.useContext(AppContext);
 
+
 	return (
 		<div>
 			{
