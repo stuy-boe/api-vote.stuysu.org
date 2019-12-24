@@ -50,7 +50,7 @@ export const NavDrawer = (props) => {
 
 				<DrawerContent className={["DrawerContent"]}>
 
-					<List>
+					<List onClick={() => window.innerWidth < 600 && props.toggleDrawer()}>
 						{/*TODO ADD ADMIN and CAMPAIGNING ITEMS*/}
 
 						{

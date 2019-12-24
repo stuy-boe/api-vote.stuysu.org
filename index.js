@@ -40,7 +40,6 @@ app.use(session);
 app.use(cookieParser("some_semi_permanent_secret"));
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
-app.use(sessionValidator);
 
 app.use(
 	morgan(
@@ -62,6 +61,9 @@ const handleDefaultNavigation = (req, res) => {
 app.route("/").get(handleDefaultNavigation);
 
 app.use(express.static(path.join(__dirname, 'client/build')));
+
+// Leave the session validation here so that it isn't unnecessarily triggered by static files
+app.use(sessionValidator);
 
 // API ROUTES
 app.use(require("./routes/api"));

@@ -23,8 +23,8 @@ function App() {
 			<BrowserRouter>
 				<AppProvider>
 					<AppBar toggleDrawer={toggleDrawer}/>
-					<NavDrawer drawerOpen={drawerOpen}>
-						<Obfuscator open={drawerOpen && window.innerWidth < 600}/>
+					<NavDrawer drawerOpen={drawerOpen} toggleDrawer={toggleDrawer}>
+						<Obfuscator open={drawerOpen && window.innerWidth < 600} toggleDrawer={toggleDrawer}/>
 						<Content/>
 					</NavDrawer>
 				</AppProvider>
