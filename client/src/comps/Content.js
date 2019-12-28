@@ -1,6 +1,7 @@
 import React from "react";
 import {AuthButton} from "./AuthButton";
 import {AppContext} from "./AppProvider";
+import {Switch, Route} from "react-router-dom";
 
 export const Content = (props) => {
 	const context = React.useContext(AppContext);
@@ -8,6 +9,10 @@ export const Content = (props) => {
 
 	return (
 		<div>
+			<Switch>
+				<Route path="/" component={Hello} exact/>
+			</Switch>
+
 			{
 				! context.signed_in &&
 				<AuthButton/>
@@ -15,3 +20,7 @@ export const Content = (props) => {
 		</div>
 	)
 };
+
+function Hello() {
+	return <h1>Hello World!</h1>;
+}

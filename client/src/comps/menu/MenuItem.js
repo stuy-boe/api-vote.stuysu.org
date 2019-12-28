@@ -17,4 +17,4 @@ export const MenuItem = (props) => {
 			/>
 		</Link>
 	)
-}
+};

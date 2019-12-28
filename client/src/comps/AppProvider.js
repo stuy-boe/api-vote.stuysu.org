@@ -44,10 +44,6 @@ export class AppProvider extends React.Component {
 		this.updateState();
 	}
 
-	componentWillUnmount() {
-		this.unlistenPath();
-	}
-
 	render(){
 
 		if(this.state.error)
@@ -56,10 +52,7 @@ export class AppProvider extends React.Component {
 					{/*	Error screen with a refresh button */}
 					<h3 style={{textAlign: "center"}}>There was an error loading the app</h3>
 
-					<div style={{
-						display: "flex",
-						justifyContent: "center"
-					}}>
+					<div className={["flex-center"]}>
 						<Button outlined onClick={this.updateState}>Retry</Button>
 					</div>
 				</div>
@@ -67,11 +60,12 @@ export class AppProvider extends React.Component {
 
 		if(! this.state.initialized)
 			return (
-				<div style={{
-					display: "flex",
-					justifyContent: "center",
-					paddingTop: "calc(50vh - 72px)"
-				}}>
+				<div
+					className={["flex-center"]}
+					style={{
+						paddingTop: "calc(50vh - 72px)"
+					}}
+				>
 					{/*	Loading Screen */}
 					<CircularProgress size={72} />
 				</div>

@@ -28,6 +28,7 @@ export const NavDrawer = (props) => {
 			.then(data => {
 				if(data.success)
 					context.updateState();
+				else throw new Error();
 			})
 			.catch(() => {
 				MessageQueue.notify({
