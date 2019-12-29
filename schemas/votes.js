@@ -9,10 +9,6 @@ module.exports = (sequelize, Database) => {
 			type: Database.STRING,
 			allowNull: false
 		},
-		data: {
-			type: Database.TEXT,
-			allowNull: false
-		},
 		grade: {
 			type: Database.STRING,
 			allowNull: false

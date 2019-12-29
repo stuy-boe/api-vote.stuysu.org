@@ -22,11 +22,13 @@ const sequelize = new Database(
 		logging: (Boolean(process.env.SEQUELIZE_LOGGING) && process.env.SEQUELIZE_LOGGING !== "false" ? console.log : false)
 	});
 
-const Students = require("./../models/students")(sequelize, Database);
-const Elections = require("./../models/elections")(sequelize, Database);
-const Candidates = require("./../models/candidates")(sequelize, Database);
-const Votes = require("./../models/votes")(sequelize, Database);
+const Students = require("./../schemas/students")(sequelize, Database);
+const Elections = require("./../schemas/elections")(sequelize, Database);
+const Candidates = require("./../schemas/candidates")(sequelize, Database);
+const Votes = require("./../schemas/votes")(sequelize, Database);
+const Vote_Data = require("./../schemas/vote_data")(sequelize, Database);
 
+Vote_Data.belongsTo(Votes);
 Votes.belongsTo(Elections);
 Candidates.belongsTo(Elections);
 

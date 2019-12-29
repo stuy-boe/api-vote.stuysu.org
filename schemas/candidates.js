@@ -9,6 +9,10 @@ module.exports = (sequelize, Database) => {
 			type: Database.STRING,
 			allowNull: false
 		},
+		public_url: {
+			type: Database.STRING,
+			allowNull: false
+		},
 		active: {
 			type: Database.BOOLEAN,
 			allowNull: false,
