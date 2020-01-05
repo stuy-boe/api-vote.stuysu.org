@@ -14,9 +14,14 @@ import '@material/button/dist/mdc.button.css';
 import {Obfuscator} from "./comps/Obfuscator";
 
 function App() {
-	const [drawerOpen, setDrawerOpen] = React.useState(window.innerWidth > 600);
+	const [drawerOpen, setDrawerOpen] = React.useState(window.innerWidth > 800);
 
 	const toggleDrawer = () => setDrawerOpen(! drawerOpen);
+
+	window.onresize = () => {
+		if(window.innerWidth !== window.outerWidth && drawerOpen !== (window.innerWidth > 800))
+			setDrawerOpen(window.innerWidth > 800);
+	};
 
 	return (
 		<div className="App">
@@ -24,7 +29,7 @@ function App() {
 				<AppProvider>
 					<AppBar toggleDrawer={toggleDrawer}/>
 					<NavDrawer drawerOpen={drawerOpen} toggleDrawer={toggleDrawer}>
-						<Obfuscator open={drawerOpen && window.innerWidth < 600} toggleDrawer={toggleDrawer}/>
+						<Obfuscator open={drawerOpen && window.innerWidth < 800} toggleDrawer={toggleDrawer}/>
 						<Content/>
 					</NavDrawer>
 				</AppProvider>

@@ -27,10 +27,16 @@ module.exports = (sequelize, Database) => {
 			type: Database.DATE,
 			allowNull: false
 		},
-		active: {
+		visible: {
 			type: Database.BOOLEAN,
 			allowNull: false,
 			defaultValue: true
+		},
+		picture: Database.STRING,
+		public_results: {
+			type: Database.BOOLEAN,
+			allowNull: false,
+			defaultValue: false
 		},
 		completed: {
 			type: Database.BOOLEAN,

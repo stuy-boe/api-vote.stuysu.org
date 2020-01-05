@@ -1,5 +1,6 @@
 const router = require("express").Router();
 
-router.get("/api/state", require("./api/state"));
+router.get(...require("./api/state"));
+router.get(...require("./api/elections/all"));
 
 module.exports = router;

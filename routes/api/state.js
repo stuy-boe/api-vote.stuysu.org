@@ -1,4 +1,4 @@
-module.exports = (req, res) => {
+module.exports = ["/api/state", (req, res) => {
 	if( ! req.session.signed_in )
 		return res.json({signed_in: false});
 
@@ -18,4 +18,4 @@ module.exports = (req, res) => {
 			manager_for: ["1"]
 		}
 	});
-};
+}];
