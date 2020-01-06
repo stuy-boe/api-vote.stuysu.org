@@ -4,7 +4,7 @@ steps:
     args: ["install"]
   - name: node:10.15.1
     entrypoint: npm
-    args: ["run", "heroku-postbuild"]
+    args: ["run", "build"]
     env:
       - 'REACT_APP_GOOGLE_CLIENT_ID=${_REACT_APP_GOOGLE_CLIENT_ID}'
   - name: node:10.15.1
@@ -13,6 +13,10 @@ steps:
     env:
       - 'MORGAN_FORMAT=${_MORGAN_FORMAT}'
       - 'SEQUELIZE_CONN_LIMIT=${_SEQUELIZE_CONN_LIMIT}'
+      - 'SEQUELIZE_DIALECT=${_SEQUELIZE_DIALECT}'
+      - 'SEQUELIZE_STORAGE=${_SEQUELIZE_STORAGE}'
+      - 'SEQUELIZE_SSL=${_SEQUELIZE_SSL}'
+      - 'SEQUELIZE_PORT=${_SEQUELIZE_PORT}'
       - 'SEQUELIZE_DB=${_SEQUELIZE_DB}'
       - 'SEQUELIZE_HOST=${_SEQUELIZE_HOST}'
       - 'SEQUELIZE_LOGGING=${_SEQUELIZE_LOGGING}'

@@ -50,8 +50,6 @@ router.post("/auth/login", (req, res) => {
 			req.session.name = payload.name;
 			req.session.cookie.expires = new Date(new Date().getTime() + maxAge);
 			req.session.encryptedID = tools.encryptString(payload.sub, encryptKey, encryptIv);
-			req.session.sessionTest = tools.encryptString(tools.getDecryptionTestString(), encryptKey, encryptIv);
-
 			res.json({success: true});
 		})
 		.then((known_error = null) => {

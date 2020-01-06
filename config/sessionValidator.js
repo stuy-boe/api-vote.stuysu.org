@@ -1,16 +1,13 @@
-const tools = require("./tools");
-
 const sessionValidator = (req, res, next) => {
-	try {
-		if(req.session.signed_in) {
-			if (!req.signedCookies.decryptKey || !req.signedCookies.decryptIv)
-				throw new Error("Decryption cookies missing");
+	if(req.session.signed_in) {
+		if (!req.signedCookies.decryptKey || !req.signedCookies.decryptIv){
+			req.session.signed_in = false;
+			req.session.cookie.expires = new Date(1);
+		} else {
 
-			let decrypt_test = tools.decryptHex(req.session.sessionTest, req.signedCookies.decryptKey, req.signedCookies.decryptIv);
-			if (decrypt_test !== tools.getDecryptionTestString())
-				throw new Error("Decryption test failed");
+			// The session is valid and we can reset the maxAge
 
-			// If we reach this point, that means the session was a success and we can reset the maxAge
+			// Voting Station cookies are not rolling, do not reset expiration
 			let isVotingStation = Boolean(req.cookies.isVotingStation);
 			if(! isVotingStation){
 				let options = {
@@ -21,13 +18,8 @@ const sessionValidator = (req, res, next) => {
 				res.cookie('decryptIv', req.signedCookies.decryptIv, options);
 				res.cookie('decryptKey', req.signedCookies.decryptKey, options);
 			}
-
 		}
-	} catch(e) {
-		req.session.signed_in = false;
-		req.session.cookie.expires = new Date(1);
 	}
-
 	next();
 };
 

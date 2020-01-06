@@ -9,7 +9,7 @@ react_process.stdout.on('data', (data) => {
 });
 
 chokidar.watch('.', {
-	ignored: ['node_modules/*', '.git/*', "client/*", ".idea/*"]
+	ignored: ['node_modules/*', '.git/*', "client/*", ".idea/*", "*.db", "*.db-journal"]
 }).on("change", (filename, stat) => {
 	index_process.kill();
 	console.log("\n");
@@ -20,19 +20,15 @@ chokidar.watch('.', {
 
 process.stdin.resume();
 
-function exitHandler(options, exitCode) {
+const exitHandler = () => {
 	react_process.kill();
 	index_process.kill();
-	if (options.cleanup) console.log('clean');
-	if (exitCode || exitCode === 0) console.log(exitCode);
-	if (options.exit) process.exit();
-}
+	process.exit();
+};
 
-process.on('exit', exitHandler.bind(null,{cleanup:true}));
-
-process.on('SIGINT', exitHandler.bind(null, {exit:true}));
-
-process.on('SIGUSR1', exitHandler.bind(null, {exit:true}));
-process.on('SIGUSR2', exitHandler.bind(null, {exit:true}));
-
-process.on('uncaughtException', exitHandler.bind(null, {exit:true}));
+// Cleanup child processes when program exits;
+process.on('exit', exitHandler);
+process.on('SIGINT', exitHandler);
+process.on('SIGUSR1', exitHandler);
+process.on('SIGUSR2', exitHandler);
+process.on('uncaughtException', exitHandler);

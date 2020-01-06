@@ -46,11 +46,4 @@ module.exports = {
 		return path.split("/").filter(item => Boolean(item));
 	},
 
-	/**
-	 * Returns a constant string that will be used for validating decryption key and iv in sessions
-	 * @return {String}
-	 */
-	getDecryptionTestString: () => {
-		return process.env.DECRYPTION_TEST_STRING || "banana";
-	}
 };
