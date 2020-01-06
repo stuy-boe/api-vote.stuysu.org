@@ -143,7 +143,7 @@ This site uses OAuth with Google and for that to work, you first need to obtain 
     * Or "http://localhost:3000" (The default port for react is 3000 but this can be changed) if you're just testing locally.
 7. Now you should have your Client ID and you should store it as an environmental variable.
 
-If you ever need to edit the Authorized Javascript Origin for your project, you may do so by going here [here](https://console.developers.google.com/apis/credentials) and clicking on the credential that says `OAuth client` (Make sure to select the right project!)
+If you ever need to edit the Authorized Javascript Origin for your project, you may do so by going [here](https://console.developers.google.com/apis/credentials) and clicking on the credential that says `OAuth client` (Make sure to select the right project!)
 
 ## Deployment
 The app is ready for instant deployment with Heroku or Google App engine with minimal setup. Make sure you first obtain the proper credentials for services used by the app.

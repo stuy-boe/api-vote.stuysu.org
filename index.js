@@ -44,9 +44,7 @@ app.use(bodyParser.json());
 app.use(
 	morgan(
 		process.env.MORGAN_FORMAT || "dev",
-		{
-			skip: (req, res) =>  res.statusCode < 400
-		}
+		{skip: (req, res) =>  res.statusCode < 400}
 	)
 );
 
