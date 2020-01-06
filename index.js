@@ -17,7 +17,7 @@ const
 	SequelizeConnectSession = require('connect-session-sequelize')(expressSession.Store),
 	sequelizeStore = new SequelizeConnectSession({db: db.sequelize}),
 	session = expressSession({
-		secret: process.env.SESSION_SECRET || "some_semi_permanent_not_so_secret_secret",
+		secret: process.env.SESSION_SECRET || "some_semi_permanent_secret",
 		name: "session",
 		resave: true,
 		saveUninitialized: false,
@@ -37,7 +37,7 @@ sequelizeStore.sync();
 
 app.use(session);
 
-app.use(cookieParser("some_semi_permanent_secret"));
+app.use(cookieParser(process.env.SESSION_SECRET || "some_semi_permanent_secret"));
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
