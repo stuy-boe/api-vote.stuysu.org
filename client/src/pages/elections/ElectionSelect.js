@@ -13,12 +13,15 @@ export class ElectionSelect extends React.Component {
 			completed: []
 		};
 
+		this.setStateFromCache = this.setStateFromCache.bind(this);
+		this.setStateFromFetch = this.setStateFromFetch.bind(this);
 	}
 
-	componentDidMount() {
+	setStateFromCache(){
 		// The API call is cached to SessionStorage for 1 hour or until the browser session restarts
 		let ss = window.sessionStorage;
 		let elections_cache = ss.getItem("elections");
+
 		if(elections_cache){
 			// Verify the cache was updated within the last 15 min
 			let last_updated = new Date(ss.getItem("elections_updated"));
@@ -27,11 +30,14 @@ export class ElectionSelect extends React.Component {
 				try {
 					let elections = JSON.parse(elections_cache);
 					this.setState(elections);
-					return;
+					return true;
 				} catch(e) {}
 			}
 		}
+		return false;
+	}
 
+	setStateFromFetch(){
 		fetch("/api/elections/all")
 			.then(res => res.json())
 			.then(data => {
@@ -44,7 +50,12 @@ export class ElectionSelect extends React.Component {
 					body: "Could not fetch elections. Check your network connection.",
 					actions: [{"icon": "close"}]
 				});
-			})
+			});
+	}
+
+	componentDidMount() {
+		if(! this.setStateFromCache())
+			this.setStateFromFetch();
 	}
 
 	render() {
