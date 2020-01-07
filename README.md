@@ -123,7 +123,10 @@ The steps for deploying with the Heroku-CLI are also available [here](https://de
 
 ## Getting a Database
 This app requires a database to function, but due to the schema being defined with sequelize, you have 4 different options to choose from. 
-You may obtain a managed database from a provider such as Digital Ocean or AWS, or you may want to set up your own database. 
+
+By default the app will use SQLite and so if the dialect is not changed and no SQLite path is provided, the app will just use/create the database file at the root of the project with the name `app.db`. If you are just testing locally, you don't need to worry about setting the database information and the app will create the database file on its own if necessary. 
+
+It is recommended you use a hosted database solution for production however. You may obtain a managed database from a provider such as Digital Ocean or AWS, or you may want to set up your own database. 
 
 Here are some helpful links for learning how to set up a database.
 

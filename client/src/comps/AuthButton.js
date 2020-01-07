@@ -25,7 +25,7 @@ export const AuthButton = (props) => {
 						actions: [{"icon": "close"}]
 					});
 				else
-					context.updateState();
+					context.updateState() && window.sessionStorage.clear();
 			})
 	};
 
