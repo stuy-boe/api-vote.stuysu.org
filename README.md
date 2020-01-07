@@ -24,13 +24,19 @@ The contents of the `.env` file should be as below with actual values filled in 
 #### Example .env FILE
 ```dotenv
 # Optional - Number of active connections to the database
-SEQUELIZE_CONN_LIMIT=5
+SEQUELIZE_CONN_LIMIT=2
 
 # Required
 # The type of database being used
 # Can be either mysql|postgres|sqlite|mariadb
 # Defaults to mysql
-SEQUELIZE_DIALECT=mysql
+SEQUELIZE_DIALECT=sqlite
+
+# Required if dialect IS SQLite
+# Path to database file
+# If path is not provided, ./app.db will be used
+# Database file will be created if it doesn't exist
+SEQUELIZE_STORAGE=./app.db
 
 # Required if dialect IS NOT SQLite
 # The host used to connect to the database
@@ -47,10 +53,6 @@ SEQUELIZE_PASS=
 # Required if dialect IS NOT SQLite
 # The name of the database to use
 SEQUELIZE_DB=
-
-# Required if dialect IS SQLite
-# Path to database file
-SEQUELIZE_STORAGE=
 
 # Optional - Whether to use ssl for database connections.
 # Default is true, can be: true|false 

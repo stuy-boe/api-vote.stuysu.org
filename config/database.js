@@ -4,7 +4,7 @@ dotenv.config();
 
 let sequelize_options = {
 	host: (process.env.SEQUELIZE_HOST || "localhost"),
-	dialect: process.env.SEQUELIZE_DIALECT || 'mysql',
+	dialect: (process.env.SEQUELIZE_DIALECT || "sqlite"),
 	pool: {
 		max: (Number(process.env.SEQUELIZE_CONN_LIMIT) || 5),
 		min: 0,
@@ -23,8 +23,8 @@ let sequelize_options = {
 if(process.env.SEQUELIZE_PORT)
 	sequelize_options.port = Number(process.env.SEQUELIZE_PORT);
 
-if(process.env.SEQUELIZE_DIALECT === "sqlite" && process.env.SEQUELIZE_STORAGE)
-	sequelize_options.storage = process.env.SEQUELIZE_STORAGE;
+if(! process.env.SEQUELIZE_DIALECT || process.env.SEQUELIZE_DIALECT === "sqlite")
+	sequelize_options.storage = process.env.SEQUELIZE_STORAGE || "./app.db";
 
 if(process.env.SEQUELIZE_SSL === "false"){
 	sequelize_options.ssl = false;
