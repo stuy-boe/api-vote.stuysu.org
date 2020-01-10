@@ -51,6 +51,10 @@ app.use(
 const index_file = fs.readFileSync("./client/build/index.html").toString();
 
 const handleDefaultNavigation = (req, res) => {
+	// Cache requests for 5 days
+	// cache_age represents the number of seconds to cache the page
+	let cache_age = 60 * 60 * 24 * 5;
+	res.set('Cache-Control', `public, max-age=${cache_age}`); // one year
 	res.send(meta.fillPlaceholders(index_file, req.path));
 };
 

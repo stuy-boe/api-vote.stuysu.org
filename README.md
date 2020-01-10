@@ -29,7 +29,7 @@ SEQUELIZE_CONN_LIMIT=2
 # Required
 # The type of database being used
 # Can be either mysql|postgres|sqlite|mariadb
-# Defaults to mysql
+# Defaults to sqlite for easier local development
 SEQUELIZE_DIALECT=sqlite
 
 # Required if dialect IS SQLite
