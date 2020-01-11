@@ -6,14 +6,13 @@ let addOrUpdateStudents = (email, grade) => new Promise(resolve => {
 		.findOne({ where: {email} })
 		.then(res => {
 			// update existing students
-			if(res){
-				if(String(res.grade) !== String(grade)) {
-					res.update({email, grade});
-					return resolve(1);
-				}
-
-				return resolve(0);
+			if(res && String(res.grade) !== String(grade)) {
+				res.update({email, grade});
+				return resolve(1);
 			}
+
+			if(res)
+				return resolve(0);
 
 			Students.create({email, grade});
 			return resolve(1);
@@ -35,23 +34,15 @@ module.exports = ["/api/talos/updateStudents", async (req, res) => {
 
 	let updatePromises = [];
 
-	for(let x = 0; x < all_students.length ; x++){
-		try {
-			let student = all_students[x];
-			let promise = addOrUpdateStudents(student.user.email, student.grade);
-			updatePromises.push(promise);
-		} catch(er) {
-			console.log(er);
-		}
-	}
+	all_students.forEach(student => {
 
-	Promise.all(updatePromises).then(values => {
-		let rows_affected = values.reduce((a, b) => {
-			if(typeof b === "number")
-				return a + b;
-			return a;
-		});
-		res.json({success: true, rows_affected});
-	})
-		.catch(() => res.json({success: false}));
+		let promise = addOrUpdateStudents(student.user.email, String(student.grade));
+		updatePromises.push(promise);
+
+	});
+
+
+	let values = await Promise.all(updatePromises);
+	let rows_affected = values.reduce((a, b) => a + b);
+	res.json({success: true, rows_affected});
 }];
