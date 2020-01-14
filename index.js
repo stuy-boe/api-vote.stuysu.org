@@ -67,11 +67,8 @@ app.use(express.static(path.join(__dirname, 'client/build')));
 // Leave the session validation here so that it isn't unnecessarily triggered by static files
 app.use(sessionValidator);
 
-// API ROUTES
-app.use(require("./routes/api"));
-
-// AUTH ROUTES
-app.use(require("./routes/auth"));
+// OTHER ROUTES
+app.use("/", require("./routes"));
 
 // Fallback to react for non-static files
 app.route("*").get(handleDefaultNavigation);

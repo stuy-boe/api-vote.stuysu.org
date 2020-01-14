@@ -1,4 +1,4 @@
-const tools = require("../config/tools");
+const tools = require("./../../config/tools");
 const router = require("express").Router();
 const {OAuth2Client} = require('google-auth-library');
 const client = new OAuth2Client(process.env.REACT_APP_GOOGLE_CLIENT_ID);
@@ -12,7 +12,7 @@ async function validateToken(token) {
 	return ticket.getPayload();
 }
 
-router.post("/auth/login", (req, res) => {
+router.post("/", (req, res) => {
 	const idToken = req.body.idToken;
 	const isVotingStation = Boolean(req.cookies.isVotingStation);
 
@@ -62,11 +62,6 @@ router.post("/auth/login", (req, res) => {
 			//Being here likely means the token was invalid
 			res.json({success: false, error: "The login token provided was invalid."});
 		});
-});
-
-router.get("/auth/logout", (req, res) => {
-	req.session.destroy();
-	res.json({success: true});
 });
 
 module.exports = router;

@@ -38,7 +38,7 @@ export class ElectionSelect extends React.Component {
 	}
 
 	setStateFromFetch(){
-		fetch("/api/elections/all")
+		fetch("/api/elections")
 			.then(res => res.json())
 			.then(data => {
 				window.sessionStorage.setItem("elections", JSON.stringify(data));

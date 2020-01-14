@@ -1,4 +1,6 @@
-module.exports = ["/api/state", (req, res) => {
+const router = require("express").Router();
+
+router.get("/", (req, res) => {
 	if( ! req.session.signed_in )
 		return res.json({signed_in: false});
 
@@ -18,4 +20,6 @@ module.exports = ["/api/state", (req, res) => {
 			manager_for: ["1"]
 		}
 	});
-}];
+});
+
+module.exports = router;

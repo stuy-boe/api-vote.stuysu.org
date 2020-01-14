@@ -1,3 +1,4 @@
+const router = require("express").Router();
 const Talos = require("talos-js");
 const {Students} = require("./../../../config/database");
 
@@ -6,7 +7,7 @@ let addOrUpdateStudents = (email, grade) => new Promise(resolve => {
 		.findOne({ where: {email} })
 		.then(res => {
 			// update existing students
-			if(res && String(res.grade) !== String(grade)) {
+			if(res && String(res.grade) !== String(grade) && Number(res.grade) > grade) {
 				res.update({email, grade});
 				return resolve(1);
 			}
@@ -19,30 +20,31 @@ let addOrUpdateStudents = (email, grade) => new Promise(resolve => {
 		});
 });
 
-module.exports = ["/api/talos/updateStudents", async (req, res) => {
+router.get("/", async (req, res) => {
 	const username = req.body.username || "";
 	const password = req.body.password || "";
-	const user = new Talos( username, password);
 
-	if(! await user.authenticate())
+	const user = new Talos( username, password);
+	let all_students;
+	try {
+		all_students = await user.getAllStudents("");
+	} catch (error) {
 		return res.json({
 			success: false,
-			error: "The credentials provided are not valid"
+			error: error.message
 		});
-
-	let all_students = await user.getAllStudents("");
+	}
 
 	let updatePromises = [];
 
 	all_students.forEach(student => {
-
-		let promise = addOrUpdateStudents(student.user.email, String(student.grade));
+		let promise = addOrUpdateStudents(student.user.email, student.grade);
 		updatePromises.push(promise);
-
 	});
 
-
 	let values = await Promise.all(updatePromises);
-	let rows_affected = values.reduce((a, b) => a + b);
+	let rows_affected = values.reduce((a, b) => a + b, 0);
 	res.json({success: true, rows_affected});
-}];
+});
+
+module.exports = router;
