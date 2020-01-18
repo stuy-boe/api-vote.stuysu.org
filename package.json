@@ -40,7 +40,7 @@
     "sequelize": "^5.21.2",
     "set-cookie-parser": "^2.4.1",
     "sqlite3": "^4.1.1",
-    "talos-js": "^1.1.0"
+    "talos-js": "^1.1.1"
   },
   "devDependencies": {
     "chokidar": "latest"

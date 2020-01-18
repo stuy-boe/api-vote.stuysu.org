@@ -1,6 +1,6 @@
 const
 	fs = require("fs"),
-	meta = require("./config/meta"),
+	opengraph = require("./opengraph"),
 	dotenv = require('dotenv'),
 	db = require("./config/database"),
 	sessionValidator = require("./config/sessionValidator"),
@@ -40,6 +40,7 @@ app.use(session);
 app.use(cookieParser(process.env.SESSION_SECRET || "some_semi_permanent_secret"));
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
+app.use(opengraph);
 
 app.use(
 	morgan(
@@ -54,8 +55,8 @@ const handleDefaultNavigation = (req, res) => {
 	// Cache requests for 5 days
 	// cache_age represents the number of seconds to cache the page
 	let cache_age = 60 * 60 * 24 * 5;
-	res.set('Cache-Control', `public, max-age=${cache_age}`); // one year
-	res.send(meta.fillPlaceholders(index_file, req.path));
+	res.set('Cache-Control', `public, max-age=${cache_age}`); // 5 days
+	res.send(index_file.replace(`<og-data/>`, req.buildOG()));
 };
 
 // Catch the index page before it is handled statically

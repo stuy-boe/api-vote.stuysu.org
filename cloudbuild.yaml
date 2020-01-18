@@ -7,6 +7,7 @@ steps:
     args: ["run", "build"]
     env:
       - 'REACT_APP_GOOGLE_CLIENT_ID=${_REACT_APP_GOOGLE_CLIENT_ID}'
+      - 'PUBLIC_URL=${_PUBLIC_URL}'
   - name: node:10.15.1
     entrypoint: npm
     args: ["run", "create-env"]
@@ -24,6 +25,8 @@ steps:
       - 'SEQUELIZE_USER=${_SEQUELIZE_USER}'
       - 'SESSION_SECRET=${_SESSION_SECRET}'
       - 'REACT_APP_GOOGLE_CLIENT_ID=${_REACT_APP_GOOGLE_CLIENT_ID}'
+      - 'S3_URI=${_S3_URI}'
+      - 'PUBLIC_URL=${_PUBLIC_URL}'
   - name: "gcr.io/cloud-builders/gcloud"
     args: ["app", "deploy"]
 timeout: "1600s"
