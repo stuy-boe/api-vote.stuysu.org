@@ -29,4 +29,6 @@ router.use("/", (req, res, next) => {
 	next();
 });
 
+router.use(require("./elections"));
+
 module.exports = router;

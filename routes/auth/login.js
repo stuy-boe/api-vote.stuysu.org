@@ -1,4 +1,3 @@
-const tools = require("../../tools");
 const encryptString = require("./../../tools/encryptString");
 const genString = require("./../../tools/genString");
 const router = require("express").Router();
