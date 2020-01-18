@@ -37,11 +37,11 @@ const sequelize = new Database(
 	(process.env.SEQUELIZE_PASS || "password"),
 	sequelize_options);
 
-const Students = require("./../schemas/students")(sequelize, Database);
-const Elections = require("./../schemas/elections")(sequelize, Database);
-const Candidates = require("./../schemas/candidates")(sequelize, Database);
-const Votes = require("./../schemas/votes")(sequelize, Database);
-const Vote_Data = require("./../schemas/vote_data")(sequelize, Database);
+const Students = require("./schemas/students")(sequelize, Database);
+const Elections = require("./schemas/elections")(sequelize, Database);
+const Candidates = require("./schemas/candidates")(sequelize, Database);
+const Votes = require("./schemas/votes")(sequelize, Database);
+const Vote_Data = require("./schemas/vote_data")(sequelize, Database);
 
 Vote_Data.belongsTo(Votes);
 Votes.belongsTo(Elections);

@@ -1,4 +1,4 @@
-const tools = require("./../../config/tools");
+const tools = require("../../tools");
 const router = require("express").Router();
 const {OAuth2Client} = require('google-auth-library');
 const client = new OAuth2Client(process.env.REACT_APP_GOOGLE_CLIENT_ID);

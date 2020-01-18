@@ -5,21 +5,20 @@ const htmlEntities = (str) => {
 };
 
 router.use("*", (req, res, next) => {
-	let og = {};
-	og.site_name = "Stuy Board of Elections Voting Site";
-	og.title = "Error 404 | Page Not Found";
-	og.type = "website";
-	og.image = "/logo512.png";
-	og.description = "This page does not exist or has been moved";
-	og.url = path.join(process.env.PUBLIC_URL || "", req.path);
-	console.log(process.env.PUBLIC_URL);
-	req.og = og;
+	req.og = {};
+	req.og.site_name = "Stuy Board of Elections Voting Site";
+	req.og.title = "Error 404 | Page Not Found";
+	req.og.type = "website";
+	req.og.image = "/logo512.png";
+	req.og.description = "This page does not exist or has been moved";
+	req.og.url = path.join(process.env.PUBLIC_URL || "", req.path);
 
 	req.buildOG = () => {
 		let og_str = "";
-		for(let type in req.og){
+
+		for(let type in req.og)
 			og_str += `<meta property="og:${type}" content="${htmlEntities(req.og[type])}"/>`;
-		}
+
 		return og_str;
 	};
 
