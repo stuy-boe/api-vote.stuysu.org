@@ -1,4 +1,6 @@
 const tools = require("../../tools");
+const encryptString = require("./../../tools/encryptString");
+const genString = require("./../../tools/genString");
 const router = require("express").Router();
 const {OAuth2Client} = require('google-auth-library');
 const client = new OAuth2Client(process.env.REACT_APP_GOOGLE_CLIENT_ID);
@@ -29,8 +31,8 @@ router.post("/", (req, res) => {
 
 			// Create session now that info has been validated
 			// Generate a random key and salt to encrypt the user's sub (secret user id)
-			let encryptKey = tools.genString(32);
-			let encryptIv = tools.genString(16);
+			let encryptKey = genString(32);
+			let encryptIv = genString(16);
 
 			let maxAge = isVotingStation ? 1000 * 60 * 5 : 1000 * 86400 * 30;
 
@@ -49,7 +51,7 @@ router.post("/", (req, res) => {
 			req.session.email = payload.email;
 			req.session.name = payload.name;
 			req.session.cookie.expires = new Date(new Date().getTime() + maxAge);
-			req.session.encryptedID = tools.encryptString(payload.sub, encryptKey, encryptIv);
+			req.session.encryptedID = encryptString(payload.sub, encryptKey, encryptIv);
 			res.json({success: true});
 		})
 		.then((known_error = null) => {

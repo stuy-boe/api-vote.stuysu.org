@@ -1,4 +1,6 @@
-const sessionValidator = (req, res, next) => {
+const router = require("express").Router();
+
+router.use("*", sessionValidator = (req, res, next) => {
 	if(req.session.signed_in) {
 		if (!req.signedCookies.decryptKey || !req.signedCookies.decryptIv){
 			req.session.signed_in = false;
@@ -21,6 +23,6 @@ const sessionValidator = (req, res, next) => {
 		}
 	}
 	next();
-};
+});
 
-module.exports = sessionValidator;
+module.exports = router;

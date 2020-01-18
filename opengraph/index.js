@@ -1,8 +1,6 @@
 const router = require("express").Router();
 const path = require("path");
-const htmlEntities = (str) => {
-	return String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
-};
+const htmlEntities = require("./../tools/htmlEntities");
 
 router.use("*", (req, res, next) => {
 	req.og = {};
