@@ -2,7 +2,7 @@ const router = require("express").Router();
 const url = require("url");
 const htmlEntities = require("./../tools/htmlEntities");
 
-router.use("*", (req, res, next) => {
+router.get("*", (req, res, next) => {
 	req.og = {};
 	req.og.site_name = "Stuy Board of Elections Voting Site";
 	req.og.title = "Error 404 - Page Not Found | Stuy BOE Voting Site";
@@ -23,7 +23,7 @@ router.use("*", (req, res, next) => {
 	next();
 });
 
-router.use("/", (req, res, next) => {
+router.get("/", (req, res, next) => {
 	req.og.title = "Home | Stuy BOE Voting Site";
 	req.og.description = "This is where voting as well as campaigning for Student Union Elections takes place";
 	next();
