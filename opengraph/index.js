@@ -1,5 +1,5 @@
 const router = require("express").Router();
-const path = require("path");
+const url = require("url");
 const htmlEntities = require("./../tools/htmlEntities");
 
 router.use("*", (req, res, next) => {
@@ -9,7 +9,7 @@ router.use("*", (req, res, next) => {
 	req.og.type = "website";
 	req.og.image = "/logo512.png";
 	req.og.description = "This page does not exist or has been moved";
-	req.og.url = path.join(process.env.PUBLIC_URL || "", req.path);
+	req.og.url = url.resolve(process.env.PUBLIC_URL || "", req.path);
 
 	req.buildOG = () => {
 		let og_str = "";
