@@ -44,6 +44,8 @@ const Votes = require("./schemas/votes")(sequelize, Database);
 const Vote_Data = require("./schemas/vote_data")(sequelize, Database);
 
 Vote_Data.belongsTo(Votes);
+Elections.hasMany(Votes);
+Elections.hasMany(Candidates);
 Votes.belongsTo(Elections);
 Candidates.belongsTo(Elections);
 

@@ -21,7 +21,6 @@ export class ElectionSelect extends React.Component {
 			.then(res => res.json())
 			.then(data => this.setState(data))
 			.catch(er => {
-				console.log(er);
 				MessageQueue.notify({
 					body: "Could not fetch elections. Check your network connection.",
 					actions: [{"icon": "close"}]
