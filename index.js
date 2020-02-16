@@ -43,8 +43,11 @@ app.use(bodyParser.json());
 const allowed_origins = (process.env.ALLOWED_ORIGINS || "").split(" ");
 app.use("/", (req, res, next) => {
 	let origin = req.get("origin");
-	if(allowed_origins.includes(origin))
+	if(allowed_origins.includes(origin)){
 		res.header("Access-Control-Allow-Origin", origin);
+		res.header("Access-Control-Allow-Methods", "POST, GET, PUT");
+		res.header("Access-Control-Allow-Headers", "Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With");
+	}
 
 	next();
 });
