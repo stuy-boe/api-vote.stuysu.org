@@ -17,8 +17,7 @@ router.use(async (req, res, next) => {
 
 router.get("/", (req, res) => res.json(req.election));
 router.use("/overview", require("./overview"));
-router.use("/candidates", require("./candidatyou" +
-	"es"));
+router.use("/candidates", require("./candidates"));
 
 
 module.exports = router;
