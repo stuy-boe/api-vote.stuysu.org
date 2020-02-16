@@ -1,6 +1,7 @@
 const
 	opengraph = require("./opengraph"),
 	dotenv = require('dotenv'),
+	cors = require("cors"),
 	db = require("./database"),
 	sessionValidator = require("./tools/sessionValidator"),
 	app_port = process.env.PORT || 3001,
@@ -31,6 +32,22 @@ const
 
 dotenv.config();
 
+
+const allowedOrigins = (process.env.ALLOWED_ORIGINS || "http://localhost:3001").split(" ");
+const corsOptions = {
+	origin: (origin, callback) => {
+
+		if (! origin || allowedOrigins.includes(origin))
+			callback(null, true);
+
+		else
+			callback(new Error('Not allowed by CORS'));
+
+	}
+};
+
+app.use("/", cors(corsOptions));
+
 sequelizeStore.sync();
 
 app.use(session);
@@ -38,19 +55,6 @@ app.use(session);
 app.use(cookieParser(process.env.SESSION_SECRET || "some_semi_permanent_secret"));
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
-
-// Allow our front end to make requests
-const allowed_origins = (process.env.ALLOWED_ORIGINS || "").split(" ");
-app.use("/", (req, res, next) => {
-	let origin = req.get("origin");
-	if(allowed_origins.includes(origin)){
-		res.header("Access-Control-Allow-Origin", origin);
-		res.header("Access-Control-Allow-Methods", "POST, GET, PUT");
-		res.header("Access-Control-Allow-Headers", "Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With");
-	}
-
-	next();
-});
 
 app.use(opengraph);
 
