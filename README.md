@@ -21,7 +21,7 @@ A lot of the functionality in the app depends on secret credentials and so it's 
  
 The contents of the `.env` file should be as below with actual values filled in after the equal signs.
 
-#### Example .env FILE
+### Example .env FILE
 ```dotenv
 # Optional - Number of active connections to the database
 SEQUELIZE_CONN_LIMIT=2

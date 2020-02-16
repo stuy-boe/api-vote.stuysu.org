@@ -45,15 +45,15 @@ export const NavDrawer = (props) => {
 			<Drawer dismissible open={props.drawerOpen} className={["NavDrawer"]} style={{position: "fixed"}}>
 				<DrawerHeader>
 					<img src={"/logo192.png"} width={100} alt={"StuyBOE Logo"} style={{paddingTop: '1em'}}/>
-					<DrawerTitle>{context.signed_in ? context.user.name : "Not Signed In"}</DrawerTitle>
-					<DrawerSubtitle>{context.signed_in ? context.user.email: ""}</DrawerSubtitle>
+					<DrawerTitle>{context.signedIn ? context.user.name : "Not Signed In"}</DrawerTitle>
+					<DrawerSubtitle>{context.signedIn ? context.user.email: ""}</DrawerSubtitle>
 				</DrawerHeader>
 
 				<DrawerContent className={["DrawerContent"]}>
 
 					<List onClick={() => window.innerWidth < 600 && props.toggleDrawer()}>
 						{
-							context.signed_in &&
+							context.signedIn &&
 							<SimpleListItem
 								graphic="power_settings_new"
 								text="Sign Out"
@@ -62,7 +62,7 @@ export const NavDrawer = (props) => {
 						}
 
 						{
-							context.signed_in &&
+							context.signedIn &&
 							context.admin.is_admin &&
 							<MenuItem
 								to={"/admin"}
@@ -73,7 +73,7 @@ export const NavDrawer = (props) => {
 						}
 
 						{
-							context.signed_in &&
+							context.signedIn &&
 							context.campaign.is_manager &&
 							<MenuItem
 								to={"/campaign"}

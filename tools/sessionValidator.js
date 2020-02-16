@@ -1,9 +1,9 @@
 const router = require("express").Router();
 
-router.use("*", sessionValidator = (req, res, next) => {
-	if(req.session.signed_in) {
+router.use("*", (req, res, next) => {
+	if(req.session.signedIn) {
 		if (!req.signedCookies.decryptKey || !req.signedCookies.decryptIv){
-			req.session.signed_in = false;
+			req.session.signedIn = false;
 			req.session.cookie.expires = new Date(1);
 		} else {
 

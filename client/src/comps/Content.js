@@ -15,7 +15,7 @@ export const Content = (props) => {
 			</Switch>
 
 			{
-				! context.signed_in &&
+				! context.signedIn &&
 				<AuthButton/>
 			}
 		</div>

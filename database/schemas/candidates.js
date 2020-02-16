@@ -1,7 +1,7 @@
 module.exports = (sequelize, Database) => {
 	return sequelize.define('candidates', {
 		id: {
-			type: Database.STRING(6),
+			type: Database.INTEGER,
 			primaryKey: true,
 			unique: true
 		},

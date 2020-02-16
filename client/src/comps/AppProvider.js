@@ -17,7 +17,7 @@ export class AppProvider extends React.Component {
 		this.updateState = this.updateState.bind(this);
 		this.state = {
 			initialized: false,
-			signed_in: false,
+			signedIn: false,
 			user: {},
 			admin: {},
 			campaign: {},

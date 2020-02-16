@@ -19,7 +19,7 @@ router.post("/", (req, res) => {
 
 	validateToken(idToken)
 		.then(payload => {
-			if(req.session.signed_in)
+			if(req.session.signedIn)
 				return "You are already signed in.";
 
 			if(! payload.email_verified)
@@ -38,7 +38,7 @@ router.post("/", (req, res) => {
 			// Create a user cookie to store the information needed to decrypt the user id
 			// The decryption keys only exist on the user side
 			let options = {
-				maxAge: maxAge, // Normal cookie lasts for 30 days, voting station lasts 5 min
+				maxAge, // Normal cookie lasts for 30 days, voting station lasts 5 min
 				httpOnly: true, // The cookie only accessible by the web server
 				signed: true // Indicates if the cookie should be signed
 			};
@@ -46,7 +46,7 @@ router.post("/", (req, res) => {
 			res.cookie('decryptKey', encryptKey, options);
 			res.cookie('decryptIv', encryptIv, options);
 
-			req.session.signed_in = true;
+			req.session.signedIn = true;
 			req.session.email = payload.email;
 			req.session.name = payload.name;
 			req.session.cookie.expires = new Date(new Date().getTime() + maxAge);
