@@ -40,8 +40,12 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
 // Allow our front end to make requests
+const allowed_origins = (process.env.ALLOWED_ORIGINS || "").split(" ");
 app.use("/", (req, res, next) => {
-	res.header("Access-Control-Allow-Origin", process.env.PUBLIC_URL);
+	let origin = req.get("origin");
+	if(allowed_origins.includes(origin))
+		res.header("Access-Control-Allow-Origin", origin);
+
 	next();
 });
 
