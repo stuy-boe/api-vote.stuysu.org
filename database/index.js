@@ -3,8 +3,6 @@ const dotenv = require("dotenv");
 dotenv.config();
 
 let sequelize_options = {
-	host: (process.env.SEQUELIZE_HOST || "localhost"),
-	dialect: (process.env.SEQUELIZE_DIALECT || "sqlite"),
 	pool: {
 		max: (Number(process.env.SEQUELIZE_CONN_LIMIT) || 5),
 		min: 0,
@@ -20,22 +18,15 @@ let sequelize_options = {
 	logging: (process.env.SEQUELIZE_LOGGING === "true" ? console.log : false)
 };
 
-if(process.env.SEQUELIZE_PORT)
-	sequelize_options.port = Number(process.env.SEQUELIZE_PORT);
-
-if(! process.env.SEQUELIZE_DIALECT || process.env.SEQUELIZE_DIALECT === "sqlite")
-	sequelize_options.storage = process.env.SEQUELIZE_STORAGE || "./app.db";
-
 if(process.env.SEQUELIZE_SSL === "false"){
 	sequelize_options.ssl = false;
 	sequelize_options.native = false;
 }
 
 const sequelize = new Database(
-	(process.env.SEQUELIZE_DB || "database"),
-	(process.env.SEQUELIZE_USER || "user"),
-	(process.env.SEQUELIZE_PASS || "password"),
-	sequelize_options);
+	process.env.CLEARDB_DATABASE_URL || process.env.SEQUELIZE_URL || "sqlite:./app.db",
+	sequelize_options
+);
 
 const Students = require("./schemas/students")(sequelize, Database);
 const Elections = require("./schemas/elections")(sequelize, Database);

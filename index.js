@@ -1,5 +1,4 @@
 const
-	fs = require("fs"),
 	opengraph = require("./opengraph"),
 	dotenv = require('dotenv'),
 	db = require("./database"),
@@ -7,7 +6,6 @@ const
 	app_port = process.env.PORT || 3001,
 	bodyParser = require("body-parser"),
 	cookieParser = require('cookie-parser'),
-	path = require("path"),
 	express = require("express"),
 	app = express(),
 	http = require('http'),
@@ -40,6 +38,13 @@ app.use(session);
 app.use(cookieParser(process.env.SESSION_SECRET || "some_semi_permanent_secret"));
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
+
+// Allow our front end to make requests
+app.use("/", (req, res, next) => {
+	res.header("Access-Control-Allow-Origin", process.env.PUBLIC_URL);
+	next();
+});
+
 app.use(opengraph);
 
 app.use(
@@ -49,30 +54,11 @@ app.use(
 	)
 );
 
-const index_file = fs.readFileSync("./client/build/index.html").toString();
-
-const handleDefaultNavigation = (req, res) => {
-	// Cache requests for 5 days
-	// cache_age represents the number of seconds to cache the page
-	let cache_age = 60 * 60 * 24 * 5;
-	res.set('Cache-Control', `public, max-age=${cache_age}`); // 5 days
-	res.send(index_file.replace(`<og-data/>`, req.buildOG()));
-};
-
-// Catch the index page before it is handled statically
-// Otherwise server side rendering doesn't happen
-app.route("/").get(handleDefaultNavigation);
-
-app.use(express.static(path.join(__dirname, 'client/build')));
-
 // Leave the session validation here so that it isn't unnecessarily triggered by static files
 app.use(sessionValidator);
 
 // OTHER ROUTES
 app.use("/", require("./routes"));
-
-// Fallback to react for non-static files
-app.route("*").get(handleDefaultNavigation);
 
 server.listen(app_port, () => {
 	console.log('listening on *:' + app_port);

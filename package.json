@@ -6,10 +6,6 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node index.js",
-    "heroku-postbuild": "npm run build",
-    "setup": "npm install && cd client && npm install",
-    "build": "cd client && npm install && npm run build",
-    "create-env": "printenv > .env",
     "dev": "npx nodemon index.js"
   },
   "repository": {
