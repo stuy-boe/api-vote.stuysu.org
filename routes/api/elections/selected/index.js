@@ -15,7 +15,7 @@ router.use(async (req, res, next) => {
 	}
 });
 
-router.get("/", (req, res) => res.json(req.election));
+router.get("/", (req, res) => res.json({success: true, payload: req.election}));
 router.use("/overview", require("./overview"));
 router.use("/candidates", require("./candidates"));
 
