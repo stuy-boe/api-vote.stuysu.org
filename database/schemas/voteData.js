@@ -1,6 +1,6 @@
 module.exports = (sequelize, Database) => {
-	return sequelize.define("vote_data", {
-		choice_number: {
+	return sequelize.define("voteData", {
+		choiceNumber: {
 			type: Database.INTEGER,
 			allowNull: false
 		},

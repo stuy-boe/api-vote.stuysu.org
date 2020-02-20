@@ -9,7 +9,7 @@ module.exports = (sequelize, Database) => {
 			type: Database.STRING,
 			allowNull: false
 		},
-		public_url: {
+		publicUrl: {
 			type: Database.STRING,
 			allowNull: false
 		},

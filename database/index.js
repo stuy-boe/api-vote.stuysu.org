@@ -32,13 +32,16 @@ const Students = require("./schemas/students")(sequelize, Database);
 const Elections = require("./schemas/elections")(sequelize, Database);
 const Candidates = require("./schemas/candidates")(sequelize, Database);
 const Votes = require("./schemas/votes")(sequelize, Database);
-const Vote_Data = require("./schemas/vote_data")(sequelize, Database);
+const VoteData = require("./schemas/voteData")(sequelize, Database);
+const AllowedGrades = require("./schemas/allowedGrades")(sequelize, Database);
 
-Vote_Data.belongsTo(Votes);
+VoteData.belongsTo(Votes);
 Elections.hasMany(Votes);
 Elections.hasMany(Candidates);
 Votes.belongsTo(Elections);
 Candidates.belongsTo(Elections);
+AllowedGrades.belongsTo(Elections, {foreignKey: "electionId"});
+Elections.hasMany(AllowedGrades, {foreignKey: "electionId"});
 
 sequelize.sync(
 	// {force: true}
@@ -49,5 +52,6 @@ module.exports = {
 	Students,
 	Elections,
 	Candidates,
-	Votes
+	Votes,
+	VoteData
 };

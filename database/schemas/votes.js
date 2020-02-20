@@ -5,7 +5,7 @@ module.exports = (sequelize, Database) => {
 			primaryKey: true,
 			autoIncrement: true
 		},
-		user_id: {
+		userHash: {
 			type: Database.STRING,
 			allowNull: false
 		},

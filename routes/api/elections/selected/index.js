@@ -1,8 +1,8 @@
 const router = require("express").Router({mergeParams: true});
-const {Elections} = require("./../../../../database");
+const Elections = require("./../../../../database/models/Elections");
 
 router.use(async (req, res, next) => {
-	let election = await Elections.findOne({where: {public_url: req.params.public_url}});
+	let election = await Elections.findOne({where: {publicUrl: req.params.publicUrl}});
 
 	if(! election){
 		res.json({
@@ -18,6 +18,7 @@ router.use(async (req, res, next) => {
 router.get("/", (req, res) => res.json({success: true, payload: req.election}));
 router.use("/overview", require("./overview"));
 router.use("/candidates", require("./candidates"));
+router.use("/vote", require("./vote"));
 
 
 module.exports = router;

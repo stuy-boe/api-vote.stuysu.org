@@ -8,7 +8,7 @@ router.get("/",  async (req, res) => {
 
 	let elections = await Elections.findAll({
 		where: {visible: true},
-		attributes: ["public_url", "name", "picture", "completed", "start_time", "end_time", "public_results"]
+		attributes: ["publicUrl", "name", "picture", "completed", "startTime", "endTime", "publicResults"]
 	});
 
 	let sorted = {

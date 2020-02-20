@@ -6,7 +6,7 @@ module.exports = (sequelize, Database) => {
 			unique: true,
 			autoIncrement: true
 		},
-		public_url: {
+		publicUrl: {
 			type: Database.STRING(32),
 			unique: true,
 			allowNull: false
@@ -19,11 +19,11 @@ module.exports = (sequelize, Database) => {
 			type: Database.STRING,
 			allowNull: false
 		},
-		start_time: {
+		startTime: {
 			type: Database.DATE,
 			allowNull: false
 		},
-		end_time: {
+		endTime: {
 			type: Database.DATE,
 			allowNull: false
 		},
@@ -33,7 +33,7 @@ module.exports = (sequelize, Database) => {
 			defaultValue: true
 		},
 		picture: Database.STRING,
-		public_results: {
+		publicResults: {
 			type: Database.BOOLEAN,
 			allowNull: false,
 			defaultValue: false
