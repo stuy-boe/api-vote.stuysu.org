@@ -1,7 +1,11 @@
 const router = require("express").Router();
 
 router.get("/", async (req, res) => {
-	res.send(await req.election.getCandidates());
+	res.json({
+		success:true,
+		payload: await req.election.getCandidates()
+	});
 });
+
 
 module.exports = router;
