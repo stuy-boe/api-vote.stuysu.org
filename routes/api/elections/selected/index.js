@@ -7,7 +7,8 @@ router.use(async (req, res, next) => {
 	if(! election){
 		res.json({
 			success: false,
-			error: "There is no election with that url id"
+			error: "There is no election with that url id",
+			payload: null
 		});
 	} else {
 		req.election = election;
