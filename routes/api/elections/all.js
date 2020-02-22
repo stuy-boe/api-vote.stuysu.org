@@ -23,7 +23,7 @@ router.get("/",  async (req, res) => {
 			sorted.active.push(elections[x]);
 	}
 
-	res.json(sorted);
+	res.json({success: true, payload: sorted});
 });
 
 module.exports = router;
