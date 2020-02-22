@@ -30,17 +30,18 @@ router.post("/", (req, res) => {
 
 			// Create session now that info has been validated
 			// Generate a random key and salt to encrypt the user's sub (secret user id)
-			let encryptKey = genString(32);
-			let encryptIv = genString(16);
+			const encryptKey = genString(32);
+			const encryptIv = genString(16);
 
-			let maxAge = isVotingStation ? 1000 * 60 * 5 : 1000 * 86400 * 30;
+			const maxAge = isVotingStation ? 1000 * 60 * 5 : 1000 * 86400 * 30;
 
 			// Create a user cookie to store the information needed to decrypt the user id
 			// The decryption keys only exist on the user side
-			let options = {
+			const options = {
 				maxAge, // Normal cookie lasts for 30 days, voting station lasts 5 min
 				httpOnly: true, // The cookie only accessible by the web server
-				signed: true // Indicates if the cookie should be signed
+				signed: true, // Indicates if the cookie should be signed
+				sameSite: "none"
 			};
 
 			res.cookie('decryptKey', encryptKey, options);

@@ -15,7 +15,8 @@ router.use("*", (req, res, next) => {
 				let options = {
 					maxAge: 1000 * 86400 * 30, // Normal cookie lasts for 30 days, voting station lasts 5 min
 					httpOnly: true, // The cookie only accessible by the web server
-					signed: true // Indicates if the cookie should be signed
+					signed: true, // Indicates if the cookie should be signed
+					sameSite: "none"
 				};
 				res.cookie('decryptIv', req.signedCookies.decryptIv, options);
 				res.cookie('decryptKey', req.signedCookies.decryptKey, options);

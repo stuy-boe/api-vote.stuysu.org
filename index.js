@@ -24,7 +24,8 @@ const
 			path: '/',
 			httpOnly: true,
 			secure: false,
-			maxAge: Number(process.env.SESSION_MAX_AGE) || (15 * 86400 * 1000)
+			maxAge: Number(process.env.SESSION_MAX_AGE) || (15 * 86400 * 1000),
+			sameSite: "none"
 		},
 		rolling: true
 	});
