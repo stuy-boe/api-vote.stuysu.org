@@ -44,6 +44,9 @@ router.post("/", (req, res) => {
 				sameSite: "none"
 			};
 
+			if(process.env.NODE_ENV === "production")
+				options.secure = true;
+
 			res.cookie('decryptKey', encryptKey, options);
 			res.cookie('decryptIv', encryptIv, options);
 

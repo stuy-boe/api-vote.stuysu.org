@@ -18,6 +18,10 @@ router.use("*", (req, res, next) => {
 					signed: true, // Indicates if the cookie should be signed
 					sameSite: "none"
 				};
+
+				if(process.env.NODE_ENV === "production")
+					options.secure = true;
+
 				res.cookie('decryptIv', req.signedCookies.decryptIv, options);
 				res.cookie('decryptKey', req.signedCookies.decryptKey, options);
 			}
