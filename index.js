@@ -1,7 +1,7 @@
 const
 	dotenv = require('dotenv'),
 	cors = require("cors"),
-	db = require("./old_database"),
+	db = require("./database"),
 	sessionValidator = require("./tools/sessionValidator"),
 	app_port = process.env.PORT || 3001,
 	bodyParser = require("body-parser"),
