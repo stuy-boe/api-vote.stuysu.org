@@ -20,23 +20,22 @@
   "homepage": "https://github.com/stuy-boe/vote.stuysu.org#readme",
   "dependencies": {
     "body-parser": "latest",
-    "connect-session-sequelize": "^6.0.0",
+    "connect-session-sequelize": "^6.1.1",
     "cookie-parser": "^1.4.4",
     "cors": "latest",
     "dotenv": "^8.2.0",
     "express": "latest",
     "express-session": "^1.17.0",
-    "google-auth-library": "^5.7.0",
+    "google-auth-library": "^5.10.1",
     "moment": "^2.24.0",
     "morgan": "^1.9.1",
     "mysql2": "^2.1.0",
-    "sequelize": "^5.21.2",
-    "set-cookie-parser": "^2.4.1",
+    "sequelize": "^5.21.5",
+    "set-cookie-parser": "^2.4.3",
     "sqlite3": "^4.1.1",
     "talos-js": "^1.1.1"
   },
   "devDependencies": {
-    "chokidar": "latest",
     "sequelize-cli": "^5.5.1"
   }
 }
