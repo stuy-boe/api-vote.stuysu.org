@@ -8,9 +8,6 @@ module.exports = {
 				primaryKey: true,
 				type: Sequelize.INTEGER
 			},
-			voteId: {
-				type: Sequelize.INTEGER
-			},
 			choiceNumber: {
 				type: Sequelize.INTEGER
 			},

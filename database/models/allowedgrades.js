@@ -6,6 +6,7 @@ module.exports = (sequelize, DataTypes) => {
 	}, {});
 	allowedGrades.associate = function (models) {
 		// associations can be defined here
+		allowedGrades.belongsTo(models.elections, {foreignKey: "electionId", targetKey: "id"});
 	};
 	return allowedGrades;
 };
