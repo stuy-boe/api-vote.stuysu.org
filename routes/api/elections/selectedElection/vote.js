@@ -1,5 +1,5 @@
 const router = require("express").Router();
-const Students = require("./../../../../database/models/Students");
+const Students = require("../../../../old_database/models/Students");
 
 // Middleware to determine if a user can vote before processing the vote
 router.use("/", async (req, res, next) => {
@@ -35,7 +35,7 @@ router.get("/eligible", (req, res) => {
 
 	if( ! req.election.userCanVote)
 		response.error = req.election.userCanVoteReason;
-	
+
 	return res.json(response);
 });
 

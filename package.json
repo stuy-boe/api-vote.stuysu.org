@@ -36,6 +36,7 @@
     "cors": "latest"
   },
   "devDependencies": {
-    "chokidar": "latest"
+    "chokidar": "latest",
+    "sequelize-cli": "^5.5.1"
   }
 }
