@@ -1,6 +1,6 @@
 const router = require("express").Router();
 const Talos = require("talos-js");
-const {Students} = require("../../../database");
+const {Students} = require("../../../old_database");
 
 let addOrUpdateStudents = (email, grade) => new Promise(resolve => {
 	Students

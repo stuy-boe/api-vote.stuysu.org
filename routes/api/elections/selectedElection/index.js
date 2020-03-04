@@ -1,5 +1,5 @@
 const router = require("express").Router({mergeParams: true});
-const Elections = require("./../../../../database/models/Elections");
+const Elections = require("../../../../old_database/models/Elections");
 
 router.use(async (req, res, next) => {
 	let election = await Elections.findOne({where: {publicUrl: req.params.publicUrl}});
