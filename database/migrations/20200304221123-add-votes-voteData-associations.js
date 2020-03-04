@@ -3,12 +3,12 @@
 module.exports = {
 	up: (queryInterface, Sequelize) => {
 		return queryInterface.addColumn(
-			'allowedGrades', // name of Source model
-			'electionId', // name of the key we're adding
+			'votedata', // name of Source model
+			'voteId', // name of the key we're adding
 			{
 				type: Sequelize.INTEGER,
 				references: {
-					model: 'elections', // name of Target model
+					model: 'votes', // name of Target model
 					key: 'id', // key in Target model that we're referencing
 				},
 				onUpdate: 'CASCADE',
@@ -19,8 +19,8 @@ module.exports = {
 
 	down: (queryInterface, Sequelize) => {
 		return queryInterface.removeColumn(
-			'allowedGrades', // name of Source model
-			'electionId' // key we want to remove
+			'votedata', // name of Source model
+			'voteId' // key we want to remove
 		);
 	}
 };

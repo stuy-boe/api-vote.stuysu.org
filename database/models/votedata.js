@@ -7,6 +7,7 @@ module.exports = (sequelize, DataTypes) => {
 	}, {});
 	voteData.associate = function (models) {
 		// associations can be defined here
+		voteData.belongsTo(models.votes, {foreignKey: "voteId", targetKey: "id"});
 	};
 	return voteData;
 };
