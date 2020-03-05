@@ -41,11 +41,12 @@ router.post("/", (req, res) => {
 				maxAge, // Normal cookie lasts for 30 days, voting station lasts 5 min
 				httpOnly: true, // The cookie only accessible by the web server
 				signed: true, // Indicates if the cookie should be signed
-				sameSite: "none"
 			};
 
-			if(process.env.NODE_ENV === "production")
+			if(process.env.NODE_ENV === "production"){
 				options.secure = true;
+				options.sameSite = "none";
+			}
 
 			res.cookie('decryptKey', encryptKey, options);
 			res.cookie('decryptIv', encryptIv, options);

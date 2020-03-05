@@ -25,7 +25,6 @@ const sessionOptions = {
 		path: '/',
 		httpOnly: true,
 		maxAge: Number(process.env.SESSION_MAX_AGE) || (15 * 86400 * 1000),
-		sameSite: "none"
 	},
 	rolling: true
 };
@@ -33,6 +32,7 @@ const sessionOptions = {
 if(process.env.NODE_ENV === "production"){
 	app.set('trust proxy', 1);
 	sessionOptions.cookie.secure = true;
+	sessionOptions.cookie.sameSite = "none";
 }
 
 const session = expressSession(sessionOptions);
