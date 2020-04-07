@@ -1,5 +1,8 @@
 # vote.stuysu.org
-The latest version of the Stuyvesant High School Board of Elections Voting Site.
+The backend api for the Stuyvesant High School Board of Elections Voting Site.
+
+[![Stuyvesant Board of Elctions](https://circleci.com/gh/stuy-boe/api.vote.stuysu.org.svg?style=svg)](https://github.com/stuy-boe/api.vote.stuysu.org)
+
 
 ## Getting Started
 1. Clone the Repository
