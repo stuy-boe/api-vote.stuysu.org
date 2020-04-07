@@ -1,24 +1,24 @@
 {
-  "name": "vote.stuysu.org",
+  "name": "api.vote.stuysu.org",
   "version": "1.0.0",
   "description": "The latest version of the Stuyvesant High School Board of Elections Voting Site.",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "npx sequelize-cli db:migrate",
+    "prestart": "npx sequelize-cli db:migrate",
     "start": "node index.js",
     "dev": "npx nodemon index.js"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/stuy-boe/vote.stuysu.org.git"
+    "url": "git+https://github.com/stuy-boe/api.vote.stuysu.org.git"
   },
   "author": "",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/stuy-boe/vote.stuysu.org/issues"
+    "url": "https://github.com/stuy-boe/api.vote.stuysu.org/issues"
   },
-  "homepage": "https://github.com/stuy-boe/vote.stuysu.org#readme",
+  "homepage": "https://github.com/stuy-boe/api.vote.stuysu.org#readme",
   "dependencies": {
     "body-parser": "latest",
     "connect-session-sequelize": "^6.1.1",

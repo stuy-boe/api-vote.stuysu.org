@@ -8,10 +8,10 @@ The latest version of the Stuyvesant High School Board of Elections Voting Site.
     ```
 2. Change into the repository directory and install dependencies
     ```shell script
-   cd vote.stuysu.org && npm run setup
+   cd vote.stuysu.org && npm install
     ```
 
-If you want to actively develop with hot reloading, run the following command to start both the front-end and back-end side by side. Make sure you [Set your environment variables](#setting-environment-variables) first
+If you want to actively develop with hot reloading, run the following command. Make sure you [Set your environment variables](#setting-environment-variables) first
 ```shell script
 npm run dev
 ```
@@ -23,52 +23,12 @@ The contents of the `.env` file should be as below with actual values filled in 
 
 ### Example .env FILE
 ```dotenv
-# Optional - Number of active connections to the database
-SEQUELIZE_CONN_LIMIT=2
-
 # Required
-# The type of database being used
-# Can be either mysql|postgres|sqlite|mariadb
-# Defaults to sqlite for easier local development
-SEQUELIZE_DIALECT=sqlite
-
-# Required if dialect IS SQLite
-# Path to database file
-# If path is not provided, ./app.db will be used
-# Database file will be created if it doesn't exist
-SEQUELIZE_STORAGE=./app.db
-
-# Required if dialect IS NOT SQLite
-# The host used to connect to the database
-SEQUELIZE_HOST=
-
-# Required if dialect IS NOT SQLite 
-# The username for connecting to the database
-SEQUELIZE_USER=
-
-# Required if dialect IS NOT SQLite
-# The password to the database
-SEQUELIZE_PASS=
-
-# Required if dialect IS NOT SQLite
-# The name of the database to use
-SEQUELIZE_DB=
-
-# Optional - Whether to use ssl for database connections.
-# Default is true, can be: true|false 
-SEQUELIZE_SSL=true
-
-# Optional
-# Depends on the database dialect
-# If your database communicates on a different port than the default
-# Defaults are 3306-mysql 3306-mariadb 5432-postgres
-SEQUELIZE_PORT=
-
-# Optional
-# Whether to log database queries to the console
-# Not recommeneded for production
-# Default is false, can be: true|false 
-SEQUELIZE_LOGGING=false
+# Contains database connection information
+# examples: 
+# mysql://user:pass@example.com:5432/dbname
+# sqlite::./app.db
+SEQUELIZE_URL= 
 
 # Required
 # Used by express session to sign sessions
@@ -77,11 +37,9 @@ SEQUELIZE_LOGGING=false
 SESSION_SECRET=
 
 # Required - Client ID of Google Cloud Project, used for OAuth
-# Must be accesible to both:
 # * The backend during runtime
-# * The frontend during build time / development
 # Learn more here: https://bit.ly/GoogleIdentity
-REACT_APP_GOOGLE_CLIENT_ID=
+GOOGLE_CLIENT_ID=
 ```
 There are many ways you can go about setting environment variables and you can do so in any way you'd like. You just need to make sure you define all of the required environment variables.
 
@@ -112,8 +70,6 @@ You may also use a .env file and it will automatically be parsed when the app is
     * Order does not matter but all of the required ones mentioned [here](#environment-variables) must be included.
     * The `key` is the name of the variable (the part preceding the equal sign in the `.env` file)
 
-<!-- TODO ADD GOOGLE APP ENGINE ENV SETTINGS -->
-
 ## Deploying on Heroku
 1. Sign into [heroku.com](https://heroku.com) and visit the page for your app.
 2. On the app page, click `Deploy` on the tab bar.
@@ -124,8 +80,8 @@ The steps for deploying with the Heroku-CLI are also available [here](https://de
 ## Getting a Database
 This app requires a database to function, but due to the schema being defined with sequelize, you have 4 different options to choose from. 
 
-By default the app will use SQLite and so if the dialect is not changed and no SQLite path is provided, the app will just use/create the database file at the root of the project with the name `app.db`. If you are just testing locally, you don't need to worry about setting the database information and the app will create the database file on its own if necessary. 
-
+In the development environment the app will use an SQLite3 database.
+In the production and testing environments, the `SEQUELIZE_URL` env variable will be used.
 It is recommended you use a hosted database solution for production however. You may obtain a managed database from a provider such as Digital Ocean or AWS, or you may want to set up your own database. 
 
 Here are some helpful links for learning how to set up a database.
@@ -159,13 +115,11 @@ The app is ready for instant deployment with Heroku or Google App engine with mi
 4. Set your environment variables
     * [Manual Deployment](#setting-environment-variables-manually)
     * [Heroku Deployment](#setting-environment-variables-on-heroku)
-    * Google app engine steps coming soon
 5. Deploy the app!
     * If you're deploying manually, run
         ```shell script
         npm start 
         ```
     * [Deploying on Heroku](#deploying-on-heroku)
-    * Deployment on App Engine steps coming soon
 
 Congrats, you're done!
