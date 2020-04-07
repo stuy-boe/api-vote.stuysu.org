@@ -26,13 +26,21 @@ router.get("/", async (req, res) => {
 
 	const user = new Talos( username, password);
 	let all_students;
+
 	try {
+
 		all_students = await user.getAllStudents("");
+
 	} catch (error) {
+
 		return res.json({
 			success: false,
-			error: error.message
+			error: {
+				message: error.message,
+				code: error.code
+			}
 		});
+
 	}
 
 	let updatePromises = [];
@@ -43,8 +51,11 @@ router.get("/", async (req, res) => {
 	});
 
 	let values = await Promise.all(updatePromises);
-	let rows_affected = values.reduce((a, b) => a + b, 0);
-	res.json({success: true, rows_affected});
+
+	let rowsAffected = values.reduce((a, b) => a + b, 0);
+
+	res.json({success: true, payload: {rowsAffected}});
+
 });
 
 module.exports = router;
