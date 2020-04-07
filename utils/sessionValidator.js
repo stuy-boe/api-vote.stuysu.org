@@ -1,4 +1,5 @@
 const router = require("express").Router();
+const decryptHex = require("./../utils/decryptHex");
 
 router.use("*", (req, res, next) => {
 	if(req.session.signedIn) {
@@ -26,6 +27,13 @@ router.use("*", (req, res, next) => {
 				res.cookie('decryptIv', req.signedCookies.decryptIv, options);
 				res.cookie('decryptKey', req.signedCookies.decryptKey, options);
 			}
+
+			// Let's also provide a function to make it easier to decrypt the user Id
+
+			req.session.getDecryptedUserId = () => {
+				return decryptHex(req.session.encryptedUserId, req.signedCookies.decryptKey, req.signedCookies.decryptIv);
+			};
+
 		}
 	}
 	next();

@@ -4,7 +4,7 @@ const encryptString = require("../../../utils/encryptString");
 const genString = require("../../../utils/genString");
 
 const {OAuth2Client} = require('google-auth-library');
-const client = new OAuth2Client(process.env.REACT_APP_GOOGLE_CLIENT_ID);
+const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
 
 const RefusalError = require("./../../../utils/RefusalError");
 
@@ -37,8 +37,8 @@ router.post("/", async (req, res) => {
 		throw new RefusalError("That email is not verified and cannot be used for sign in.", "UNVERIFIED_EMAIL");
 	}
 
-	if( payload.azp !== process.env.REACT_APP_GOOGLE_CLIENT_ID ||
-		payload.aud !== process.env.REACT_APP_GOOGLE_CLIENT_ID
+	if( payload.azp !== process.env.GOOGLE_CLIENT_ID ||
+		payload.aud !== process.env.GOOGLE_CLIENT_ID
 	){
 		throw new RefusalError("That login token was not generated for this app and cannot be used.", "INVALID_ID_TOKEN");
 	}
@@ -70,7 +70,7 @@ router.post("/", async (req, res) => {
 	req.session.email = payload.email;
 	req.session.name = payload.name;
 	req.session.cookie.expires = new Date(new Date().getTime() + maxAge);
-	req.session.encryptedID = encryptString(payload.sub, encryptKey, encryptIv);
+	req.session.encryptedUserId = encryptString(payload.sub, encryptKey, encryptIv);
 
 	res.json({success: true});
 

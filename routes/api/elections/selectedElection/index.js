@@ -1,19 +1,27 @@
 const router = require("express").Router({mergeParams: true});
-const Elections = require("../../../../old_database/models/Elections");
+const {elections} = require("./../../../../database");
 
 router.use(async (req, res, next) => {
-	let election = await Elections.findOne({where: {publicUrl: req.params.publicUrl}});
+	let election = await elections.findOne({where: {publicUrl: req.params.publicUrl}});
 
 	if(! election){
-		res.json({
+
+		res.status(404).json({
 			success: false,
-			error: "There is no election with that url id",
+			error: {
+				code: "NOT_FOUND",
+				message: "There is no election with that url"
+			},
 			payload: null
 		});
+
 	} else {
+
 		req.election = election;
 		next();
+
 	}
+
 });
 
 router.get("/", (req, res) => res.json({success: true, payload: req.election}));

@@ -11,8 +11,8 @@ module.exports = {
 			choiceNumber: {
 				type: Sequelize.INTEGER
 			},
-			data: {
-				type: Sequelize.STRING
+			candidateId: {
+				type: Sequelize.INTEGER
 			},
 			createdAt: {
 				allowNull: false,

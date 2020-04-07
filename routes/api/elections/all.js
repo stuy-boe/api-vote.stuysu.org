@@ -1,4 +1,4 @@
-const {Elections} = require("../../../old_database");
+const {elections} = require("../../../database");
 const router = require("express").Router();
 
 router.get("/",  async (req, res) => {
@@ -6,7 +6,7 @@ router.get("/",  async (req, res) => {
 	// Cache the response for 3 min
 	res.set(`Cache-Control', 'public, max-age=${60 * 3}`);
 
-	let elections = await Elections.findAll({
+	let elections = await elections.findAll({
 		where: {visible: true},
 		attributes: ["publicUrl", "name", "picture", "completed", "startTime", "endTime", "publicResults"]
 	});

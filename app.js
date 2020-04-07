@@ -1,21 +1,15 @@
+require('express-async-errors');
+
 const db = require("./database");
 const sessionValidator = require("./utils/sessionValidator");
 const bodyParser = require("body-parser");
 const cookieParser = require('cookie-parser');
 const express = require("express");
-require('express-async-errors');
-
 const app = express();
 const morgan = require("morgan");
 const expressSession = require("express-session");
 const SequelizeConnectSession = require('connect-session-sequelize')(expressSession.Store);
 const sequelizeStore = new SequelizeConnectSession({db: db.sequelize});
-const nunjucks = require("nunjucks");
-
-nunjucks.configure('client/build', {
-	autoescape: true,
-	express: app
-});
 
 const sessionOptions = {
 	secret: process.env.SESSION_SECRET || "some_semi_permanent_secret",

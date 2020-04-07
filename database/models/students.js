@@ -7,5 +7,12 @@ module.exports = (sequelize, DataTypes) => {
 	students.associate = function (models) {
 		// associations can be defined here
 	};
+
+	students.prototype.getGrade = async function(email) {
+		const student = await students.findOne({where: {email}});
+
+		return student ? student.grade : null;
+	};
+
 	return students;
 };

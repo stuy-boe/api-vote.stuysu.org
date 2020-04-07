@@ -1,9 +1,9 @@
 const router = require("express").Router();
 const Talos = require("talos-js");
-const {Students} = require("../../../old_database");
+const {students} = require("../../../database");
 
 let addOrUpdateStudents = (email, grade) => new Promise(resolve => {
-	Students
+	students
 		.findOne({ where: {email} })
 		.then(res => {
 			// update existing students
@@ -15,7 +15,7 @@ let addOrUpdateStudents = (email, grade) => new Promise(resolve => {
 			if(res)
 				return resolve(0);
 
-			Students.create({email, grade});
+			students.create({email, grade});
 			return resolve(1);
 		});
 });
@@ -25,11 +25,11 @@ router.get("/", async (req, res) => {
 	const password = req.body.password || "";
 
 	const user = new Talos( username, password);
-	let all_students;
+	let allStudents;
 
 	try {
 
-		all_students = await user.getAllStudents("");
+		allStudents = await user.getAllStudents("");
 
 	} catch (error) {
 
@@ -45,7 +45,7 @@ router.get("/", async (req, res) => {
 
 	let updatePromises = [];
 
-	all_students.forEach(student => {
+	allStudents.forEach(student => {
 		let promise = addOrUpdateStudents(student.user.email, student.grade);
 		updatePromises.push(promise);
 	});
