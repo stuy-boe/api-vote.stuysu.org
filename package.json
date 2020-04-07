@@ -27,7 +27,7 @@
     "dotenv": "^8.2.0",
     "express": "latest",
     "express-session": "^1.17.0",
-    "google-auth-library": "^5.10.1",
+    "google-auth-library": "^6.0.0",
     "moment": "^2.24.0",
     "morgan": "^1.10.0",
     "mysql2": "^2.1.0",
