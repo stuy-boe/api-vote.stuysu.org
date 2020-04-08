@@ -4,7 +4,7 @@ const cluster = require("cluster");
 const port = Number(process.env.PORT) || 3001;
 const app = require("./app");
 
-if ( process.env.NODE_ENV === "production" ) {
+if ( process.env.NODE_ENV === "production" && process.env.DISABLE_CLUSTER === "true" ) {
 
 	if(cluster.isMaster){
 		console.log("Running production server. Spawning worker processes...");
@@ -30,9 +30,9 @@ if ( process.env.NODE_ENV === "production" ) {
 
 	}
 
-// Code to run if we're in a worker process
 } else {
 
+	// Code to run if we're in development
 	app.listen(port, () => console.log(`Listening on port ${port}`));
 
 }
