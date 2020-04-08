@@ -1,8 +1,7 @@
-const router = require("express").Router();
 const cors = require("cors");
 const RefusalError = require("./../utils/RefusalError");
 
-const allowedOrigins = (process.env.ALLOWED_ORIGINS || "http://localhost:3001").split(" ");
+const allowedOrigins = (process.env.ALLOWED_ORIGINS || "http://localhost:3000 http://localhost:3001").split(" ");
 const corsOptions = {
 	origin: (origin, callback) => {
 
@@ -15,6 +14,4 @@ const corsOptions = {
 	credentials: true
 };
 
-router.use(cors(corsOptions));
-
-module.exports = router;
+module.exports = cors(corsOptions);
