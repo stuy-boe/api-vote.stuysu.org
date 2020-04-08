@@ -19,9 +19,8 @@ const errorHandler = (err, req, res, next) => {
 		res.status(500).json({
 			success: false,
 			error: {
-				code: err.code,
+				code: "SERVER_ERROR",
 				message: "There was an unexpected server error. We will review this shortly"
-
 			},
 		});
 
