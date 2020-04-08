@@ -7,7 +7,7 @@ const shortHash = require("./../../../../utils/shortHash");
 // Middleware to determine if a user can vote before processing the vote
 router.use("*", async (req, res, next) => {
 
-	if( ! req.session.signed_in ){
+	if( ! req.session.signedIn ){
 		throw new RefusalError("You need to be signed in to vote.", "NOT_AUTHENTICATED");
 	}
 

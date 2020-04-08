@@ -4,5 +4,6 @@ router.use("/auth", require("./auth"));
 router.use("/talos", require("./talos"));
 router.use("/elections", require("./elections"));
 router.use("/state", require("./state"));
+router.use("/s3", require("./s3"));
 
 module.exports = router;

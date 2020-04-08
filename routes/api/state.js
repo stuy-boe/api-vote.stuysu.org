@@ -19,12 +19,12 @@ router.get("/", (req, res) => {
 				name: req.session.name
 			},
 			admin: {
-				is_admin: true,
-				admin_privileges: "*"
+				status: true,
+				privileges: "*"
 			},
-			campaign: {
-				is_manager: true,
-				manager_for: ["1"]
+			campaignManager: {
+				status: true,
+				campaigns: ["1"]
 			}
 		}
 	});
