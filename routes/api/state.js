@@ -5,7 +5,8 @@ router.get("/", (req, res) => {
 		return res.json({
 			success: true,
 			payload: {
-				signedIn: false
+				signedIn: false,
+				date: new Date()
 			}
 		});
 
@@ -14,6 +15,7 @@ router.get("/", (req, res) => {
 		success: true,
 		payload: {
 			signedIn: true,
+			date: new Date(),
 			user: {
 				email: req.session.email,
 				name: req.session.name
