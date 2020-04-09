@@ -1,11 +1,15 @@
 const router = require("express").Router();
 
 router.get("/", (req, res) => {
+
+	const date = new Date().toISOString();
+
 	if( ! req.session.signedIn )
 		return res.json({
 			success: true,
 			payload: {
-				signedIn: false
+				signedIn: false,
+				date
 			}
 		});
 
@@ -14,6 +18,7 @@ router.get("/", (req, res) => {
 		success: true,
 		payload: {
 			signedIn: true,
+			date,
 			user: {
 				email: req.session.email,
 				name: req.session.name
