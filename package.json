@@ -42,6 +42,7 @@
     "chai": "^4.2.0",
     "mocha": "^7.1.1",
     "nodemon": "^2.0.3",
+    "prettier": "^2.0.4",
     "request": "^2.88.2",
     "sequelize-cli": "^5.5.1"
   }
