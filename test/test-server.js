@@ -1,4 +1,4 @@
-const app = require("./../app");
+const app = require('./../app');
 
 it('Server runs without error', function (done) {
 	let server;

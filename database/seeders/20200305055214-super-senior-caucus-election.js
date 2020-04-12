@@ -13,23 +13,30 @@ module.exports = {
 		  }], {});
 		*/
 
-		return queryInterface.bulkInsert('elections', [
-			{
-				id: -1,
-				publicUrl: "super-senior-caucus",
-				name: "Super Senior Caucus",
-				type: "runoff",
-				startTime: new Date(),
-				endTime: new Date(new Date().getTime() + (1000 * 60 * 60 * 24)),
-				visible: 1,
-				picture: "https://source.unsplash.com/400x300/?vote",
-				publicResults: false,
-				completed: false,
-				createdAt: new Date(),
-				updatedAt: new Date(),
-			}
-
-		], {});
+		return queryInterface.bulkInsert(
+			'elections',
+			[
+				{
+					id: -1,
+					publicUrl: 'super-senior-caucus',
+					name: 'Super Senior Caucus',
+					type: 'runoff',
+					startTime: new Date(),
+					endTime: new Date(
+						new Date().getTime() +
+							1000 * 60 * 60 * 24
+					),
+					visible: 1,
+					picture:
+						'https://source.unsplash.com/400x300/?vote',
+					publicResults: false,
+					completed: false,
+					createdAt: new Date(),
+					updatedAt: new Date()
+				}
+			],
+			{}
+		);
 	},
 
 	down: (queryInterface, Sequelize) => {
@@ -40,6 +47,10 @@ module.exports = {
 		  Example:
 		  return queryInterface.bulkDelete('People', null, {});
 		*/
-		return queryInterface.bulkDelete("elections", {id: -1}, {});
+		return queryInterface.bulkDelete(
+			'elections',
+			{ id: -1 },
+			{}
+		);
 	}
 };

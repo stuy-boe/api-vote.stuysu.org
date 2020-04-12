@@ -1,38 +1,37 @@
-const router = require("express").Router();
-const Talos = require("talos-js");
-const {students} = require("../../../database");
+const router = require('express').Router();
+const Talos = require('talos-js');
+const { students } = require('../../../database');
 
-let addOrUpdateStudents = (email, grade) => new Promise(resolve => {
-	students
-		.findOne({ where: {email} })
-		.then(res => {
+let addOrUpdateStudents = (email, grade) =>
+	new Promise(resolve => {
+		students.findOne({ where: { email } }).then(res => {
 			// update existing students
-			if(res && String(res.grade) !== String(grade) && Number(res.grade) > grade) {
-				res.update({email, grade});
+			if (
+				res &&
+				String(res.grade) !== String(grade) &&
+				Number(res.grade) > grade
+			) {
+				res.update({ email, grade });
 				return resolve(1);
 			}
 
-			if(res)
-				return resolve(0);
+			if (res) return resolve(0);
 
-			students.create({email, grade});
+			students.create({ email, grade });
 			return resolve(1);
 		});
-});
+	});
 
-router.get("/", async (req, res) => {
-	const username = req.body.username || "";
-	const password = req.body.password || "";
+router.get('/', async (req, res) => {
+	const username = req.body.username || '';
+	const password = req.body.password || '';
 
-	const user = new Talos( username, password);
+	const user = new Talos(username, password);
 	let allStudents;
 
 	try {
-
-		allStudents = await user.getAllStudents("");
-
+		allStudents = await user.getAllStudents('');
 	} catch (error) {
-
 		return res.json({
 			success: false,
 			error: {
@@ -40,13 +39,15 @@ router.get("/", async (req, res) => {
 				code: error.code
 			}
 		});
-
 	}
 
 	let updatePromises = [];
 
 	allStudents.forEach(student => {
-		let promise = addOrUpdateStudents(student.user.email, student.grade);
+		let promise = addOrUpdateStudents(
+			student.user.email,
+			student.grade
+		);
 		updatePromises.push(promise);
 	});
 
@@ -54,8 +55,7 @@ router.get("/", async (req, res) => {
 
 	let rowsAffected = values.reduce((a, b) => a + b, 0);
 
-	res.json({success: true, payload: {rowsAffected}});
-
+	res.json({ success: true, payload: { rowsAffected } });
 });
 
 module.exports = router;

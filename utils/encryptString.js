@@ -1,4 +1,4 @@
-const crypto = require("crypto");
+const crypto = require('crypto');
 
 /**
  * Encrypts a string using a given key and iv (salt)
@@ -9,5 +9,8 @@ const crypto = require("crypto");
  */
 module.exports = (str, key, iv) => {
 	let cipher = crypto.createCipheriv('aes256', key, iv);
-	return cipher.update(str, 'utf8', 'hex') + cipher.final("hex");
+	return (
+		cipher.update(str, 'utf8', 'hex') +
+		cipher.final('hex')
+	);
 };

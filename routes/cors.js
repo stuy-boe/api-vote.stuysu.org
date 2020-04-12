@@ -1,25 +1,29 @@
-const cors = require("cors");
-const RefusalError = require("./../utils/RefusalError");
+const cors = require('cors');
+const RefusalError = require('./../utils/RefusalError');
 
 const allowedOrigins = new RegExp(
-  process.env.ALLOWED_ORIGINS || /^(http(s?):\/\/localhost((:\d{1,5})?))$/ // guardrails-disable-line
+	process.env.ALLOWED_ORIGINS ||
+		/^(http(s?):\/\/localhost((:\d{1,5})?))$/ // guardrails-disable-line
 );
 
 const corsOptions = {
-  origin: (origin, callback) => {
-    if (
-      !origin ||
-      origin.match(allowedOrigins) ||
-      process.env.NODE_ENV === "development"
-    ) {
-      callback(null, true);
-    } else {
-      callback(
-        new RefusalError("Not allowed by CORS", "ERR_HTTP2_INVALID_ORIGIN")
-      );
-    }
-  },
-  credentials: true,
+	origin: (origin, callback) => {
+		if (
+			!origin ||
+			origin.match(allowedOrigins) ||
+			process.env.NODE_ENV === 'development'
+		) {
+			callback(null, true);
+		} else {
+			callback(
+				new RefusalError(
+					'Not allowed by CORS',
+					'ERR_HTTP2_INVALID_ORIGIN'
+				)
+			);
+		}
+	},
+	credentials: true
 };
 
 module.exports = cors(corsOptions);
