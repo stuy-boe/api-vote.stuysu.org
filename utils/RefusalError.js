@@ -1,7 +1,7 @@
 class RefusalError extends Error {
 	constructor(message, code) {
 		super();
-		this.name = "Refusal";
+		this.name = 'Refusal';
 		this.message = message;
 		this.code = code;
 	}

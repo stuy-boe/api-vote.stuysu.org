@@ -12,26 +12,26 @@ module.exports = {
 			isBetaMember: false
 		  }], {});
 		*/
-		return queryInterface.bulkInsert("candidates", [
+		return queryInterface.bulkInsert('candidates', [
 			{
 				id: -1,
-				name: "Bernie Sanders",
+				name: 'Bernie Sanders',
 				electionId: -1,
-				publicUrl: "sanders",
+				publicUrl: 'sanders',
 				active: true,
 				createdAt: new Date(),
 				updatedAt: new Date()
 			},
 			{
 				id: -2,
-				name: "Elizabeth Warren",
+				name: 'Elizabeth Warren',
 				electionId: -1,
-				publicUrl: "warren",
+				publicUrl: 'warren',
 				active: true,
 				createdAt: new Date(),
 				updatedAt: new Date()
-			},
-		])
+			}
+		]);
 	},
 
 	down: (queryInterface, Sequelize) => {
@@ -42,6 +42,8 @@ module.exports = {
 		  Example:
 		  return queryInterface.bulkDelete('People', null, {});
 		*/
-		return queryInterface.bulkDelete('candidates', {electionId: -1});
+		return queryInterface.bulkDelete('candidates', {
+			electionId: -1
+		});
 	}
 };
