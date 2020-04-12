@@ -6,7 +6,7 @@ const app = require('./app');
 
 if (
 	process.env.NODE_ENV === 'production' &&
-	process.env.DISABLE_CLUSTER === 'true'
+	process.env.DISABLE_CLUSTER !== 'true'
 ) {
 	if (cluster.isMaster) {
 		console.log(
