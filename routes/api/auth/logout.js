@@ -1,8 +1,8 @@
-const router = require("express").Router();
+const router = require('express').Router();
 
-router.get("/", (req, res) => {
+router.get('/', (req, res) => {
 	req.session.destroy();
-	res.json({success: true});
+	res.json({ success: true });
 });
 
 module.exports = router;

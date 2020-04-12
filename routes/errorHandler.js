@@ -1,9 +1,7 @@
-const RefusalError = require("./../utils/RefusalError");
+const RefusalError = require('./../utils/RefusalError');
 
 const errorHandler = (err, req, res, next) => {
-
-	if(err instanceof RefusalError){
-
+	if (err instanceof RefusalError) {
 		res.status(403).json({
 			success: false,
 			error: {
@@ -11,21 +9,18 @@ const errorHandler = (err, req, res, next) => {
 				message: err.message
 			}
 		});
-
 	} else {
-
 		console.error(err);
 
 		res.status(500).json({
 			success: false,
 			error: {
-				code: "SERVER_ERROR",
-				message: "There was an unexpected server error. We will review this shortly"
-			},
+				code: 'SERVER_ERROR',
+				message:
+					'There was an unexpected server error. We will review this shortly'
+			}
 		});
-
 	}
-
 };
 
 module.exports = errorHandler;

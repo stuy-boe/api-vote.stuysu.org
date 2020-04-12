@@ -1,12 +1,11 @@
-const router = require("express").Router();
+const router = require('express').Router();
 
-router.get("/", (req, res) => {
-
-	if( ! req.session.signedIn ) {
+router.get('/', (req, res) => {
+	if (!req.session.signedIn) {
 		return res.json({
 			success: true,
 			payload: {
-				signedIn: false,
+				signedIn: false
 			}
 		});
 	}
@@ -22,15 +21,14 @@ router.get("/", (req, res) => {
 			},
 			admin: {
 				status: true,
-				privileges: "*"
+				privileges: '*'
 			},
 			campaignManager: {
 				status: true,
-				campaigns: ["1"]
+				campaigns: ['1']
 			}
 		}
 	});
-
 });
 
 module.exports = router;
