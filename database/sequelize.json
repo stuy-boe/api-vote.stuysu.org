@@ -7,6 +7,16 @@
 			"collate": "utf8_general_ci"
 		}
 	},
+	"testing": {
+		"use_env_variable": "SEQUELIZE_URL",
+		"define": {
+			"charset": "utf8",
+			"collate": "utf8_general_ci"
+		},
+		"native": true,
+		"ssl": true,
+		"logging": true
+	},
 	"production": {
 		"use_env_variable": "SEQUELIZE_URL",
 		"pool": {

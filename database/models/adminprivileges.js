@@ -13,7 +13,7 @@ module.exports = (sequelize, DataTypes) => {
 	};
 
 	adminPrivileges.exists = async function (email, privilege) {
-		const exists = adminPrivileges.count({
+		const exists = await adminPrivileges.count({
 			where: {
 				email,
 				privilege
