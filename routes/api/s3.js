@@ -1,13 +1,38 @@
-const url = require('url');
-const path = require('path');
 const router = require('express').Router();
+const cloudinary = require('cloudinary').v2;
 
 router.get('*', (req, res) => {
-	// Redirect the user to the appropriate object on our s3 service
-	let s3Url = url.parse(process.env.S3_URL || '/storage');
-	s3Url.pathname = path.join(s3Url.pathname, req.path);
+	// replace will only replace the first instance
+	const adjustedPath = req.path.replace('/', '');
 
-	res.status(301).redirect(url.format(s3Url));
+	let width = Number(req.query.width) || undefined;
+
+	if (width && width > 1000) {
+		width = 1000;
+	}
+
+	let height = Number(req.query.height) || undefined;
+
+	if (height && height > 1000) {
+		height = 1000;
+	}
+
+	let crop = req.query.crop;
+
+	let gravity = req.query.gravity;
+	let radius = req.query.radius;
+
+	const cloudinaryUrl = cloudinary.url(adjustedPath, {
+		height,
+		width,
+		crop,
+		gravity,
+		radius,
+		secure: true
+	});
+
+	// Redirect the user to the appropriate object on our s3 service
+	res.status(301).redirect(cloudinaryUrl);
 });
 
 module.exports = router;

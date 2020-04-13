@@ -1,9 +1,5 @@
 const router = require('express').Router();
-const {
-	students,
-	votes,
-	voteData
-} = require('../../../../database');
+const { students, votes, voteData } = require('../../../../database');
 const RefusalError = require('./../../../../utils/RefusalError');
 const shortHash = require('./../../../../utils/shortHash');
 
@@ -12,7 +8,7 @@ router.use('*', async (req, res, next) => {
 	if (!req.session.signedIn) {
 		throw new RefusalError(
 			'You need to be signed in to vote.',
-			'NOT_AUTHENTICATED'
+			'AUTH_REQUIRED'
 		);
 	}
 
@@ -39,11 +35,7 @@ router.use('*', async (req, res, next) => {
 		);
 	}
 
-	if (
-		await req.election.existsVote(
-			req.session.getDecryptedUserId()
-		)
-	) {
+	if (await req.election.existsVote(req.session.getDecryptedUserId())) {
 		throw new RefusalError(
 			'You have already voted for this election.',
 			'ALREADY_VOTED'
@@ -83,10 +75,7 @@ router.post('/', async (req, res) => {
 			candidate => candidate.id === choice
 		);
 
-		if (
-			choiceExists &&
-			!validChoices.includes(choice)
-		) {
+		if (choiceExists && !validChoices.includes(choice)) {
 			validChoices.push(choice);
 		}
 	}
@@ -95,18 +84,11 @@ router.post('/', async (req, res) => {
 
 	const voteId = await votes.create({
 		electionId: req.election.id,
-		userHash: shortHash(
-			req.session.getDecryptedUserId() +
-				req.election.id
-		),
+		userHash: shortHash(req.session.getDecryptedUserId() + req.election.id),
 		grade
 	});
 
-	for (
-		let choiceNumber = 0;
-		choiceNumber < choices.length;
-		choiceNumber++
-	) {
+	for (let choiceNumber = 0; choiceNumber < choices.length; choiceNumber++) {
 		const choice = choices[choiceNumber];
 
 		await voteData.create({

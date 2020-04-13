@@ -2,6 +2,7 @@ const router = require('express').Router({
 	mergeParams: true
 });
 
+router.use('/admin', require('./admin'));
 router.use('/auth', require('./auth'));
 router.use('/talos', require('./talos'));
 router.use('/elections', require('./elections'));
