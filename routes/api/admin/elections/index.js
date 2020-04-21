@@ -20,6 +20,7 @@ router.use(async (req, res, next) => {
 });
 
 router.use('/pics', require('./pics'));
+router.use('/list', require('./list'));
 router.use('/create', require('./create'));
 
 module.exports = router;
