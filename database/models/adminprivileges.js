@@ -22,5 +22,14 @@ module.exports = (sequelize, DataTypes) => {
 
 		return Boolean(exists);
 	};
+
+	adminPrivileges.list = async function (email) {
+		const rows = await adminPrivileges.findAll({
+			where: { email }
+		});
+
+		return rows.map(row => row.privilege);
+	};
+
 	return adminPrivileges;
 };
