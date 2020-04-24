@@ -8,7 +8,8 @@ const electionPicsFolder = path.join(folder, 'electionPics');
 router.get('/', async (req, res) => {
 	const response = await cloudinary.api.resources({
 		type: 'upload',
-		prefix: electionPicsFolder
+		prefix: electionPicsFolder,
+		max_results: 999
 	});
 
 	const items = response.resources.map(i => i.public_id);
