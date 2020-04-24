@@ -1,6 +1,7 @@
 const router = require('express').Router();
+const { adminPrivileges } = require('./../../database');
 
-router.get('/', (req, res) => {
+router.get('/', async (req, res) => {
 	if (!req.session.signedIn) {
 		return res.json({
 			success: true,
@@ -9,6 +10,9 @@ router.get('/', (req, res) => {
 			}
 		});
 	}
+
+	const privileges = await adminPrivileges.list(req.session.email);
+	const isAdmin = Boolean(privileges.length);
 
 	// TODO UPDATE ADMIN AND CAMPAIGNING WITH REAL VALUES
 	return res.json({
@@ -20,8 +24,8 @@ router.get('/', (req, res) => {
 				name: req.session.name
 			},
 			admin: {
-				status: true,
-				privileges: '*'
+				status: isAdmin,
+				privileges
 			},
 			campaignManager: {
 				status: true,
