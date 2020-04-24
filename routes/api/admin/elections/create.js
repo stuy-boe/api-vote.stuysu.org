@@ -21,7 +21,7 @@ router.post('/', async (req, res) => {
 		);
 	}
 
-	if (electionTypes.includes(type)) {
+	if (!electionTypes.includes(type)) {
 		throw new RefusalError(
 			'That election type is not supported',
 			'UNSUPPORTED_ELECTION_TYPE'
