@@ -21,6 +21,8 @@ router.get('*', (req, res) => {
 
 	let gravity = req.query.gravity;
 	let radius = req.query.radius;
+	let flags = req.query.flags;
+	let quality = req.query.quality;
 
 	const cloudinaryUrl = cloudinary.url(adjustedPath, {
 		height,
@@ -28,6 +30,8 @@ router.get('*', (req, res) => {
 		crop,
 		gravity,
 		radius,
+		flags,
+		quality,
 		secure: true
 	});
 
