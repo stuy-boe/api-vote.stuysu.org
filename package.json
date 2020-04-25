@@ -34,7 +34,7 @@
 		"morgan": "^1.10.0",
 		"mysql2": "^2.1.0",
 		"nunjucks": "^3.2.1",
-		"sequelize": "^5.21.6",
+		"sequelize": "^5.21.7",
 		"set-cookie-parser": "^2.4.5",
 		"sqlite3": "^4.1.1",
 		"talos-js": "^1.1.1"
