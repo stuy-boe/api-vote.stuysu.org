@@ -4,17 +4,23 @@ const encryptString = require('../../../utils/encryptString');
 const genString = require('../../../utils/genString');
 
 const { OAuth2Client } = require('google-auth-library');
-const client = new OAuth2Client(
-	process.env.GOOGLE_CLIENT_ID
-);
+const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
 
 const RefusalError = require('./../../../utils/RefusalError');
 
-router.post('/', async (req, res) => {
-	const idToken = req.body.idToken;
-	const isVotingStation = Boolean(
-		req.cookies.isVotingStation
-	);
+router.get('/', (req, res, next) => {
+	req.idToken = req.query.idToken;
+	next();
+});
+
+router.post('/', (req, res, next) => {
+	req.idToken = req.body.idToken;
+	next();
+});
+
+router.use('/', async (req, res) => {
+	const idToken = req.idToken;
+	const isVotingStation = Boolean(req.cookies.isVotingStation);
 
 	let payload;
 
@@ -33,10 +39,7 @@ router.post('/', async (req, res) => {
 	}
 
 	if (req.session.signedIn) {
-		throw new RefusalError(
-			'You are already signed in.',
-			'SIGNED_IN'
-		);
+		throw new RefusalError('You are already signed in.', 'SIGNED_IN');
 	}
 
 	if (!payload.email_verified) {
@@ -61,9 +64,7 @@ router.post('/', async (req, res) => {
 	const encryptKey = genString(32);
 	const encryptIv = genString(16);
 
-	const maxAge = isVotingStation
-		? 1000 * 60 * 5
-		: 1000 * 86400 * 30;
+	const maxAge = isVotingStation ? 1000 * 60 * 5 : 1000 * 86400 * 30;
 
 	// Create a user cookie to store the information needed to decrypt the user id
 	// The decryption keys only exist on the user side
@@ -84,16 +85,18 @@ router.post('/', async (req, res) => {
 	req.session.signedIn = true;
 	req.session.email = payload.email;
 	req.session.name = payload.name;
-	req.session.cookie.expires = new Date(
-		new Date().getTime() + maxAge
-	);
+	req.session.cookie.expires = new Date(new Date().getTime() + maxAge);
 	req.session.encryptedUserId = encryptString(
 		payload.sub,
 		encryptKey,
 		encryptIv
 	);
 
-	res.json({ success: true });
+	if (req.query.redirect) {
+		res.redirect(req.query.redirect);
+	} else {
+		res.json({ success: true });
+	}
 });
 
 module.exports = router;
