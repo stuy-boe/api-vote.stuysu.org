@@ -66,3 +66,6 @@ typings/
 
 # scratch files
 *scratch.js
+
+# Files uploaded to the server with multer
+/uploads
