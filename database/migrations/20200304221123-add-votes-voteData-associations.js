@@ -3,7 +3,7 @@
 module.exports = {
 	up: (queryInterface, Sequelize) => {
 		return queryInterface.addColumn(
-			'votedata', // name of Source model
+			'voteData', // name of Source model
 			'voteId', // name of the key we're adding
 			{
 				type: Sequelize.INTEGER,
@@ -19,7 +19,7 @@ module.exports = {
 
 	down: (queryInterface, Sequelize) => {
 		return queryInterface.removeColumn(
-			'votedata', // name of Source model
+			'voteData', // name of Source model
 			'voteId' // key we want to remove
 		);
 	}

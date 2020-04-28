@@ -14,21 +14,15 @@ router.use(async (req, res, next) => {
 		where: {
 			publicUrl: req.params.publicUrl
 		},
-		subQuery: false,
-		attributes: [
-			// Include all election attributes
-			...Object.keys(elections.rawAttributes),
-
-			// Include the number of votes
-			[sequelize.fn('COUNT', sequelize.col('votes.id')), 'voteCount']
-		],
+		subQuery: true,
 		include: [
 			{ model: candidates },
 			{ model: allowedGrades },
-			{
-				model: votes,
-				attributes: []
-			}
+			{ model: votes, attributes: [] }
+		],
+		attributes: [
+			'name',
+			[sequelize.fn('COUNT', sequelize.col('vote.userHash')), 'numVotes']
 		]
 	});
 
@@ -43,6 +37,7 @@ router.use(async (req, res, next) => {
 		});
 	} else {
 		req.election = election;
+
 		next();
 	}
 });
