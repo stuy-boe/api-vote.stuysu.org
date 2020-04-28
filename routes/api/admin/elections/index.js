@@ -22,5 +22,6 @@ router.use(async (req, res, next) => {
 router.use('/pics', require('./pics'));
 router.use('/list', require('./list'));
 router.use('/create', require('./create'));
+router.use('/info/:publicUrl', require('./info'));
 
 module.exports = router;
