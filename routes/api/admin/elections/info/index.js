@@ -5,7 +5,6 @@ const {
 	elections,
 	allowedGrades,
 	votes,
-	sequelize,
 	candidates
 } = require('./../../../../../database');
 
@@ -14,19 +13,17 @@ router.use(async (req, res, next) => {
 		where: {
 			publicUrl: req.params.publicUrl
 		},
-		subQuery: true,
 		include: [
-			{ model: candidates },
-			{ model: allowedGrades },
-			{ model: votes, attributes: [] }
-		],
-		attributes: [
-			'name',
-			[sequelize.fn('COUNT', sequelize.col('vote.userHash')), 'numVotes']
+			{
+				model: allowedGrades
+			},
+			{
+				model: candidates
+			}
 		]
 	});
 
-	if (election.id === null) {
+	if (!election) {
 		res.status(404).json({
 			success: false,
 			error: {
@@ -42,8 +39,14 @@ router.use(async (req, res, next) => {
 	}
 });
 
-router.get('/', (req, res) =>
-	res.json({ success: true, payload: req.election })
-);
+router.get('/', async (req, res) => {
+	req.election = req.election.toJSON();
+
+	req.election.numVotes = await votes.count({
+		where: { electionId: req.election.id }
+	});
+
+	res.json({ success: true, payload: req.election });
+});
 
 module.exports = router;

@@ -4,7 +4,9 @@ module.exports = {
 		define: {
 			charset: 'utf8',
 			collate: 'utf8_general_ci'
-		}
+		},
+		ssl: true,
+		native: true
 	},
 	production: {
 		url: process.env.SEQUELIZE_URL,
