@@ -42,6 +42,8 @@ router.use(async (req, res, next) => {
 router.get('/', async (req, res) => {
 	req.election = req.election.toJSON();
 
+	req.election = req.election.allowedGrades.map(row => row.grade);
+
 	req.election.numVotes = await votes.count({
 		where: { electionId: req.election.id }
 	});
