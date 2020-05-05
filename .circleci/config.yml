@@ -3,8 +3,6 @@ orbs:
     node: circleci/node@1.1.6
 jobs:
     build-and-test:
-        environment:
-            SEQUELIZE_URL: "postgres://ubuntu@localhost:5432/db_name"
         docker:
             - image: circleci/php:7.1-apache-node-browsers
             - image: circleci/mysql:8.0.4
