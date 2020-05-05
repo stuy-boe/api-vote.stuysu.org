@@ -13,8 +13,7 @@ router.use(async (req, res, next) => {
 			success: false,
 			error: {
 				code: 'NOT_FOUND',
-				message:
-					'There is no election with that url'
+				message: 'There is no election with that url'
 			},
 			payload: null
 		});

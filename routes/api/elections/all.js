@@ -24,8 +24,7 @@ router.get('/', async (req, res) => {
 	};
 
 	for (let x = 0; x < allElections.length; x++) {
-		if (allElections[x].completed)
-			sorted.completed.push(allElections[x]);
+		if (allElections[x].completed) sorted.completed.push(allElections[x]);
 		else sorted.active.push(allElections[x]);
 	}
 

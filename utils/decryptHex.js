@@ -8,13 +8,8 @@ const crypto = require('crypto');
  * @return {String} The original string as it existed before encryption (if successful)
  */
 module.exports = (encryptedHex, key, iv) => {
-	let decipher = crypto.createDecipheriv(
-		'aes256',
-		key,
-		iv
-	);
+	let decipher = crypto.createDecipheriv('aes256', key, iv);
 	return (
-		decipher.update(encryptedHex, 'hex', 'utf8') +
-		decipher.final('utf8')
+		decipher.update(encryptedHex, 'hex', 'utf8') + decipher.final('utf8')
 	);
 };

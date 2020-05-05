@@ -36,9 +36,7 @@ module.exports = (sequelize, DataTypes) => {
 		return this.startTime <= now && now < this.endTime;
 	};
 
-	elections.prototype.existsVote = async function (
-		userId
-	) {
+	elections.prototype.existsVote = async function (userId) {
 		const userHash = shortHash(userId + this.id);
 		const userVotes = await this.getVotes({
 			where: { userHash }
@@ -47,9 +45,7 @@ module.exports = (sequelize, DataTypes) => {
 		return userVotes.length;
 	};
 
-	elections.prototype.includesGrade = async function (
-		grade
-	) {
+	elections.prototype.includesGrade = async function (grade) {
 		const allowedGrades = await this.getAllowedGrades({
 			where: grade
 		});

@@ -4,7 +4,7 @@ module.exports = (sequelize, DataTypes) => {
 		'allowedGrades',
 		{
 			electionId: DataTypes.INTEGER,
-			grade: DataTypes.STRING
+			grade: DataTypes.INTEGER
 		},
 		{}
 	);

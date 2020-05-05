@@ -9,9 +9,7 @@ if (
 	process.env.DISABLE_CLUSTER !== 'true'
 ) {
 	if (cluster.isMaster) {
-		console.log(
-			'Running production server. Spawning worker processes...'
-		);
+		console.log('Running production server. Spawning worker processes...');
 
 		const cpuCount = require('os').cpus().length;
 
@@ -22,21 +20,15 @@ if (
 
 		cluster.on('exit', worker => {
 			// Restart the dead process
-			console.log(
-				`Worker ${worker.id} died. Restarting...`
-			);
+			console.log(`Worker ${worker.id} died. Restarting...`);
 			cluster.fork();
 		});
 	} else {
 		app.listen(port, () =>
-			console.log(
-				`Worker ${cluster.worker.id} listening on port ${port}`
-			)
+			console.log(`Worker ${cluster.worker.id} listening on port ${port}`)
 		);
 	}
 } else {
 	// Code to run if we're in development
-	app.listen(port, () =>
-		console.log(`Listening on port ${port}`)
-	);
+	app.listen(port, () => console.log(`Listening on port ${port}`));
 }

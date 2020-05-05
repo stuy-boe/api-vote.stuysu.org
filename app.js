@@ -16,9 +16,7 @@ const sequelizeStore = new SequelizeConnectSession({
 });
 
 const sessionOptions = {
-	secret:
-		process.env.SESSION_SECRET ||
-		'some_semi_permanent_secret',
+	secret: process.env.SESSION_SECRET || 'some_semi_permanent_secret',
 	name: 'session',
 	resave: true,
 	saveUninitialized: false,
@@ -26,9 +24,7 @@ const sessionOptions = {
 	cookie: {
 		path: '/',
 		httpOnly: true,
-		maxAge:
-			Number(process.env.SESSION_MAX_AGE) ||
-			15 * 86400 * 1000
+		maxAge: Number(process.env.SESSION_MAX_AGE) || 15 * 86400 * 1000
 	},
 	rolling: true
 };
@@ -46,10 +42,7 @@ sequelizeStore.sync();
 app.use(session);
 
 app.use(
-	cookieParser(
-		process.env.SESSION_SECRET ||
-			'some_semi_permanent_secret'
-	)
+	cookieParser(process.env.SESSION_SECRET || 'some_semi_permanent_secret')
 );
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());

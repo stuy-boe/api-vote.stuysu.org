@@ -1,10 +1,15 @@
+const path = require('path');
+const databaseFile = path.resolve(__dirname, './../app.db');
+
 module.exports = {
 	development: {
-		url: process.env.SEQUELIZE_URL || 'sqlite::./app.db',
+		url: process.env.SEQUELIZE_URL || `sqlite::${databaseFile}`,
 		define: {
 			charset: 'utf8',
-			collate: 'utf8_general_ci'
-		}
+			collate: 'utf8_unicode_ci'
+		},
+		ssl: true,
+		native: true
 	},
 	production: {
 		url: process.env.SEQUELIZE_URL,
@@ -16,7 +21,7 @@ module.exports = {
 		},
 		define: {
 			charset: 'utf8',
-			collate: 'utf8_general_ci'
+			collate: 'utf8_unicode_ci'
 		},
 		native: true,
 		ssl: true,
