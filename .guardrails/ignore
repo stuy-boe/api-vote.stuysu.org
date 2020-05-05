@@ -1,2 +1,3 @@
 database/models/index.js
 test/*
+.circleci/config.yml
