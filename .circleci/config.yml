@@ -15,8 +15,10 @@ jobs:
 
         steps:
             - checkout
-            - run: npm install
-            - run: node check-database-ready
+            - node/with-cache:
+                  steps:
+                      - run: npm install
+                      - run: node check-database-ready
 workflows:
     build-and-test:
         jobs:
