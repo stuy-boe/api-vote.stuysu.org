@@ -18,8 +18,8 @@ jobs:
                       - run: npm install pg pg-native
                       - run: npm run build
                       - run: npm test
-            environment:
-                SEQUELIZE_URL: "postgres://ubuntu@localhost:5432/db_name"
+                  environment:
+                      SEQUELIZE_URL: "postgres://ubuntu@localhost:5432/db_name"
 workflows:
     build-and-test:
         jobs:
