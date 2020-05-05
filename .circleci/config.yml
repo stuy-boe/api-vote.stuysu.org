@@ -10,11 +10,11 @@ commands:
         steps:
             - run:
                   # Our primary container isn't MYSQL so run a sleep command until it's ready.
-                  name: Waiting for MySQL to be ready
+                  name: Waiting for port to start listening
                   command: |
                       for i in `seq 1 10`;
                       do
-                        node is-port-listening --port=3306 && echo Success && exit 0
+                        node is-port-listening --port=<< parameters.port >> && echo Success && exit 0
                         echo -n .
                         sleep 2
                       done
