@@ -6,7 +6,6 @@ jobs:
         executor:
             name: node/default
         docker:
-            - image: circleci/php:7.1-apache-node-browsers # The primary container where steps are run
             - image: circleci/mysql:8.0.4
               environment:
                   MYSQL_ROOT_PASSWORD: rootpw
@@ -16,18 +15,7 @@ jobs:
 
         steps:
             - checkout
-            - run:
-                  # Our primary container isn't MYSQL so run a sleep command until it's ready.
-                  name: Waiting for MySQL to be ready
-                  command: |
-                      for i in `seq 1 10`;
-                      do
-                        nc -z 127.0.0.1 3306 && echo Success && exit 0
-                        echo -n .
-                        sleep 1
-                      done
-                      echo Failed waiting for MySQL && exit 1
-            - run: node -v
+            - run: node check-database-ready
 workflows:
     build-and-test:
         jobs:
