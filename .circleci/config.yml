@@ -3,6 +3,11 @@ orbs:
     node: circleci/node@1.1.6
 jobs:
     build-and-test:
+        docker:
+            - image: postgres:9.6
+              environment:
+                  POSTGRES_USER: ubuntu
+                  POSTGRES_DB: db_name
         executor:
             name: node/default
         steps:
@@ -10,8 +15,11 @@ jobs:
             - node/with-cache:
                   steps:
                       - run: npm install
+                      - run: npm install pg pg-native
                       - run: npm run build
                       - run: npm test
+            environment:
+                SEQUELIZE_URL: "postgres://ubuntu@localhost:5432/db_name"
 workflows:
     build-and-test:
         jobs:
