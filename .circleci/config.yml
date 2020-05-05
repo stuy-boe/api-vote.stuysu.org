@@ -6,14 +6,28 @@ jobs:
         environment:
             SEQUELIZE_URL: "postgres://ubuntu@localhost:5432/db_name"
         docker:
-            - image: postgres:9.6
-              environment:
-                  POSTGRES_USER: ubuntu
-                  POSTGRES_DB: db_name
+            - image: circleci/php:7.1-apache-node-browsers
+            - image: circleci/mysql:8.0.4
+                  environment:
+                      MYSQL_ROOT_PASSWORD: rootpw
+                      MYSQL_DATABASE: test_db
+                      MYSQL_USER: user
+                      MYSQL_PASSWORD: passw0rd
         executor:
             name: node/default
         steps:
             - checkout
+            - run:
+                  # Our primary container isn't MYSQL so run a sleep command until it's ready.
+                  name: Waiting for MySQL to be ready
+                  command: |
+                      for i in `seq 1 10`;
+                      do
+                        nc -z 127.0.0.1 3306 && echo Success && exit 0
+                        echo -n .
+                        sleep 1
+                      done
+                      echo Failed waiting for MySQL && exit 1
             - node/with-cache:
                   steps:
                       - run: npm install
