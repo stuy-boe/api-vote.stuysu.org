@@ -2,37 +2,37 @@ version: 2.1
 orbs:
     node: circleci/node@1.1.6
 jobs:
-    build-and-test:
+    build:
+
+        # Primary container image where all commands run
+
         docker:
-            - image: circleci/php:7.1-apache-node-browsers
-            - image: circleci/mysql:8.0.4
-                  environment:
-                      MYSQL_ROOT_PASSWORD: rootpw
-                      MYSQL_DATABASE: test_db
-                      MYSQL_USER: user
-                      MYSQL_PASSWORD: passw0rd
-        executor:
-            name: node/default
+            - image: circleci/python:3.6.2-stretch-browsers
+              environment:
+                  TEST_DATABASE_URL: postgresql://root@localhost/circle_test
+
+            # Service container image
+
+            - image: circleci/postgres:9.6.5-alpine-ram
+
         steps:
             - checkout
-            - run:
-                  # Our primary container isn't MYSQL so run a sleep command until it's ready.
-                  name: Waiting for MySQL to be ready
-                  command: |
-                      for i in `seq 1 10`;
-                      do
-                        nc -z 127.0.0.1 3306 && echo Success && exit 0
-                        echo -n .
-                        sleep 1
-                      done
-                      echo Failed waiting for MySQL && exit 1
-            - node/with-cache:
-                  steps:
-                      - run: npm install
-                      - run: npm install pg pg-native
-                      - run: npm run build
-                      - run: npm test
+            - run: sudo apt-get update
+            - run: sudo apt-get install postgresql-client-9.6
+            - run: whoami
+            - run: |
+                  psql \
+                  -d $TEST_DATABASE_URL \
+                  -c "CREATE TABLE test (name char(25));"
+            - run: |
+                  psql \
+                  -d $TEST_DATABASE_URL \
+                  -c "INSERT INTO test VALUES ('John'), ('Joanna'), ('Jennifer');"
+            - run: |
+                  psql \
+                  -d $TEST_DATABASE_URL \
+                  -c "SELECT * from test"
 workflows:
     build-and-test:
         jobs:
-            - build-and-test
+            - build
