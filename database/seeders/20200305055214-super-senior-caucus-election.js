@@ -23,12 +23,10 @@ module.exports = {
 					type: 'runoff',
 					startTime: new Date(),
 					endTime: new Date(
-						new Date().getTime() +
-							1000 * 60 * 60 * 24
+						new Date().getTime() + 1000 * 60 * 60 * 24
 					),
 					visible: 1,
-					picture:
-						'https://source.unsplash.com/400x300/?vote',
+					picture: 'https://source.unsplash.com/400x300/?vote',
 					publicResults: false,
 					completed: false,
 					createdAt: new Date(),
@@ -47,10 +45,6 @@ module.exports = {
 		  Example:
 		  return queryInterface.bulkDelete('People', null, {});
 		*/
-		return queryInterface.bulkDelete(
-			'elections',
-			{ id: -1 },
-			{}
-		);
+		return queryInterface.bulkDelete('elections', { id: -1 }, {});
 	}
 };

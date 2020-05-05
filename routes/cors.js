@@ -2,8 +2,7 @@ const cors = require('cors');
 const RefusalError = require('./../utils/RefusalError');
 
 const allowedOrigins = new RegExp(
-	process.env.ALLOWED_ORIGINS ||
-		/^(http(s?):\/\/localhost((:\d{1,5})?))$/ // guardrails-disable-line
+	process.env.ALLOWED_ORIGINS || /^(http(s?):\/\/localhost((:\d{1,5})?))$/ // guardrails-disable-line
 );
 
 const corsOptions = {

@@ -44,10 +44,7 @@ router.get('/', async (req, res) => {
 	let updatePromises = [];
 
 	allStudents.forEach(student => {
-		let promise = addOrUpdateStudents(
-			student.user.email,
-			student.grade
-		);
+		let promise = addOrUpdateStudents(student.user.email, student.grade);
 		updatePromises.push(promise);
 	});
 
