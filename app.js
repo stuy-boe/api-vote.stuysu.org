@@ -9,6 +9,10 @@ const cookieSecret = process.env.SESSION_SECRET || 'some_semi_permanent_secret';
 const session = require('./middleware/session');
 const sessionValidator = require('./middleware/sessionValidator');
 
+if (process.env.NODE_ENV === 'production') {
+	app.set('trust proxy', 1);
+}
+
 app.use(session);
 app.use(sessionValidator);
 app.use(cookieParser(cookieSecret));
