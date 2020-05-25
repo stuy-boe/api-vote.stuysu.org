@@ -1,4 +1,4 @@
-const router = require('express').Router({mergeParams : true});
+const router = require('express').Router({ mergeParams: true });
 
 // Cross-Origin rules apply to all requests
 router.use('*', require('../middleware/cors'));
