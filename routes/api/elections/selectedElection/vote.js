@@ -59,7 +59,8 @@ router.post('/', async (req, res) => {
 		);
 	}
 
-	if (!Boolean(choices.length)) {
+	const hasChoices = Boolean(choices.length);
+	if (!hasChoices) {
 		throw new RequestRefusalError(
 			'You must choose at least one candidate to vote for.',
 			'INSUFFICIENT_SELECTIONS'
