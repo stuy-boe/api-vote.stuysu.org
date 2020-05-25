@@ -4,10 +4,11 @@
 	"description": "The latest version of the Stuyvesant High School Board of Elections Voting Site.",
 	"main": "index.js",
 	"scripts": {
-		"test": "mocha",
 		"build": "npx sequelize-cli db:migrate",
 		"start": "node index.js",
-		"dev": "npx nodemon index.js"
+		"dev": "npx nodemon index.js",
+		"test": "nyc mocha",
+		"coverage": "nyc report --reporter=text-lcov | coveralls"
 	},
 	"repository": {
 		"type": "git",
@@ -44,9 +45,11 @@
 	},
 	"devDependencies": {
 		"chai": "^4.2.0",
+		"coveralls": "^3.1.0",
 		"minimist": "^1.2.5",
 		"mocha": "^7.1.2",
 		"nodemon": "^2.0.4",
+		"nyc": "^15.0.1",
 		"pg": "^8.2.1",
 		"pg-native": "^3.0.0",
 		"portscanner": "^2.2.0",

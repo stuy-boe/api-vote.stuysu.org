@@ -6,7 +6,7 @@ commands:
         parameters:
             port:
                 type: string
-                default: "3306"
+                default: '3306'
         steps:
             - run:
                   # Our primary container isn't MYSQL so run a sleep command until it's ready.
@@ -39,7 +39,7 @@ jobs:
                       - run: npm install
                       - run: npm install mysql2
                       - check-port-listening:
-                           port: "3306"
+                            port: '3306'
                       - run: npm run build
                       - run: npm run test
     test-postgres:
@@ -57,13 +57,13 @@ jobs:
         steps:
             - checkout
             - node/with-cache:
-                steps:
-                    - run: npm install
-                    - run: npm install pg pg-native
-                    - check-port-listening:
-                        port: "5432"
-                    - run: npm run build
-                    - run: npm test
+                  steps:
+                      - run: npm install
+                      - run: npm install pg pg-native
+                      - check-port-listening:
+                            port: '5432'
+                      - run: npm run build
+                      - run: npm test
     test-sqlite:
         executor:
             name: node/default
@@ -77,6 +77,11 @@ jobs:
                       - run: npm install sqlite3
                       - run: npm run build
                       - run: npm test
+                      - run:
+                            name: Run migrations
+                            command: npm run coverage
+                            environment:
+                                COVERALLS_GIT_BRANCH: {{ .Branch }}
 workflows:
     build-and-test:
         jobs:
