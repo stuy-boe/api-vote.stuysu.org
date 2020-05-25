@@ -1,5 +1,5 @@
 const router = require('express').Router();
-const RefusalError = require('./../../../../utils/RefusalError');
+const RequestRefusalError = require('../../../../utils/RequestRefusalError');
 const { elections, allowedGrades } = require('./../../../../database');
 const electionTypes = ['runoff', 'plurality'];
 const allGrades = [9, 10, 11, 12];
@@ -20,28 +20,28 @@ router.post('/', async (req, res) => {
 		endTime = new Date(req.body.endTime);
 		startTime.toISOString() && endTime.toISOString();
 	} catch (e) {
-		throw new RefusalError(
+		throw new RequestRefusalError(
 			'Start date/time or end date/time is not valid.',
 			'INVALID_TIMES'
 		);
 	}
 
 	if (!picture) {
-		throw new RefusalError(
+		throw new RequestRefusalError(
 			'You must provide a valid picture for this election.',
 			'INVALID_PICTURE'
 		);
 	}
 
 	if (!name) {
-		throw new RefusalError(
+		throw new RequestRefusalError(
 			'A valid name is required to create an election.',
 			'INCOMPLETE_FORM'
 		);
 	}
 
 	if (!electionTypes.includes(type)) {
-		throw new RefusalError(
+		throw new RequestRefusalError(
 			'That election type is not supported',
 			'UNSUPPORTED_ELECTION_TYPE'
 		);
@@ -50,7 +50,7 @@ router.post('/', async (req, res) => {
 	const publicUrlExists = await elections.count({ where: { publicUrl } });
 
 	if (!publicUrl || publicUrlExists) {
-		throw new RefusalError(
+		throw new RequestRefusalError(
 			'There already exists an election with that public url.',
 			'URL_EXISTS'
 		);
@@ -82,10 +82,7 @@ router.post('/', async (req, res) => {
 	res.json({
 		success: true,
 		payload: {
-			election: {
-				id: election.id,
-				publicUrl: election.publicUrl
-			}
+			election: { id: election.id, publicUrl: election.publicUrl }
 		}
 	});
 });

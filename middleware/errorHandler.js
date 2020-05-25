@@ -1,13 +1,10 @@
-const RefusalError = require('./../utils/RefusalError');
+const RequestRefusalError = require('../utils/RequestRefusalError');
 
 const errorHandler = (err, req, res, next) => {
-	if (err instanceof RefusalError) {
+	if (err instanceof RequestRefusalError) {
 		res.status(403).json({
 			success: false,
-			error: {
-				code: err.code,
-				message: err.message
-			}
+			error: { code: err.code, message: err.message }
 		});
 	} else {
 		console.error(err);
