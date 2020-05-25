@@ -1,4 +1,4 @@
-const RefusalError = require('./../utils/RefusalError');
+const RefusalError = require('../utils/RefusalError');
 
 const errorHandler = (err, req, res, next) => {
 	if (err instanceof RefusalError) {

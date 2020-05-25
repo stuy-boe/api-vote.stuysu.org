@@ -3,10 +3,10 @@ const router = require('express').Router({
 });
 
 // Cross-Origin rules apply to all requests
-router.use('*', require('./cors'));
+router.use('*', require('../middleware/cors'));
 
 router.use('/api', require('./api'));
 
-router.use(require('./errorHandler'));
+router.use(require('../middleware/errorHandler'));
 
 module.exports = router;

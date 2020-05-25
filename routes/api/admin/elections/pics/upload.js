@@ -2,7 +2,7 @@ const router = require('express').Router();
 const multer = require('multer');
 const fileSizeLimit = 1000000 * 5;
 const path = require('path');
-const genString = require('./../../../../../utils/genString');
+const randomString = require('crypto-random-string');
 const uploadsFolder = path.resolve(__dirname, './../../../../../uploads');
 const fs = require('fs');
 
@@ -30,7 +30,7 @@ router.post('/', multerUploads, async (req, res) => {
 
 	const cloudinaryFolder = process.env.CLOUDINARY_FOLDER || '';
 
-	const randomName = genString(8);
+	const randomName = randomString({ length: 8 });
 	const filePublicId = `${cloudinaryFolder}/electionPics/${randomName}`;
 
 	await cloudinary.uploader.upload(file.path, {

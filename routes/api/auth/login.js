@@ -1,7 +1,8 @@
 const router = require('express').Router();
 
 const encryptString = require('../../../utils/encryptString');
-const genString = require('../../../utils/genString');
+const randomString = require('crypto-random-string');
+const crypto = require('crypto');
 
 const { OAuth2Client } = require('google-auth-library');
 const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
@@ -61,8 +62,8 @@ router.use('/', async (req, res) => {
 
 	// Create session now that info has been validated
 	// Generate a random key and salt to encrypt the user's sub (secret user id)
-	const encryptKey = genString(32);
-	const encryptIv = genString(16);
+	const encryptKey = crypto.randomBytes(32);
+	const encryptIv = crypto.randomBytes(16);
 
 	const maxAge = isVotingStation ? 1000 * 60 * 5 : 1000 * 86400 * 30;
 
@@ -79,8 +80,8 @@ router.use('/', async (req, res) => {
 		options.sameSite = 'none';
 	}
 
-	res.cookie('decryptKey', encryptKey, options);
-	res.cookie('decryptIv', encryptIv, options);
+	res.cookie('decryptKey', encryptKey.toString('hex'), options);
+	res.cookie('decryptIv', encryptIv.toString('hex'), options);
 
 	req.session.signedIn = true;
 	req.session.email = payload.email;
