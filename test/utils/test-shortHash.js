@@ -32,7 +32,7 @@ describe('shortHash', () => {
 	});
 
 	it('should accept a buffer', done => {
-		const shortHashBound = shortHash.bind(null, new Buffer('hello'));
+		const shortHashBound = shortHash.bind(null, Buffer.from('hello'));
 
 		expect(shortHashBound).to.not.throw(Error);
 
