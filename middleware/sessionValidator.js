@@ -1,5 +1,5 @@
 const router = require('express').Router();
-const decryptHex = require('./../utils/decryptHex');
+const decryptHex = require('../utils/decryptHex');
 
 router.use('*', (req, res, next) => {
 	if (req.session.signedIn) {

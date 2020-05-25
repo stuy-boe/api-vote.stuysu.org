@@ -14,12 +14,7 @@ const corsOptions = {
 		) {
 			callback(null, true);
 		} else {
-			callback(
-				new RefusalError(
-					'Not allowed by CORS',
-					'ERR_HTTP2_INVALID_ORIGIN'
-				)
-			);
+			callback(new RefusalError('Not allowed by CORS', 'INVALID_ORIGIN'));
 		}
 	},
 	credentials: true

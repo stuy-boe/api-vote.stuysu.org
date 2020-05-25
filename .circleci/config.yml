@@ -14,7 +14,7 @@ commands:
                   command: |
                       for i in `seq 1 10`;
                       do
-                        node is-port-listening --port=<< parameters.port >> && echo Success && exit 0
+                        npx is-port-listening --port=<< parameters.port >> && echo Success && exit 0
                         echo -n .
                         sleep 2
                       done
