@@ -8,7 +8,7 @@ const crypto = require('crypto');
  * @return {String} The original string as it existed before encryption (if
  *     successful)
  */
-module.exports = (encryptedHex, key, iv) => {
+const decryptHex = (encryptedHex, key, iv) => {
 	if (key.length !== 32) {
 		throw new Error('The key must be a 32 byte Buffer.');
 	}
@@ -22,3 +22,5 @@ module.exports = (encryptedHex, key, iv) => {
 		decipher.update(encryptedHex, 'hex', 'utf8') + decipher.final('utf8')
 	);
 };
+
+module.exports = decryptHex;
