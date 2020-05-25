@@ -1,4 +1,4 @@
-# vote.stuysu.org
+# api-vote.stuysu.org
 
 The backend api for the Stuyvesant High School Board of Elections Voting Site.
 
