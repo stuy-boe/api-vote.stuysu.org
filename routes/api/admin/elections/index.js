@@ -1,5 +1,5 @@
 const router = require('express').Router();
-const RefusalError = require('./../../../../utils/RefusalError');
+const RequestRefusalError = require('../../../../utils/RequestRefusalError');
 const { adminPrivileges } = require('./../../../../database');
 
 // Only admins with the 'elections' privilege can access the following endpoints
@@ -10,7 +10,7 @@ router.use(async (req, res, next) => {
 	);
 
 	if (!hasAdminPrivilege) {
-		throw new RefusalError(
+		throw new RequestRefusalError(
 			"You don't have permission to use this endpoint.",
 			'INSUFFICIENT_PERMISSIONS'
 		);

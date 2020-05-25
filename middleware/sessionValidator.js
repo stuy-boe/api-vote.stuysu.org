@@ -1,5 +1,5 @@
 const router = require('express').Router();
-const decryptHex = require('./../utils/decryptHex');
+const decryptHex = require('../utils/decryptHex');
 
 router.use('*', (req, res, next) => {
 	if (req.session.signedIn) {
@@ -13,7 +13,8 @@ router.use('*', (req, res, next) => {
 			let isVotingStation = Boolean(req.cookies.isVotingStation);
 			if (!isVotingStation) {
 				let options = {
-					maxAge: 1000 * 86400 * 30, // Normal cookie lasts for 30 days, voting station lasts 5 min
+					maxAge: 1000 * 86400 * 30, // Normal cookie lasts for 30 days, voting
+					// station lasts 5 min
 					httpOnly: true, // The cookie only accessible by the web server
 					signed: true // Indicates if the cookie should be signed
 				};
@@ -32,8 +33,8 @@ router.use('*', (req, res, next) => {
 			req.session.getDecryptedUserId = () => {
 				return decryptHex(
 					req.session.encryptedUserId,
-					req.signedCookies.decryptKey,
-					req.signedCookies.decryptIv
+					Buffer.from(req.signedCookies.decryptKey, 'hex'),
+					Buffer.from(req.signedCookies.decryptIv, 'hex')
 				);
 			};
 		}
