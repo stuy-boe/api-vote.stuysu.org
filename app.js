@@ -13,11 +13,11 @@ if (process.env.NODE_ENV === 'production') {
 	app.set('trust proxy', 1);
 }
 
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(cookieParser(cookieSecret));
 app.use(session);
 app.use(sessionValidator);
-app.use(cookieParser(cookieSecret));
-app.use(bodyParser.urlencoded({ extended: false }));
-app.use(bodyParser.json());
 
 const loggerFormat = process.env.MORGAN_FORMAT || 'dev';
 const logger = morgan(loggerFormat, {
