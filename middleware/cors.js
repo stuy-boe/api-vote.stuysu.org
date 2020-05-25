@@ -1,5 +1,5 @@
 const cors = require('cors');
-const RefusalError = require('../utils/RefusalError');
+const RequestRefusalError = require('../utils/RequestRefusalError');
 
 const allowedOrigins = new RegExp(
 	process.env.ALLOWED_ORIGINS || /^(http(s?):\/\/localhost((:\d{1,5})?))$/ // guardrails-disable-line
@@ -14,7 +14,9 @@ const corsOptions = {
 		) {
 			callback(null, true);
 		} else {
-			callback(new RefusalError('Not allowed by CORS', 'INVALID_ORIGIN'));
+			callback(
+				new RequestRefusalError('Not allowed by CORS', 'INVALID_ORIGIN')
+			);
 		}
 	},
 	credentials: true

@@ -11,18 +11,18 @@ const multerUploads = multer({
 	limits: { fileSize: fileSizeLimit }
 }).single('image');
 
-const RefusalError = require('./../../../../../utils/RefusalError');
+const RequestRefusalError = require('../../../../../utils/RequestRefusalError');
 const cloudinary = require('cloudinary').v2;
 
 router.post('/', multerUploads, async (req, res) => {
 	const file = req.file;
 
 	if (!file) {
-		throw new RefusalError('No image was provided', 'NO_IMAGE');
+		throw new RequestRefusalError('No image was provided', 'NO_IMAGE');
 	}
 
 	if (!file.mimetype.startsWith('image/')) {
-		throw new RefusalError(
+		throw new RequestRefusalError(
 			'Only image files can be uploaded',
 			'INVALID_TYPE'
 		);
@@ -50,10 +50,10 @@ router.post('/', multerUploads, async (req, res) => {
 router.use((err, req, res, next) => {
 	const maxFileSizeMB = Math.round(fileSizeLimit / 10000) / 100;
 
-	// If the error is a file size error, catch it and throw a RefusalError in its place
+	// If the error is a file size error, catch it and throw a RequestRefusalError in its place
 	// Otherwise the error might be a server error and let our 500 handler take care of it
 	if (err.code === 'LIMIT_FILE_SIZE') {
-		throw new RefusalError(
+		throw new RequestRefusalError(
 			`That file is too large. The limit is ${maxFileSizeMB}MB.`,
 			'LIMIT_FILE_SIZE'
 		);

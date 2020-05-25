@@ -1,19 +1,19 @@
 const router = require('express').Router();
 const { students, votes, voteData } = require('../../../../database');
-const RefusalError = require('./../../../../utils/RefusalError');
+const RequestRefusalError = require('../../../../utils/RequestRefusalError');
 const shortHash = require('./../../../../utils/shortHash');
 
 // Middleware to determine if a user can vote before processing the vote
 router.use('*', async (req, res, next) => {
 	if (!req.session.signedIn) {
-		throw new RefusalError(
+		throw new RequestRefusalError(
 			'You need to be signed in to vote.',
 			'AUTH_REQUIRED'
 		);
 	}
 
 	if (!req.election.isVotingPeriod()) {
-		throw new RefusalError(
+		throw new RequestRefusalError(
 			'It is not currently the voting period for this election.',
 			'NOT_VOTING_PERIOD'
 		);
@@ -22,21 +22,21 @@ router.use('*', async (req, res, next) => {
 	const grade = students.getGrade(req.session.email);
 
 	if (!grade) {
-		throw new RefusalError(
+		throw new RequestRefusalError(
 			'Your grade is unknown and so you are not yet allowed to vote.',
 			'GRADE_UNKNOWN'
 		);
 	}
 
 	if (!(await req.election.includesGrade(grade))) {
-		throw new RefusalError(
+		throw new RequestRefusalError(
 			'You are not allowed to vote for this election.',
 			'NOT_ALLOWED'
 		);
 	}
 
 	if (await req.election.existsVote(req.session.getDecryptedUserId())) {
-		throw new RefusalError(
+		throw new RequestRefusalError(
 			'You have already voted for this election.',
 			'ALREADY_VOTED'
 		);
@@ -53,14 +53,14 @@ router.post('/', async (req, res) => {
 	const choices = req.body.choices || [];
 
 	if (!Array.isArray(choices)) {
-		throw new RefusalError(
+		throw new RequestRefusalError(
 			'The choices were not sent in a way that the server can understand.',
 			'INVALID_FORMAT'
 		);
 	}
 
 	if (!Boolean(choices.length)) {
-		throw new RefusalError(
+		throw new RequestRefusalError(
 			'You must choose at least one candidate to vote for.',
 			'INSUFFICIENT_SELECTIONS'
 		);
