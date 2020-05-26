@@ -69,6 +69,8 @@ jobs:
             name: node/default
         docker:
             - image: node:12
+        environment:
+            COVERALLS_GIT_BRANCH: ${ CIRCLE_BRANCH }
         steps:
             - checkout
             - node/with-cache:
@@ -77,11 +79,7 @@ jobs:
                       - run: npm install sqlite3
                       - run: npm run build
                       - run: npm test
-                      - run:
-                            name: Run migrations
-                            command: npm run coverage
-                            environment:
-                                COVERALLS_GIT_BRANCH: {{ .Branch }}
+                      - run: npm run coverage
 workflows:
     build-and-test:
         jobs:
