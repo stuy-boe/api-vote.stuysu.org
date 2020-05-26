@@ -3,8 +3,15 @@ const app = require('../../app');
 const request = require('supertest');
 const setCookie = require('set-cookie-parser');
 
+const crypto = require('crypto');
+const encryptString = require('./../../utils/encryptString');
+
 describe('sessionValidator', () => {
 	let cookies = [];
+	const originalUserId = 'myVeryCoolId';
+
+	const key = crypto.randomBytes(32);
+	const iv = crypto.randomBytes(16);
 
 	before(() => {
 		process.env.SESSION_SECRET = 'some_semi_permanent_secret';
@@ -13,11 +20,20 @@ describe('sessionValidator', () => {
 			req.session.signedIn = true;
 			req.session.email = 'email@example.com';
 			req.session.name = 'Example User';
+
+			req.session.encryptedUserId = encryptString(
+				originalUserId,
+				key,
+				iv
+			);
+
 			const options = {
 				signed: true
 			};
-			res.cookie('decryptIv', 'test', options);
-			res.cookie('decryptKey', 'test', options);
+
+			res.cookie('decryptKey', key.toString('hex'), options);
+			res.cookie('decryptIv', iv.toString('hex'), options);
+
 			res.end();
 		});
 	});
@@ -72,6 +88,20 @@ describe('sessionValidator', () => {
 			.set('Accept', 'application/json')
 			.then(res => {
 				expect(res.body.payload.signedIn).to.be.false;
+				done();
+			});
+	});
+
+	it('should add getDecryptedUserId method to session if signed in', done => {
+		app.get('/testUserIdDecryption', (req, res) => {
+			res.send(req.session.getDecryptedUserId());
+		});
+
+		request(app)
+			.get('/testUserIdDecryption')
+			.set('Cookie', cookies)
+			.then(res => {
+				expect(res.text).to.equal(originalUserId);
 				done();
 			});
 	});
