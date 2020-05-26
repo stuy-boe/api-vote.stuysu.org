@@ -14,7 +14,7 @@ const errorHandler = (err, req, res, next) => {
 			error: {
 				code: 'SERVER_ERROR',
 				message:
-					'There was an unexpected server error. We will review this shortly'
+					'There was an unexpected server error. We will review this shortly.'
 			}
 		});
 	}

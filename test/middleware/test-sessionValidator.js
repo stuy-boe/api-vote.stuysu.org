@@ -1,5 +1,10 @@
 const { expect } = require('chai');
-const app = require('../../app');
+const express = require('express');
+const app = express();
+const session = require('./../../middleware/session');
+const sessionValidator = require('./../../middleware/sessionValidator');
+const cookieParser = require('cookie-parser');
+
 const request = require('supertest');
 const setCookie = require('set-cookie-parser');
 
@@ -15,7 +20,11 @@ describe('sessionValidator', () => {
 	const iv = crypto.randomBytes(16);
 
 	before(() => {
-		process.env.SESSION_SECRET = 'some_semi_permanent_secret';
+		const cookieSecret = 'some_semi_permanent_secret';
+		process.env.SESSION_SECRET = cookieSecret;
+		app.use(cookieParser(cookieSecret));
+		app.use(session);
+		app.use(sessionValidator);
 
 		app.get('/mock-session', (req, res) => {
 			req.session.signedIn = true;
@@ -54,74 +63,82 @@ describe('sessionValidator', () => {
 		);
 	});
 
-	it('should not affect session if all decryption and session cookies are valid', done => {
-		request(app)
-			.get('/api/state')
-			.set('Cookie', cookies)
-			.set('Accept', 'application/json')
-			.then(res => {
-				expect(res.body.payload.signedIn).to.be.true;
-				done();
+	describe('session checking', () => {
+		before(() => {
+			app.get('/check-session', (req, res) => {
+				res.json({
+					signedIn: Boolean(req.session.signedIn)
+				});
 			});
-	});
-
-	it('should log me out if decryptKey cookie is changed', done => {
-		const newCookies = cookies.map(cookieStr => {
-			if (cookieStr.startsWith('decryptKey=')) {
-				return `decryptKey=someIncorrectValue`;
-			}
-			return cookieStr;
-		});
-		request(app)
-			.get('/api/state')
-			.set('Cookie', newCookies)
-			.set('Accept', 'application/json')
-			.then(res => {
-				expect(res.body.payload.signedIn).to.be.false;
-				done();
-			});
-	});
-
-	it('should log me out if decryptIv cookie is changed', done => {
-		const newCookies = cookies.map(cookieStr => {
-			if (cookieStr.startsWith('decryptIv=')) {
-				return `decryptIv=someIncorrectValue`;
-			}
-			return cookieStr;
 		});
 
-		request(app)
-			.get('/api/state')
-			.set('Cookie', newCookies)
-			.set('Accept', 'application/json')
-			.then(res => {
-				expect(res.body.payload.signedIn).to.be.false;
-				done();
+		it('should not affect session if all decryption and session cookies are valid', done => {
+			request(app)
+				.get('/check-session')
+				.set('Cookie', cookies)
+				.then(res => {
+					expect(res.body.signedIn).to.be.true;
+					done();
+				});
+		});
+
+		it('should force session expiration if decryptKey cookie is changed', done => {
+			const newCookies = cookies.map(cookieStr => {
+				if (cookieStr.startsWith('decryptKey=')) {
+					return `decryptKey=someIncorrectValue`;
+				}
+				return cookieStr;
 			});
+
+			request(app)
+				.get('/check-session')
+				.set('Cookie', newCookies)
+				.then(res => {
+					expect(res.body.signedIn).to.be.false;
+					done();
+				});
+		});
+
+		it('should log me out if decryptIv cookie is changed', done => {
+			const newCookies = cookies.map(cookieStr => {
+				if (cookieStr.startsWith('decryptIv=')) {
+					return `decryptIv=someIncorrectValue`;
+				}
+				return cookieStr;
+			});
+
+			request(app)
+				.get('/check-session')
+				.set('Cookie', newCookies)
+				.then(res => {
+					expect(res.body.signedIn).to.be.false;
+					done();
+				});
+		});
 	});
 
 	it('should add getDecryptedUserId method to session if signed in', done => {
-		app.get('/testUserIdDecryption', (req, res) => {
-			expect(req.session.getDecryptedUserId).to.not.throw(Error);
-
-			const userId = req.session.getDecryptedUserId();
-
-			expect(originalUserId).to.be.a('string');
-			expect(userId).to.equal(originalUserId);
-			res.end();
+		app.get('/decryptUserId', (req, res) => {
+			res.json({
+				userId: req.session.getDecryptedUserId()
+			});
 		});
 
 		request(app)
-			.get('/testUserIdDecryption')
+			.get('/decryptUserId')
 			.set('Cookie', cookies)
-			.then(() => done());
+			.then(res => {
+				expect(res.body.userId).to.be.a('string');
+				expect(res.body.userId).to.equal(originalUserId);
+				done();
+			});
 	});
 
 	describe('Voting Station', () => {
 		it('should extend my session expiration on future requests if not a voting station', done => {
 			setTimeout(() => {
 				request(app)
-					.get('/api/state')
+					.get('/check-session')
 					.set('Cookie', cookies)
 					.then(res => {
 						const newCookieData = setCookie(
