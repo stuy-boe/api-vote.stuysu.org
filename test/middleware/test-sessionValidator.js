@@ -7,6 +7,7 @@ const crypto = require('crypto');
 const encryptString = require('./../../utils/encryptString');
 
 describe('sessionValidator', () => {
+	let cookieData = {};
 	let cookies = [];
 	const originalUserId = 'myVeryCoolId';
 
@@ -28,7 +29,8 @@ describe('sessionValidator', () => {
 			);
 
 			const options = {
-				signed: true
+				signed: true,
+				maxAge: 1000 * 86400 * 30
 			};
 
 			res.cookie('decryptKey', key.toString('hex'), options);
@@ -41,9 +43,15 @@ describe('sessionValidator', () => {
 	beforeEach(async () => {
 		// reset our session values so that we're "signed in" again before each test
 		const response = await request(app).get('/mock-session');
-		cookies = setCookie(response.headers['set-cookie'], {
-			decodeValues: true
-		}).map(cookie => `${cookie.name}=${cookie.value}`);
+
+		cookieData = setCookie(response.headers['set-cookie'], {
+			decodeValues: true,
+			map: true
+		});
+
+		cookies = Object.keys(cookieData).map(
+			name => `${name}=${cookieData[name].value}`
+		);
 	});
 
 	it('should not affect session if all decryption and session cookies are valid', done => {
@@ -107,5 +115,92 @@ describe('sessionValidator', () => {
 			.get('/testUserIdDecryption')
 			.set('Cookie', cookies)
 			.then(() => done());
+	});
+
+	describe('Voting Station', () => {
+		it('should extend my session expiration on future requests if not a voting station', done => {
+			setTimeout(() => {
+				request(app)
+					.get('/api/state')
+					.set('Cookie', cookies)
+					.then(res => {
+						const newCookieData = setCookie(
+							res.header['set-cookie'],
+							{
+								decodeValues: true,
+								map: true
+							}
+						);
+
+						expect(
+							newCookieData.decryptKey.expires.getTime()
+						).to.be.gt(cookieData.decryptKey.expires.getTime());
+
+						expect(
+							newCookieData.decryptIv.expires.getTime()
+						).to.be.gt(cookieData.decryptIv.expires.getTime());
+
+						done();
+					});
+			}, 1000);
+		});
+
+		it('should not extend my session if a voting station cookie is present', done => {
+			const newCookies = [...cookies, 'isVotingStation=true'];
+
+			request(app)
+				.get('/api/state')
+				.set('Cookie', newCookies)
+				.then(res => {
+					const renewedCookieData = setCookie(
+						res.header['set-cookie'],
+						{
+							decodeValues: true,
+							map: true
+						}
+					);
+
+					expect(renewedCookieData).to.not.have.property(
+						'decryptKey'
+					);
+
+					expect(renewedCookieData).to.not.have.property('decryptIv');
+
+					done();
+				});
+		});
+	});
+
+	describe('production environment', () => {
+		before(() => {
+			process.env.NODE_ENV = 'production';
+		});
+
+		it('should deliver cookies with secure flag enabled and sameSite set to none', done => {
+			request(app)
+				.get('/api/state')
+				.set('Cookie', cookies)
+				.then(res => {
+					const renewedCookieData = setCookie(
+						res.header['set-cookie'],
+						{
+							decodeValues: true,
+							map: true
+						}
+					);
+
+					expect(renewedCookieData.decryptKey.secure).to.be.true;
+					expect(renewedCookieData.decryptIv.secure).to.be.true;
+
+					expect(renewedCookieData.decryptKey.sameSite).to.equal(
+						'None'
+					);
+					expect(renewedCookieData.decryptIv.sameSite).to.equal(
+						'None'
+					);
+
+					done();
+				});
+		});
 	});
 });
