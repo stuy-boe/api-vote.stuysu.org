@@ -203,4 +203,34 @@ describe('sessionValidator', () => {
 				});
 		});
 	});
+
+	describe('NODE_ENV is not production', () => {
+		before(() => {
+			process.env.NODE_ENV = 'development';
+		});
+
+		it('should not explicitly declare ssl for cookies', done => {
+			request(app)
+				.get('/api/state')
+				.set('Cookie', cookies)
+				.then(res => {
+					const renewedCookieData = setCookie(
+						res.header['set-cookie'],
+						{
+							decodeValues: true,
+							map: true
+						}
+					);
+
+					expect(renewedCookieData.decryptKey).to.not.have.property(
+						'secure'
+					);
+					expect(renewedCookieData.decryptIv).to.not.have.property(
+						'secure'
+					);
+
+					done();
+				});
+		});
+	});
 });
