@@ -94,15 +94,18 @@ describe('sessionValidator', () => {
 
 	it('should add getDecryptedUserId method to session if signed in', done => {
 		app.get('/testUserIdDecryption', (req, res) => {
-			res.send(req.session.getDecryptedUserId());
+			expect(req.session.getDecryptedUserId).to.not.throw(Error);
+
+			const userId = req.session.getDecryptedUserId();
+
+			expect(originalUserId).to.be.a('string');
+			expect(userId).to.equal(originalUserId);
+			res.end();
 		});
 
 		request(app)
 			.get('/testUserIdDecryption')
 			.set('Cookie', cookies)
-			.then(res => {
-				expect(res.text).to.equal(originalUserId);
-				done();
-			});
+			.then(() => done());
 	});
 });
