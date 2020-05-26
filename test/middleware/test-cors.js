@@ -1,38 +1,52 @@
 const { expect } = require('chai');
-const app = require('../../app');
+const express = require('express');
+const app = express();
+const cors = require('./../../middleware/cors');
 const request = require('supertest');
+const RequestRefusalError = require('./../../utils/RequestRefusalError');
 
 describe('cors', () => {
-	let stateRequest;
-	beforeEach(() => {
-		stateRequest = request(app)
-			.get('/api/state')
-			.set('Accept', 'application/json');
+	before(() => {
+		app.use('*', cors);
+		app.get('/', (req, res) => {
+			res.send('success');
+		});
 	});
 
 	describe('development environment', () => {
 		process.env.NODE_ENV = 'development';
 
-		it('should respond to state requests with status code 200', done => {
-			stateRequest.expect('Content-Type', /json/).expect(200, done);
+		it('should allow requests to pass', done => {
+			request(app).get('/').expect(200, done);
 		});
 	});
 
 	describe('production environment with only localhost origin allowed', () => {
-		process.env.NODE_ENV = 'production';
-		process.env.ALLOWED_ORIGINS = 'http://localhost:3000';
+		before(() => {
+			process.env.NODE_ENV = 'production';
+			process.env.ALLOWED_ORIGINS = 'http://localhost:3000';
+			process.env.SEQUELIZE_URL = 'sqlite::memory';
+		});
 
-		it('should respond to state requests from localhost with status code 200', done => {
-			stateRequest
+		it('should allow requests from allowed origins to pass', done => {
+			request(app)
+				.get('/')
 				.set('origin', 'http://localhost:3000')
-				.expect('Content-Type', /json/)
 				.expect(200, done);
 		});
 
-		it('should respond to state requests from invalid origins with a status code 403', done => {
-			stateRequest
+		it('should throw a RequestRefusalError if an invalid origin tries to access', done => {
+			// Error handler to catch the cors error
+			app.use((err, req, res, next) => {
+				expect(err).to.be.instanceOf(RequestRefusalError);
+				expect(err.code).to.equal('INVALID_ORIGIN');
+				expect(err.message).to.equal('Not allowed by CORS');
+				res.status(403).end();
+			});
+
+			request(app)
+				.get('/')
 				.set('origin', 'http://example.com')
-				.expect('Content-Type', /json/)
 				.expect(403, done);
 		});
 	});
