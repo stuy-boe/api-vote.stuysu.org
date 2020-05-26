@@ -171,7 +171,7 @@ describe('sessionValidator', () => {
 		});
 	});
 
-	describe('production environment', () => {
+	describe('NODE_ENV is production', () => {
 		before(() => {
 			process.env.NODE_ENV = 'production';
 		});
