@@ -9,14 +9,6 @@ const crypto = require('crypto');
  *     successful)
  */
 const decryptHex = (encryptedHex, key, iv) => {
-	if (key.length !== 32) {
-		throw new Error('The key must be a 32 byte Buffer.');
-	}
-
-	if (iv.length !== 16) {
-		throw new Error('The initialization vector must be a 16 byte Buffer.');
-	}
-
 	let decipher = crypto.createDecipheriv('aes256', key, iv);
 	return (
 		decipher.update(encryptedHex, 'hex', 'utf8') + decipher.final('utf8')
