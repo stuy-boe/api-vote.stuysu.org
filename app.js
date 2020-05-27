@@ -11,14 +11,15 @@ const sessionValidator = require('./middleware/sessionValidator');
 
 app.set('trust proxy', 1);
 app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({extended : false}));
+app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser(cookieSecret));
 app.use(session);
 app.use(sessionValidator);
 
 const loggerFormat = process.env.MORGAN_FORMAT || 'dev';
-const logger =
-    morgan(loggerFormat, {skip : (req, res) => res.statusCode < 400});
+const logger = morgan(loggerFormat, {
+	skip: (req, res) => res.statusCode < 400
+});
 
 app.use(logger);
 
