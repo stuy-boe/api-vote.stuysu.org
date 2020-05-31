@@ -42,7 +42,7 @@ module.exports = (sequelize, DataTypes) => {
 			where: { userHash }
 		});
 
-		return userVotes.length;
+		return Boolean(userVotes.length);
 	};
 
 	elections.prototype.includesGrade = async function (grade) {
