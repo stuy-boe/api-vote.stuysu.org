@@ -4,7 +4,7 @@ const {
 	votes,
 	Sequelize
 } = require('./../../../database');
-const shortHash = require("./../../../utils/shortHash");
+const shortHash = require('./../../../utils/shortHash');
 const { expect } = require('chai');
 
 const generateString = require('crypto-random-string');
@@ -79,8 +79,7 @@ describe('elections', () => {
 
 		const fakeUserId = generateString({ length: 16 });
 		before(async () => {
-
-			const userHash = shortHash(fakeUserId + activelyVotingElection.id)
+			const userHash = shortHash(fakeUserId + activelyVotingElection.id);
 			fakeVote = await votes.create({
 				electionId: activelyVotingElection.id,
 				userHash,
@@ -88,37 +87,42 @@ describe('elections', () => {
 			});
 		});
 
-		it("should be return true when a vote from a specific user exists for an election", async () => {
-			expect( await activelyVotingElection.existsVote(fakeUserId) ).to.be.true;
+		it('should be return true when a vote from a specific user exists for an election', async () => {
+			expect(await activelyVotingElection.existsVote(fakeUserId)).to.be
+				.true;
 		});
 
-		it("should return false when a vote does not exist from a specific user for an election", async () => {
-			expect( await beforeVotingElection.existsVote(fakeUserId) ).to.be.false;
-			expect( await afterVotingElection.existsVote(fakeUserId) ).to.be.false;
+		it('should return false when a vote does not exist from a specific user for an election', async () => {
+			expect(await beforeVotingElection.existsVote(fakeUserId)).to.be
+				.false;
+			expect(await afterVotingElection.existsVote(fakeUserId)).to.be
+				.false;
 		});
 
-		after(async() => {
+		after(async () => {
 			await fakeVote.destroy();
 		});
 	});
 
-	describe("#includesGrade", () => {
+	describe('#includesGrade', () => {
 		const testGrade = 11;
 		let fakeAllowedGrade;
 
 		before(async () => {
-			fakeAllowedGrade =  await allowedGrades.create({
+			fakeAllowedGrade = await allowedGrades.create({
 				electionId: activelyVotingElection.id,
 				grade: testGrade
 			});
 		});
 
-		it("should return true if a certain grade is allowed to vote for an election", async () => {
-			expect(await activelyVotingElection.includesGrade(testGrade)).to.be.true;
+		it('should return true if a certain grade is allowed to vote for an election', async () => {
+			expect(await activelyVotingElection.includesGrade(testGrade)).to.be
+				.true;
 		});
 
-		it("should return false if a certain grade is not allowed to vote for an election", async () => {
-			expect( await beforeVotingElection.includesGrade(testGrade) ).to.be.false;
+		it('should return false if a certain grade is not allowed to vote for an election', async () => {
+			expect(await beforeVotingElection.includesGrade(testGrade)).to.be
+				.false;
 		});
 
 		after(async () => {
