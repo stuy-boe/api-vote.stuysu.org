@@ -13,7 +13,6 @@ router.get('/', async (req, res) => {
 
 	const privileges = await adminPrivileges.list(req.session.email);
 	const isAdmin = Boolean(privileges.length);
-
 	// TODO UPDATE ADMIN AND CAMPAIGNING WITH REAL VALUES
 	return res.json({
 		success: true,
@@ -30,7 +29,8 @@ router.get('/', async (req, res) => {
 			campaignManager: {
 				status: true,
 				campaigns: ['1']
-			}
+			},
+			expires: req.session.cookie.expires.toISOString()
 		}
 	});
 });
