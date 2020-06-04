@@ -5,13 +5,13 @@ router.get('*', (req, res) => {
 	// replace will only replace the first instance
 	const adjustedPath = req.path.replace('/', '');
 
-	let width = Number(req.query.width);
+	let width = Number(req.query.width) || null;
 
 	if (width && width > 1000) {
 		width = 1000;
 	}
 
-	let height = Number(req.query.height);
+	let height = Number(req.query.height) || null;
 
 	if (height && height > 1000) {
 		height = 1000;
