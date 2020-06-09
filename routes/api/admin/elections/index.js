@@ -1,6 +1,6 @@
 const router = require('express').Router();
 const RequestRefusalError = require('../../../../utils/RequestRefusalError');
-const { adminPrivileges } = require('./../../../../database');
+const { adminPrivileges, elections } = require('./../../../../database');
 
 // Only admins with the 'elections' privilege can access the following endpoints
 router.use(async (req, res, next) => {
@@ -19,9 +19,23 @@ router.use(async (req, res, next) => {
 	next();
 });
 
+router.get('/', async (req, res) => {
+	const allElections = await elections.findAll({
+		order: [
+			['startTime', 'DESC'],
+			['endTime', 'DESC'],
+			['completed', 'ASC']
+		]
+	});
+
+	res.json({
+		success: true,
+		payload: allElections
+	});
+});
+
 router.use('/pics', require('./pics'));
-router.use('/list', require('./list'));
 router.use('/create', require('./create'));
-router.use('/info/:publicUrl', require('./info'));
+router.use('/:publicUrl', require('./selected'));
 
 module.exports = router;

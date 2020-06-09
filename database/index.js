@@ -1,2 +1,2 @@
-// quicker access to models/index.js
+// quicker access to models/info.js
 module.exports = require('./models');

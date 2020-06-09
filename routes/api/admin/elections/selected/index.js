@@ -1,12 +1,10 @@
-const router = require('express').Router({
-	mergeParams: true
-});
+const router = require('express').Router({ mergeParams: true });
 const {
 	elections,
 	allowedGrades,
-	votes,
-	candidates
-} = require('./../../../../../database');
+	candidates,
+	votes
+} = require('../../../../../database');
 
 router.use(async (req, res, next) => {
 	let election = await elections.findOne({
@@ -52,5 +50,7 @@ router.get('/', async (req, res) => {
 
 	res.json({ success: true, payload: req.election });
 });
+
+router.use('/edit', require('./edit'));
 
 module.exports = router;
