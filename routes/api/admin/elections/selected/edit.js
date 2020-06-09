@@ -47,13 +47,15 @@ router.post('/', async (req, res) => {
 		);
 	}
 
-	const publicUrlExists = await elections.count({ where: { publicUrl } });
+	if (publicUrl !== req.election.publicUrl) {
+		const publicUrlExists = await elections.count({ where: { publicUrl } });
 
-	if (!publicUrl || publicUrlExists) {
-		throw new RequestRefusalError(
-			'There already exists an election with that public url.',
-			'URL_EXISTS'
-		);
+		if (!publicUrl || publicUrlExists) {
+			throw new RequestRefusalError(
+				'There already exists an election with that public url.',
+				'URL_EXISTS'
+			);
+		}
 	}
 
 	const election = await req.election.update({
