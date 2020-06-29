@@ -1,10 +1,9 @@
-'use strict';
-
 const fs = require('fs');
 const path = require('path');
 const Sequelize = require('sequelize');
 const basename = path.basename(__filename);
 const env = process.env.NODE_ENV || 'development';
+
 const config = require(__dirname + '/../sequelize.js')[env];
 const db = {};
 
@@ -24,7 +23,8 @@ fs.readdirSync(__dirname)
 		);
 	})
 	.forEach(file => {
-		const model = sequelize['import'](path.join(__dirname, file));
+		const pathToModel = path.resolve(__dirname, file);
+		const model = require(pathToModel)(sequelize, Sequelize);
 		db[model.name] = model;
 	});
 
