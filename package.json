@@ -42,7 +42,7 @@
 		"set-cookie-parser": "^2.4.6",
 		"sinon": "^9.0.2",
 		"sinon-chai": "^3.5.0",
-		"sqlite3": "^4.2.0",
+		"sqlite3": "^5.0.0",
 		"supertest": "^4.0.2",
 		"talos-js": "^1.1.1"
 	},
