@@ -15,7 +15,9 @@ let addOrUpdateStudents = (email, grade) =>
 				return resolve(1);
 			}
 
-			if (res) return resolve(0);
+			if (res) {
+				return resolve(0);
+			}
 
 			students.create({ email, grade });
 			return resolve(1);
