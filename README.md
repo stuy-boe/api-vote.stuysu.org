@@ -2,6 +2,7 @@
 
 The backend api for the Stuyvesant High School Board of Elections Voting Site.
 
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/e9f69db0365f4714aea2accf8b159133)](https://app.codacy.com/gh/stuy-boe/api-vote.stuysu.org?utm_source=github.com&utm_medium=referral&utm_content=stuy-boe/api-vote.stuysu.org&utm_campaign=Badge_Grade_Dashboard)
 [![CircleCI Badge](https://circleci.com/gh/stuy-boe/api-vote.stuysu.org.svg?style=svg)](https://github.com/stuy-boe/api.vote.stuysu.org)
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/5dabc17c32034dbf9864d4821f614591)](https://app.codacy.com/gh/stuy-boe/api-vote.stuysu.org?utm_source=github.com&utm_medium=referral&utm_content=stuy-boe/api-vote.stuysu.org&utm_campaign=Badge_Grade_Settings)
 [![Coverage Status](https://coveralls.io/repos/github/stuy-boe/api-vote.stuysu.org/badge.svg?branch=master)](https://coveralls.io/github/stuy-boe/api-vote.stuysu.org?branch=master)
