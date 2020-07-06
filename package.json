@@ -60,7 +60,7 @@
 		"portscanner": "^2.2.0",
 		"prettier": "^2.0.5",
 		"request": "^2.88.2",
-		"sequelize-cli": "^6.1.0"
+		"sequelize-cli": "^6.2.0"
 	},
 	"prettier": {
 		"printWidth": 80,
