@@ -97,21 +97,27 @@ jobs:
         executor:
             name: node/default
         steps:
-            - checkout
+            - working_directory: ~/repo/client
+            - checkout:
+                  path: ~/repo
             - install-dependencies
             - run: npm test
     flow-typings:
         executor:
             name: node/default
         steps:
-            - checkout
+            - working_directory: ~/repo/client
+            - checkout:
+                  path: ~/repo
             - install-dependencies
             - run: npm run flow
     build-react:
         executor:
             name: node/default
         steps:
-            - checkout
+            - working_directory: ~/repo/client
+            - checkout:
+                  path: ~/repo
             - install-dependencies
             - restore_cache:
                   keys:
