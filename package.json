@@ -8,7 +8,9 @@
 		"start": "node index.js",
 		"dev": "npx nodemon index.js",
 		"test": "nyc mocha",
-		"coverage": "nyc report --reporter=text-lcov | coveralls"
+		"coverage": "nyc report --reporter=text-lcov | coveralls",
+		"build-react": "cd client && npm install && npm run build",
+		"heroku-postbuild": "npm run build && cd client && npm run build-react"
 	},
 	"repository": {
 		"type": "git",
