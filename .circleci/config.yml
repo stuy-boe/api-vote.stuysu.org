@@ -94,28 +94,28 @@ jobs:
                       - run: npm test
                       - run: npm run coverage
     react-unit-tests:
+        working_directory: ~/repo/client
         executor:
             name: node/default
         steps:
-            - working_directory: ~/repo/client
             - checkout:
                   path: ~/repo
             - install-dependencies
             - run: npm test
     flow-typings:
+        working_directory: ~/repo/client
         executor:
             name: node/default
         steps:
-            - working_directory: ~/repo/client
             - checkout:
                   path: ~/repo
             - install-dependencies
             - run: npm run flow
     build-react:
+        working_directory: ~/repo/client
         executor:
             name: node/default
         steps:
-            - working_directory: ~/repo/client
             - checkout:
                   path: ~/repo
             - install-dependencies
