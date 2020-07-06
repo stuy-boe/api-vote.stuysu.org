@@ -9,7 +9,10 @@ const cookieSecret = process.env.SESSION_SECRET || 'some_semi_permanent_secret';
 const session = require('./middleware/session');
 const sessionValidator = require('./middleware/sessionValidator');
 
-app.set('trust proxy', 1);
+const proxyValidator = require('./middleware/proxyValidator');
+
+app.set('trust proxy', proxyValidator);
+
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser(cookieSecret));
