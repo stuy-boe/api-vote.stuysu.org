@@ -130,6 +130,6 @@ workflows:
             - test-mysql
             - test-postgres
             - test-sqlite
-            - unit-tests
+            - react-unit-tests
             - flow-typings
-            - build
+            - build-react
