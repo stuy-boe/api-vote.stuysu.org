@@ -21,12 +21,13 @@ app.use(sessionValidator);
 
 const loggerFormat = process.env.MORGAN_FORMAT || 'dev';
 const logger = morgan(loggerFormat, {
-	skip: (req, res) => res.statusCode < 400
+	skip: (req, res) =>
+		res.statusCode < 500 && process.env.NODE_ENV === 'production'
 });
 
 app.use(logger);
 
 // ROUTES
-app.use('/', require('./routes'));
+app.use(require('./routes'));
 
 module.exports = app;

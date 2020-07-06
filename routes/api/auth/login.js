@@ -83,9 +83,6 @@ router.use('/', async (req, res) => {
 		options.sameSite = 'none';
 	}
 
-	res.cookie('decryptKey', encryptKey.toString('hex'), options);
-	res.cookie('decryptIv', encryptIv.toString('hex'), options);
-
 	req.session.signedIn = true;
 	req.session.email = payload.email;
 	req.session.name = payload.name;
@@ -95,6 +92,10 @@ router.use('/', async (req, res) => {
 		encryptKey,
 		encryptIv
 	);
+
+	res.cookie('decryptKey', encryptKey.toString('hex'), options);
+	res.cookie('decryptIv', encryptIv.toString('hex'), options);
+	res.cookie('session', req.sessionID, options);
 
 	if (req.query.redirect) {
 		res.redirect(req.query.redirect);

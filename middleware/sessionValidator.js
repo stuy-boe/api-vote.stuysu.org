@@ -26,6 +26,7 @@ router.use('*', (req, res, next) => {
 
 				res.cookie('decryptIv', req.signedCookies.decryptIv, options);
 				res.cookie('decryptKey', req.signedCookies.decryptKey, options);
+				res.cookie('session', req.sessionID, options);
 			}
 
 			// Let's also provide a function to make it easier to decrypt the user Id
