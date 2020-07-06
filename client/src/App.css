@@ -1,0 +1,17 @@
+.App {
+	min-height: 100vh;
+}
+a {
+	text-decoration: unset;
+	color: unset;
+}
+
+.flex-center {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
+.text-center {
+	text-align: center;
+}
