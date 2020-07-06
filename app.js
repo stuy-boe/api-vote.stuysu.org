@@ -30,4 +30,21 @@ app.use(logger);
 // ROUTES
 app.use(require('./routes'));
 
+if (process.env.SERVE_FRONT_END === 'true') {
+	const nunjucks = require('nunjucks');
+
+	nunjucks.configure('client/build', {
+		autoescape: true,
+		express: app
+	});
+
+	const renderIndex = (req, res) => {
+		res.render('index.html', req.og);
+	};
+
+	app.get('/', renderIndex);
+	app.use(express.static('./client/build'));
+	app.get('*', renderIndex);
+}
+
 module.exports = app;
