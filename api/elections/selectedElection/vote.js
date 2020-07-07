@@ -1,7 +1,7 @@
 const router = require('express').Router();
-const { students, votes, voteData } = require('../../../../database');
-const RequestRefusalError = require('../../../../utils/RequestRefusalError');
-const shortHash = require('./../../../../utils/shortHash');
+const { students, votes, voteData } = require('../../../database');
+const RequestRefusalError = require('../../../utils/RequestRefusalError');
+const shortHash = require('../../../utils/shortHash');
 
 // Middleware to determine if a user can vote before processing the vote
 router.use('*', async (req, res, next) => {

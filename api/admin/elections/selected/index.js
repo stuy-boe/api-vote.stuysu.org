@@ -4,7 +4,7 @@ const {
 	allowedGrades,
 	candidates,
 	votes
-} = require('../../../../../database');
+} = require('../../../../database');
 
 router.use(async (req, res, next) => {
 	let election = await elections.findOne({

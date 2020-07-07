@@ -1,13 +1,13 @@
 const router = require('express').Router();
 
-const encryptString = require('../../../utils/encryptString');
+const encryptString = require('../../utils/encryptString');
 const randomString = require('crypto-random-string');
 const crypto = require('crypto');
 
 const { OAuth2Client } = require('google-auth-library');
 const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
 
-const RequestRefusalError = require('../../../utils/RequestRefusalError');
+const RequestRefusalError = require('../../utils/RequestRefusalError');
 
 router.get('/', (req, res, next) => {
 	req.idToken = req.query.idToken;

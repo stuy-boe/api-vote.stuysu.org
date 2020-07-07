@@ -1,36 +1,15 @@
 require('express-async-errors');
 
-const bodyParser = require('body-parser');
-const cookieParser = require('cookie-parser');
 const express = require('express');
 const app = express();
-const morgan = require('morgan');
-const cookieSecret = process.env.SESSION_SECRET || 'some_semi_permanent_secret';
-const session = require('./middleware/session');
-const sessionValidator = require('./middleware/sessionValidator');
 
-const proxyValidator = require('./middleware/proxyValidator');
-
-app.set('trust proxy', proxyValidator);
-
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: false }));
-app.use(cookieParser(cookieSecret));
-app.use(session);
-app.use(sessionValidator);
-
-const loggerFormat = process.env.MORGAN_FORMAT || 'dev';
-const logger = morgan(loggerFormat, {
-	skip: (req, res) =>
-		res.statusCode < 500 && process.env.NODE_ENV === 'production'
-});
-
-app.use(logger);
-
-// ROUTES
-app.use(require('./routes'));
-
+// This is up here at the top because we want our static files served ASAP
+// This prevents requests for static files from passing through unnecessary middleware
+// i.e. We don't need to validate the session if the user just wants /favicon.ico
 if (process.env.SERVE_FRONT_END === 'true') {
+	const opengraph = require('./opengraph');
+	app.use(opengraph);
+
 	const nunjucks = require('nunjucks');
 
 	nunjucks.configure('client/build', {
@@ -38,13 +17,56 @@ if (process.env.SERVE_FRONT_END === 'true') {
 		express: app
 	});
 
-	const renderIndex = (req, res) => {
-		res.render('index.html', req.og);
-	};
+	// Adding this to the res object for less repititon
+	app.use((req, res, next) => {
+		res.serveReact = () => {
+			res.render('index.html', {
+				og: req.og,
+				date: new Date()
+			});
+		};
 
-	app.get('/', renderIndex);
+		next();
+	});
+
+	// Catch the index before it's served statically so that we can render open graph props
+	app.get('/', (req, res) => res.serveReact());
+	app.get('/index.html', (req, res) => res.serveReact());
+
+	// Check to see if the request is a static file before moving on
 	app.use(express.static('./client/build'));
-	app.get('*', renderIndex);
+}
+
+// In production it will only log when a 500 error occurs
+const logger = require('./middleware/logger');
+app.use(logger);
+
+// Body and Cookie parsers
+const parsers = require('./middleware/parsers');
+app.use(parsers);
+
+// vote.stuysu.org is served by cloudflare we have a custom proxy validator
+const proxyValidator = require('./middleware/proxyValidator');
+app.set('trust proxy', proxyValidator);
+
+// Express session & custom validator to check for decryption cookies
+const session = require('./middleware/session');
+const sessionValidator = require('./middleware/sessionValidator');
+
+app.use(session);
+app.use(sessionValidator);
+
+// API Routes
+app.use('/api', require('./api'));
+
+// Catch-all handler in case none of the routes worked
+if (process.env.SERVE_FRONT_END === 'true') {
+	app.get('*', (req, res) =>
+		res.render('index.html', {
+			og: req.og,
+			date: new Date()
+		})
+	);
 }
 
 module.exports = app;
