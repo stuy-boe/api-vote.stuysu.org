@@ -7,9 +7,16 @@
 		<meta name="theme-color" content="#000000" />
 		<link rel="apple-touch-icon" href="/img/logo192.png" />
 		<link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
-		<title>
-			Stuyvesant Board of Elections Voting Site
-		</title>
+
+		<title>{{ og.title }}</title>
+
+		<meta property="og:title" content="{{ og.title }}" />
+		<meta property="og:type" content="{{ og.type }}" />
+		<meta property="og:url" content="{{ og.url }}" />
+		<meta property="og:image" content="{{ og.image }}" />
+		<meta property="og:description" content="{{ og.description }}" />
+		<meta property="og:site_name" content="{{ og.siteName }}" />
+
 		<link
 			rel="stylesheet"
 			href="https://fonts.googleapis.com/icon?family=Material+Icons|Roboto|Sumana"
