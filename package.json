@@ -48,7 +48,8 @@
 		"sqlite3": "^5.0.0",
 		"supertest": "^4.0.2",
 		"sync-request": "^6.1.0",
-		"talos-js": "^1.1.1"
+		"talos-js": "^1.1.1",
+		"url-join": "^4.0.1"
 	},
 	"devDependencies": {
 		"chai": "^4.2.0",
