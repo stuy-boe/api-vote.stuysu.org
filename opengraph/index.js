@@ -1,12 +1,12 @@
 const router = require('express').Router();
-const url = require('url');
+const urlJoin = require('url-join');
 
 router.get('*', (req, res, next) => {
 	req.og = {};
 	req.og.siteName = 'Stuy Board of Elections Voting Site';
 	req.og.title = 'Error 404 - Page Not Found | Stuy BOE Voting Site';
 	req.og.type = 'website';
-	req.og.image = url.resolve(process.env.PUBLIC_URL || '', '/logo512.png');
+	req.og.image = urlJoin(process.env.PUBLIC_URL || '/img', '/logo512.png');
 	req.og.description = 'This page does not exist or has been moved';
 	req.og.url = url.resolve(process.env.PUBLIC_URL || '', req.path);
 

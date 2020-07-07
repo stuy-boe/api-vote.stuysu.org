@@ -69,6 +69,9 @@ if (process.env.SERVE_FRONT_END === 'true') {
 			date: new Date()
 		})
 	);
+
+	const errorHandler = require('./middleware/frontendErrorHandler');
+	app.use(errorHandler);
 }
 
 module.exports = app;
