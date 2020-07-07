@@ -1,7 +1,9 @@
 require('express-async-errors');
-
 const express = require('express');
 const app = express();
+
+const compression = require('compression');
+app.use(compression());
 
 // This is up here at the top because we want our static files served ASAP
 // This prevents requests for static files from passing through unnecessary middleware
