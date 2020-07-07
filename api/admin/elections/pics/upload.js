@@ -3,7 +3,8 @@ const multer = require('multer');
 const fileSizeLimit = 1000000 * 5;
 const path = require('path');
 const randomString = require('crypto-random-string');
-const uploadsFolder = path.resolve(__dirname, './../../../../../uploads');
+const uploadsFolder = path.resolve(__dirname, './../../../../uploads');
+console.log(uploadsFolder);
 const fs = require('fs');
 
 const multerUploads = multer({
