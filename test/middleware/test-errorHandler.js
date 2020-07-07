@@ -3,7 +3,7 @@ require('express-async-errors');
 const { expect } = require('chai');
 const express = require('express');
 const app = express();
-const errorHandler = require('./../../middleware/errorHandler');
+const errorHandler = require('../../api/errorHandler');
 const request = require('supertest');
 const RequestRefusalError = require('./../../utils/RequestRefusalError');
 const sinon = require('sinon');

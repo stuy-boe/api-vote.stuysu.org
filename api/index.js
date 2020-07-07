@@ -14,7 +14,7 @@ router.use('/s3', require('./s3'));
 router.use('/date', require('./date'));
 
 // Catches rejections and 500 errors
-const errorHandler = require('../middleware/errorHandler');
+const errorHandler = require('./errorHandler');
 router.use(errorHandler);
 
 module.exports = router;

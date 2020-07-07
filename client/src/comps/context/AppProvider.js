@@ -20,6 +20,7 @@ class AppProvider extends React.Component {
 
 		this.updateState = this.updateState.bind(this);
 		this.getDate = this.getDate.bind(this);
+		this.updateDateOffset = this.updateDateOffset.bind(this);
 
 		this.state = {
 			signedIn: false,
@@ -32,6 +33,13 @@ class AppProvider extends React.Component {
 			status: 'loaded'
 		};
 
+		const serverDate = new Date(window.ssrInfo?.date);
+
+		if (serverDate) {
+			const now = new Date();
+			this.state.dateOffset = serverDate.getTime() - now.getTime();
+		}
+
 		this.cancelTokenSource = axios.CancelToken.source();
 	}
 
@@ -41,39 +49,43 @@ class AppProvider extends React.Component {
 		return new Date(localTimestamp + this.state.dateOffset);
 	}
 
+	async updateDateOffset() {
+		const requestStartTime = new Date();
+		const getDate = await backend.get('/api/date', {
+			cancelToken: this.cancelTokenSource.token
+		});
+
+		const serverDateString = getDate.data.payload.date;
+
+		const now = new Date();
+		const requestDuration = now.getTime() - requestStartTime.getTime();
+		const serverStartTime = new Date(serverDateString);
+
+		const serverTime = new Date(
+			serverStartTime.getTime() + requestDuration
+		);
+
+		const dateOffset = serverTime.getTime() - now.getTime();
+
+		this.setState({ dateOffset });
+	}
+
 	async updateState(silent = false) {
 		if (!silent) {
 			this.setState({ status: 'loading' });
 		}
 
 		try {
-			// The reason we make two requests is because the server might be sleeping
-			// That would then result in inaccurate request duration calculations
-			// The first /api/state request would wake up the server
-			// Then the server is already awake when we get /api/date
-
 			const getState = await backend.get('/api/state', {
 				cancelToken: this.cancelTokenSource.token
 			});
 			const payload = getState.data.payload;
 
-			const requestStartTime = new Date();
-			const getDate = await backend.get('/api/date', {
-				cancelToken: this.cancelTokenSource.token
-			});
-			const serverDateString = getDate.data.payload.date;
+			if (this.state.dateOffset === 0) {
+				await this.updateDateOffset();
+			}
 
-			const now = new Date();
-			const requestDuration = now.getTime() - requestStartTime.getTime();
-			const serverStartTime = new Date(serverDateString);
-
-			const serverTime = new Date(
-				serverStartTime.getTime() + requestDuration
-			);
-
-			const dateOffset = serverTime.getTime() - now.getTime();
-
-			this.setState({ status: 'loaded', dateOffset, ...payload });
+			this.setState({ status: 'loaded', ...payload });
 
 			await apiCache.requests.where({ url: '/api/state' }).delete();
 
