@@ -1,5 +1,5 @@
 const router = require('express').Router();
-const { adminPrivileges } = require('./../../database');
+const { adminPrivileges } = require('../database');
 
 router.get('/', async (req, res) => {
 	if (!req.session.signedIn) {

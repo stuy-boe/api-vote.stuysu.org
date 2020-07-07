@@ -1,5 +1,5 @@
 const router = require('express').Router();
-const RequestRefusalError = require('../../../utils/RequestRefusalError');
+const RequestRefusalError = require('../../utils/RequestRefusalError');
 
 // Only authenticated users can use the /admin endpoint
 router.use((req, res, next) => {

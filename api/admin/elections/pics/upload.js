@@ -11,7 +11,7 @@ const multerUploads = multer({
 	limits: { fileSize: fileSizeLimit }
 }).single('image');
 
-const RequestRefusalError = require('../../../../../utils/RequestRefusalError');
+const RequestRefusalError = require('../../../../utils/RequestRefusalError');
 const cloudinary = require('cloudinary').v2;
 
 router.post('/', multerUploads, async (req, res) => {

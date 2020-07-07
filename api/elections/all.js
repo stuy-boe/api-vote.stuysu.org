@@ -1,4 +1,4 @@
-const { elections } = require('../../../database');
+const { elections } = require('../../database');
 const router = require('express').Router();
 
 router.get('/', async (req, res) => {

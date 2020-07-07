@@ -1,6 +1,6 @@
 const router = require('express').Router();
-const RequestRefusalError = require('../../../../utils/RequestRefusalError');
-const { adminPrivileges, elections } = require('./../../../../database');
+const RequestRefusalError = require('../../../utils/RequestRefusalError');
+const { adminPrivileges, elections } = require('../../../database');
 
 // Only admins with the 'elections' privilege can access the following endpoints
 router.use(async (req, res, next) => {

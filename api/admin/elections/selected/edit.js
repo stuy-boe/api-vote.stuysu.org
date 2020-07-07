@@ -1,6 +1,6 @@
 const router = require('express').Router();
 const RequestRefusalError = require('../../../../utils/RequestRefusalError');
-const { elections, allowedGrades } = require('./../../../../database');
+const { elections, allowedGrades } = require('../../../../database');
 const electionTypes = ['runoff', 'plurality'];
 const allGrades = [9, 10, 11, 12];
 
@@ -47,16 +47,18 @@ router.post('/', async (req, res) => {
 		);
 	}
 
-	const publicUrlExists = await elections.count({ where: { publicUrl } });
+	if (publicUrl !== req.election.publicUrl) {
+		const publicUrlExists = await elections.count({ where: { publicUrl } });
 
-	if (!publicUrl || publicUrlExists) {
-		throw new RequestRefusalError(
-			'There already exists an election with that public url.',
-			'URL_EXISTS'
-		);
+		if (!publicUrl || publicUrlExists) {
+			throw new RequestRefusalError(
+				'There already exists an election with that public url.',
+				'URL_EXISTS'
+			);
+		}
 	}
 
-	const election = await elections.create({
+	const election = await req.election.update({
 		publicUrl,
 		name,
 		type,
@@ -66,6 +68,12 @@ router.post('/', async (req, res) => {
 		picture,
 		publicResults,
 		completed
+	});
+
+	await allowedGrades.destroy({
+		where: {
+			electionId: req.election.id
+		}
 	});
 
 	for (let x = 0; x < grades.length; x++) {
