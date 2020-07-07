@@ -20,7 +20,7 @@ router.use('/:publicUrl', async (req, res, next) => {
 		req.og.image = urlJoin(
 			process.env.REACT_APP_API_URL || process.env.PUBLIC_URL || '',
 			`/api/s3`,
-			this.state.election.picture,
+			req.election.picture,
 			`?flags=lossy`,
 			`?quality=auto`
 		);
