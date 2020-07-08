@@ -8,7 +8,7 @@ router.get('*', (req, res, next) => {
 	req.og.type = 'website';
 	req.og.image = urlJoin(process.env.PUBLIC_URL || '/img', '/logo512.png');
 	req.og.description = 'This page does not exist or has been moved';
-	req.og.url = url.resolve(process.env.PUBLIC_URL || '', req.path);
+	req.og.url = urlJoin(process.env.PUBLIC_URL || '', req.path);
 
 	next();
 });
