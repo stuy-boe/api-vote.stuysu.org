@@ -9,34 +9,12 @@ app.use(compression());
 // This prevents requests for static files from passing through unnecessary middleware
 // i.e. We don't need to validate the session if the user just wants /favicon.ico
 if (process.env.SERVE_FRONT_END === 'true') {
-	const opengraph = require('./opengraph');
-	app.use(opengraph);
-
-	const nunjucks = require('nunjucks');
-
-	nunjucks.configure('client/build', {
-		autoescape: true,
-		express: app
-	});
-
-	// Adding this to the res object for less repititon
-	app.use((req, res, next) => {
-		res.serveReact = () => {
-			res.render('index.html', {
-				og: req.og,
-				date: new Date()
-			});
-		};
-
-		next();
-	});
-
-	// Catch the index before it's served statically so that we can render open graph props
-	app.get('/', (req, res) => res.serveReact());
-	app.get('/index.html', (req, res) => res.serveReact());
-
 	// Check to see if the request is a static file before moving on
-	app.use(express.static('./client/build'));
+	app.use(
+		express.static('./client/build', {
+			index: false
+		})
+	);
 }
 
 // In production it will only log when a 500 error occurs
@@ -61,14 +39,27 @@ app.use(sessionValidator);
 // API Routes
 app.use('/api', require('./api'));
 
-// Catch-all handler in case none of the routes worked
+// Catch-all handler to serve the react index page
 if (process.env.SERVE_FRONT_END === 'true') {
-	app.get('*', (req, res) =>
+	const opengraph = require('./opengraph');
+	app.use(opengraph);
+
+	const nunjucks = require('nunjucks');
+
+	nunjucks.configure('client/build', {
+		autoescape: true,
+		express: app
+	});
+
+	// Adding this to the res object for less repetition
+	app.get('*', (req, res, next) => {
 		res.render('index.html', {
 			og: req.og,
 			date: new Date()
-		})
-	);
+		});
+
+		next();
+	});
 
 	const errorHandler = require('./middleware/frontendErrorHandler');
 	app.use(errorHandler);
