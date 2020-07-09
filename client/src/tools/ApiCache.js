@@ -1,7 +1,7 @@
 import Dexie from 'dexie';
 import errorReporter from './errorReporter';
 
-const hasIndexedDB = Boolean(
+let hasIndexedDB = Boolean(
 	window.indexedDB ||
 		window.mozIndexedDB ||
 		window.webkitIndexedDB ||
@@ -16,53 +16,55 @@ apiCache.version(1).stores({
 
 // Wrapper so that we don't run into issues on browsers without indexedDB
 class ApiCache {
-	static hasIndexedDB = Boolean(
-		window.indexedDB ||
-			window.mozIndexedDB ||
-			window.webkitIndexedDB ||
-			window.msIndexedDB
-	);
+	static handleError(e, url, action) {
+		if (e.name !== 'NotFoundError' && e.name !== 'OpenFailedError') {
+			errorReporter.notify(e, {
+				url: window.location.href,
+				context: {
+					apiCacheUrl: url
+				},
+				action
+			});
+		} else {
+			hasIndexedDB = false;
+		}
+	}
 
 	static async findOne(url) {
 		if (!hasIndexedDB) {
 			return null;
 		}
 
-		try {
-			return await apiCache.requests.where({ url }).first();
-		} catch (e) {
-			if (e.name !== 'NotFoundError') {
-				errorReporter.notify(e, {
-					url: window.location.href,
-					context: {
-						apiCacheUrl: url
-					},
-					action: 'retrieve item from api cache'
+		return new Promise(resolve => {
+			apiCache.requests
+				.where({ url })
+				.first()
+				.then(resolve)
+				.catch(e => {
+					this.handleError(e, url, 'retrieve item from api cache');
+					resolve(null);
 				});
-			}
-		}
-		return null;
+		});
 	}
 
-	static async delete(url) {
+	static delete(url) {
 		if (!hasIndexedDB) {
 			return;
 		}
 
-		try {
-			await apiCache.requests.where({ url }).delete();
-		} catch (e) {
-			errorReporter.notify(e, {
-				url: window.location.href,
-				context: {
-					apiCacheUrl: url
-				},
-				action: 'delete item from api cache'
-			});
-		}
+		return new Promise(resolve => {
+			apiCache.requests
+				.where({ url })
+				.delete()
+				.then(resolve)
+				.catch(e => {
+					this.handleError(e, url, 'delete from apiCache DB');
+					resolve(null);
+				});
+		});
 	}
 
-	static async create(url, data, date) {
+	static create(url, data, date) {
 		if (!hasIndexedDB) {
 			return;
 		}
@@ -71,10 +73,18 @@ class ApiCache {
 			date = new Date();
 		}
 
-		return await apiCache.requests.add({
-			url,
-			data,
-			date
+		return new Promise(resolve => {
+			apiCache.requests
+				.add({
+					url,
+					data,
+					date
+				})
+				.then(resolve)
+				.catch(e => {
+					this.handleError(e, url, 'create in apiCache DB');
+					resolve(null);
+				});
 		});
 	}
 }

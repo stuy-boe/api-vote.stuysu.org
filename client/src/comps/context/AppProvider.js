@@ -79,7 +79,7 @@ class AppProvider extends React.Component {
 
 			this.setState({ status: 'loaded', ...payload });
 
-			await ApiCache.delete(url);
+			await ApiCache.delete('/api/state');
 			await ApiCache.create('/api/state', payload, this.getDate());
 		} catch (e) {
 			if (axios.isCancel(e)) {
