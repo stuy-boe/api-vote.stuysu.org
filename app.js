@@ -12,7 +12,9 @@ if (process.env.SERVE_FRONT_END === 'true') {
 	// Check to see if the request is a static file before moving on
 	app.use(
 		express.static('./client/build', {
-			index: false
+			index: false,
+			lastModified: true,
+			maxAge: '1d'
 		})
 	);
 }
@@ -51,8 +53,8 @@ if (process.env.SERVE_FRONT_END === 'true') {
 		express: app
 	});
 
-	// Adding this to the res object for less repetition
 	app.get('*', (req, res, next) => {
+		res.set('Cache-Control', `public, max-age=${60 * 60 * 12}`);
 		res.render('index.html', {
 			og: req.og,
 			date: new Date()
