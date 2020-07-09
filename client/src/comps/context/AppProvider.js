@@ -33,13 +33,6 @@ class AppProvider extends React.Component {
 			status: 'loaded'
 		};
 
-		const serverDate = new Date(window.ssrInfo?.date);
-
-		if (serverDate) {
-			const now = new Date();
-			this.state.dateOffset = serverDate.getTime() - now.getTime();
-		}
-
 		this.cancelTokenSource = axios.CancelToken.source();
 	}
 
@@ -81,9 +74,7 @@ class AppProvider extends React.Component {
 			});
 			const payload = getState.data.payload;
 
-			if (this.state.dateOffset === 0) {
-				await this.updateDateOffset();
-			}
+			await this.updateDateOffset();
 
 			this.setState({ status: 'loaded', ...payload });
 

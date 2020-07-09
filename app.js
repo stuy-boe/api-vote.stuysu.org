@@ -5,16 +5,18 @@ const app = express();
 const compression = require('compression');
 app.use(compression());
 
-// This is up here at the top because we want our static files served ASAP
+// This is up here at the top because we want our static files and date served ASAP
 // This prevents requests for static files from passing through unnecessary middleware
 // i.e. We don't need to validate the session if the user just wants /favicon.ico
+app.use('/api/date', require('./api/date'));
+
 if (process.env.SERVE_FRONT_END === 'true') {
 	// Check to see if the request is a static file before moving on
 	app.use(
 		express.static('./client/build', {
 			index: false,
 			lastModified: true,
-			maxAge: '1d'
+			maxAge: '1m'
 		})
 	);
 }
