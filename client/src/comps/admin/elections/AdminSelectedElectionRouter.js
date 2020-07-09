@@ -32,10 +32,6 @@ const AdminSelectedElectionRouter = ({ match }) => {
 		);
 	}
 
-	if (election === null) {
-		return <Loading />;
-	}
-
 	if (error) {
 		return (
 			<Retry
@@ -43,6 +39,10 @@ const AdminSelectedElectionRouter = ({ match }) => {
 				message={'There was an error getting the election information.'}
 			/>
 		);
+	}
+
+	if (election === null) {
+		return <Loading />;
 	}
 
 	const data = { ...election, reload: updateData };

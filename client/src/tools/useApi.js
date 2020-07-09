@@ -9,7 +9,7 @@ import useIsOnline from './useIsOnline';
 
 const maxAge = 1000 * 86400 * 14;
 
-const useApi = (url, defaultVal = null) => {
+const useApi = (url, defaultVal = null, handleError = true) => {
 	const context = React.useContext(AppContext);
 	const isOnline = useIsOnline();
 
