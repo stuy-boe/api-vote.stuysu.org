@@ -9,12 +9,15 @@ if (
 	process.env.DISABLE_CLUSTER !== 'true'
 ) {
 	if (cluster.isMaster) {
-		console.log('Running production server. Spawning worker processes...');
-
 		const cpuCount = require('os').cpus().length;
+		const numForks = Number(process.env.CLUSTER_NUM_FORKS) || cpuCount;
+
+		console.log(
+			`Running production server. Spawning ${numForks} worker processes...`
+		);
 
 		// Create a worker for each CPU
-		for (let i = 0; i < cpuCount; i += 1) {
+		for (let i = 0; i < numForks; i += 1) {
 			cluster.fork();
 		}
 
