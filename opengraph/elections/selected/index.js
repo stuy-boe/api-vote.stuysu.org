@@ -23,4 +23,8 @@ router.use('/', async (req, res, next) => {
 	next();
 });
 
+router.use('/candidates', require('./candidates'));
+router.use('/vote', require('./vote'));
+router.use('/results', require('./results'));
+
 module.exports = router;
