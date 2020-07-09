@@ -29,7 +29,7 @@ const Content = () => {
 				<meta
 					property="og:description"
 					content={
-						'This is where voting as well as campaigning for Student Union Elections takes place'
+						'This is where voting as well as campaigning for Student Union elections takes place.'
 					}
 				/>
 				<meta

@@ -82,11 +82,6 @@ class AppProvider extends React.Component {
 			await ApiCache.delete('/api/state');
 			await ApiCache.create('/api/state', payload, this.getDate());
 		} catch (e) {
-			if (axios.isCancel(e)) {
-				console.log('Request canceled', e.message);
-				return;
-			}
-
 			this.setState({ status: 'error' });
 
 			if (window.navigator.onLine) {
@@ -124,10 +119,6 @@ class AppProvider extends React.Component {
 			.finally(async () => {
 				await this.updateState(true);
 			});
-	}
-
-	componentWillUnmount() {
-		this.cancelTokenSource.cancel('Component will unmount');
 	}
 
 	render() {
