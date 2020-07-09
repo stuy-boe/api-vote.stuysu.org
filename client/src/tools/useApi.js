@@ -18,6 +18,7 @@ const useApi = (url, defaultVal = null, handleError = true) => {
 		checked: false,
 		lastUpdated: context.getDate()
 	});
+
 	const [serverInfo, setServerInfo] = React.useState({
 		data: null,
 		checked: false,
@@ -25,7 +26,16 @@ const useApi = (url, defaultVal = null, handleError = true) => {
 		lastUpdated: context.getDate()
 	});
 
-	const [cancelTokenSource] = React.useState(axios.CancelToken.source());
+	const [cancelTokenSource, setCancelTokenSource] = React.useState(
+		axios.CancelToken.source()
+	);
+
+	// Renew the token if it has been used
+	React.useEffect(() => {
+		cancelTokenSource.token.promise.then(() => {
+			setCancelTokenSource(axios.CancelToken.source());
+		});
+	}, [cancelTokenSource]);
 
 	const updateData = useCallback(() => {
 		const backend = axios.create({ baseURL: API_URL });
@@ -61,14 +71,15 @@ const useApi = (url, defaultVal = null, handleError = true) => {
 	React.useEffect(() => {
 		if (!storedInfo.checked) {
 			ApiCache.findOne(url).then(entry => {
-				let data, lastUpdated;
+				let data = defaultVal;
+				let lastUpdated;
 
-				if (entry !== null) {
+				if (entry !== null && entry?.date?.getTime()) {
 					// Check to see if the data is expired
 					const isFresh =
 						new Date(entry.date.getTime() + maxAge) >
-						context.getTime();
-					data = isFresh ? entry.data : null;
+						context.getDate();
+					data = isFresh ? entry.data : defaultVal;
 					lastUpdated = context.getDate();
 				}
 
@@ -84,11 +95,21 @@ const useApi = (url, defaultVal = null, handleError = true) => {
 			updateData();
 
 			// If the component unmounts during the request, cancel the request
+			// Also create a new cancel token source for the next attempt
 			return () => {
 				cancelTokenSource.cancel('Component unmounted');
 			};
 		}
-	}, [context, url, isOnline]);
+	}, [
+		context,
+		url,
+		defaultVal,
+		isOnline,
+		serverInfo,
+		storedInfo,
+		cancelTokenSource,
+		updateData
+	]);
 
 	let data, updated, lastUpdated;
 
