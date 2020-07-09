@@ -3,9 +3,11 @@
 	"version": "0.1.0",
 	"private": true,
 	"dependencies": {
+		"@honeybadger-io/react": "0.0.7",
 		"axios": "^0.19.2",
 		"dexie": "^3.0.1",
 		"flow-bin": "^0.128.0",
+		"honeybadger-js": "^2.2.2",
 		"moment": "^2.27.0",
 		"moment-timezone": "^0.5.31",
 		"react": "^16.13.1",

@@ -2,7 +2,6 @@ const errorReporter = require('../utils/errorReporter');
 const frontendErrorHandler = function (err, req, res, next) {
 	const {
 		originalUrl,
-		route,
 		path,
 		params,
 		query,
@@ -15,14 +14,12 @@ const frontendErrorHandler = function (err, req, res, next) {
 
 	errorReporter.notify(err, {
 		context: {
-			route,
 			path,
 			query,
 			hostname,
 			body,
 			baseUrl,
-			protocol,
-			env: process.env
+			protocol
 		},
 		url: originalUrl,
 		session,

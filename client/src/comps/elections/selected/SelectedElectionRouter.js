@@ -15,6 +15,7 @@ import BackButton from '../../utils/BackButton';
 
 import ConfusedPersonVector from '../../../vectors/confused-person.svg';
 import ErrorPage from '../../../pages/ErrorPage';
+import errorReporter from '../../../tools/errorReporter';
 
 export const ElectionContext = React.createContext({});
 
@@ -33,9 +34,10 @@ class SelectedElectionRouter extends React.Component {
 	fetchElection() {
 		this.setState({ status: 'loading' });
 		const { publicUrl } = this.props.match.params;
+		const apiUrl = `/api/elections/${publicUrl}`;
 
 		backend
-			.get(`/api/elections/${publicUrl}`)
+			.get(apiUrl)
 			.then(({ data }) =>
 				this.setState({
 					status: 'loaded',
@@ -43,7 +45,17 @@ class SelectedElectionRouter extends React.Component {
 				})
 			)
 			.catch(er => {
-				console.log(er.response);
+				errorReporter.notify(er, {
+					context: {
+						component: 'SelectedElectionRouter',
+						state: this.state,
+						apiUrl,
+						publicUrl
+					},
+					url: window.location.href,
+					action: 'making get request'
+				});
+
 				if (er.response && er.response.status === 404) {
 					this.setState({ status: 'loaded', election: null });
 				} else {

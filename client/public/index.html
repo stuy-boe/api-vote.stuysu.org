@@ -21,13 +21,6 @@
 			rel="stylesheet"
 			href="https://fonts.googleapis.com/icon?family=Material+Icons|Roboto|Sumana"
 		/>
-
-		<script>
-			window.ssrInfo = { date: "{{ date.toISOString() }}" };
-			{% if error %}
-			window.serverError = { code: "{{ error.code }}", message: "{{ error.message }}" };
-			{% endif %}
-		</script>
 	</head>
 	<body>
 		<noscript>You need to enable JavaScript to run this app.</noscript>

@@ -10,7 +10,6 @@ const errorHandler = (err, req, res, next) => {
 	} else {
 		const {
 			originalUrl,
-			route,
 			path,
 			params,
 			query,
@@ -23,14 +22,12 @@ const errorHandler = (err, req, res, next) => {
 
 		errorReporter.notify(err, {
 			context: {
-				route,
 				path,
 				query,
 				hostname,
 				body,
 				baseUrl,
-				protocol,
-				env: process.env
+				protocol
 			},
 			url: originalUrl,
 			session,
