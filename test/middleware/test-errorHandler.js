@@ -9,7 +9,8 @@ const RequestRefusalError = require('./../../utils/RequestRefusalError');
 const sinon = require('sinon');
 
 describe('errorHandler', () => {
-	const spy = sinon.stub(console, 'error');
+	const errorReporter = require('./../../utils/errorReporter');
+	const spy = sinon.stub(errorReporter, 'notify');
 
 	const refusedError = new RequestRefusalError(
 		'Request was refused.',
