@@ -14,8 +14,6 @@ const ElectionSelect = () => {
 	const api = useApi('/api/elections', { active: [], completed: [] });
 	const elections = api.data;
 
-	console.log(api);
-
 	return (
 		<div>
 			<Helmet>
