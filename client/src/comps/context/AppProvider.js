@@ -8,7 +8,8 @@ import Retry from '../utils/Retry';
 
 import AppContext from './AppContext';
 import MazeErrorVector from '../../vectors/maze-loading-error.svg';
-import apiCache from '../../tools/apiCache';
+import ApiCache from '../../tools/ApiCache';
+import errorReporter from '../../tools/errorReporter';
 
 const styles = {
 	LoadingContainer: { height: '100vh' }
@@ -78,29 +79,36 @@ class AppProvider extends React.Component {
 
 			this.setState({ status: 'loaded', ...payload });
 
-			await apiCache.requests.where({ url: '/api/state' }).delete();
-
-			await apiCache.requests.add({
-				url: '/api/state',
-				data: payload,
-				date: this.getDate()
-			});
+			await ApiCache.delete(url);
+			await ApiCache.create('/api/state', payload, this.getDate());
 		} catch (e) {
+			if (axios.isCancel(e)) {
+				console.log('Request canceled', e.message);
+				return;
+			}
+
 			this.setState({ status: 'error' });
+
+			if (window.navigator.onLine) {
+				errorReporter.notify(e, {
+					url: window.location.href,
+					context: {
+						userContext: this.context
+					},
+					action: 'setting up state'
+				});
+			}
 		}
 	}
 
 	componentDidMount() {
-		apiCache.requests
-			.where({ url: '/api/state' })
-			.first(entry => {
+		ApiCache.findOne('/api/state')
+			.then(async entry => {
 				if (entry) {
 					const now = this.getDate();
 					const maxAge = 1000 * 86400 * 7;
 					const difference = now.getTime() - entry.date.getTime();
-
 					const expiration = new Date(entry.data?.expires);
-
 					const isValid = !entry.data?.signedIn || expiration > now;
 
 					if (difference < maxAge && isValid) {
@@ -109,7 +117,7 @@ class AppProvider extends React.Component {
 							status: 'loaded'
 						});
 					} else {
-						apiCache.requests.where({ url: '/api/state' }).delete();
+						await ApiCache.delete('/api/state');
 					}
 				}
 			})

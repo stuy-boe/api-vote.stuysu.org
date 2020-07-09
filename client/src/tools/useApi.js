@@ -4,7 +4,7 @@ import React, { useCallback } from 'react';
 import AppContext from '../comps/context/AppContext';
 import { API_URL } from '../constants';
 
-import apiCache from './apiCache';
+import apiCache from './ApiCache';
 import useIsOnline from './useIsOnline';
 
 const maxAge = 1000 * 86400 * 14;
