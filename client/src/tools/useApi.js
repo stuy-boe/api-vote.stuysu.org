@@ -4,7 +4,7 @@ import React, { useCallback } from 'react';
 import AppContext from '../comps/context/AppContext';
 import { API_URL } from '../constants';
 
-import apiCache from './ApiCache';
+import ApiCache from './ApiCache';
 import useIsOnline from './useIsOnline';
 
 const maxAge = 1000 * 86400 * 14;
@@ -12,9 +12,19 @@ const maxAge = 1000 * 86400 * 14;
 const useApi = (url, defaultVal = null) => {
 	const context = React.useContext(AppContext);
 	const isOnline = useIsOnline();
-	const [error, setError] = React.useState(null);
-	const [refreshed, setPerformedRequest] = React.useState(false);
-	const [data, setData] = React.useState(defaultVal);
+
+	const [storedInfo, setStoredInfo] = React.useState({
+		data: defaultVal,
+		checked: false,
+		lastUpdated: context.getDate()
+	});
+	const [serverInfo, setServerInfo] = React.useState({
+		data: null,
+		checked: false,
+		error: null,
+		lastUpdated: context.getDate()
+	});
+
 	const [cancelTokenSource] = React.useState(axios.CancelToken.source());
 
 	const updateData = useCallback(() => {
@@ -25,58 +35,82 @@ const useApi = (url, defaultVal = null) => {
 		backend
 			.get(url, { cancelToken: cancelTokenSource.token })
 			.then(async res => {
-				if (res.data.success) {
-					setData(res.data.payload);
+				setServerInfo({
+					data: res.data.payload,
+					checked: true,
+					error: false,
+					lastUpdated: context.getDate()
+				});
 
-					await apiCache.requests.where({ url }).delete();
+				await ApiCache.delete(url);
 
-					await apiCache.requests.add({
-						url,
-						data: res.data.payload,
-						date: context.getDate()
-					});
-				} else {
-					setError(new Error(res.data.error.message));
-				}
+				await ApiCache.create(url, res.data.payload, context.getDate());
 			})
 			.catch(er => {
 				if (!axios.isCancel(er)) {
-					setError(er);
+					setServerInfo({
+						data: null,
+						checked: true,
+						error: er,
+						lastUpdated: context.getDate()
+					});
 				}
-			})
-			.finally(() => {
-				setPerformedRequest(true);
 			});
 	}, [context, cancelTokenSource, url]);
 
 	React.useEffect(() => {
-		apiCache.requests
-			.where({ url })
-			.first(entry => {
-				if (entry) {
-					const difference =
-						context.getDate().getTime() - entry.date.getTime();
+		if (!storedInfo.checked) {
+			ApiCache.findOne(url).then(entry => {
+				let data, lastUpdated;
 
-					if (difference < maxAge) {
-						setData(entry.data);
-					} else {
-						apiCache.requests.where({ url }).delete();
-					}
+				if (entry !== null) {
+					// Check to see if the data is expired
+					const isFresh =
+						new Date(entry.date.getTime() + maxAge) >
+						context.getTime();
+					data = isFresh ? entry.data : null;
+					lastUpdated = context.getDate();
 				}
-			})
-			.catch('NotFoundError', e => {});
-	}, [context, url]);
 
-	React.useEffect(() => {
-		if (!refreshed && isOnline) {
+				setStoredInfo({
+					data,
+					checked: true,
+					lastUpdated
+				});
+			});
+		}
+
+		if (!serverInfo.checked && isOnline) {
 			updateData();
+
+			// If the component unmounts during the request, cancel the request
 			return () => {
 				cancelTokenSource.cancel('Component unmounted');
 			};
 		}
-	}, [cancelTokenSource, updateData, refreshed, isOnline]);
+	}, [context, url, isOnline]);
 
-	return { data, error, refreshed, updateData };
+	let data, updated, lastUpdated;
+
+	if (!serverInfo.data) {
+		data = storedInfo.data;
+		lastUpdated = storedInfo.lastUpdated;
+		updated = false;
+	} else {
+		data = serverInfo.data;
+		lastUpdated = serverInfo.lastUpdated;
+		updated = true;
+	}
+
+	const error = serverInfo.error;
+
+	return {
+		data,
+		updated,
+		updateData,
+		lastUpdated,
+		error
+	};
 };
 
 export default useApi;

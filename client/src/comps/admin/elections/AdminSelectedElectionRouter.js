@@ -12,9 +12,7 @@ import useApi from '../../../tools/useApi';
 
 const AdminSelectedElectionRouter = ({ match }) => {
 	const { publicUrl } = useParams();
-	const { data: election, error, updateData } = useApi(
-		`/api/admin/elections/${publicUrl}`
-	);
+	const election = useApi(`/api/admin/elections/${publicUrl}`, {});
 
 	if (error?.response?.status === 404) {
 		return (
