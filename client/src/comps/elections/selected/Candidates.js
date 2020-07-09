@@ -1,28 +1,13 @@
 import React from 'react';
 import { ElectionContext } from './SelectedElectionRouter';
-import Loading from '../../utils/Loading';
 import { Helmet } from 'react-helmet';
-import Retry from '../../utils/Retry';
 import useApi from '../../../tools/useApi';
 
 const Candidates = () => {
 	const election = React.useContext(ElectionContext);
-	const { data: candidates, error, updateData } = useApi(
-		`/api/elections/${election.publicUrl}/candidates`
-	);
+	const api = useApi(`/api/elections/${election.publicUrl}/candidates`, []);
 
-	if (error !== null) {
-		return (
-			<Retry
-				onRetry={updateData}
-				message={'There was an error getting the candidates'}
-			/>
-		);
-	}
-
-	if (candidates === null) {
-		return <Loading />;
-	}
+	const candidates = api.data;
 
 	return (
 		<div>

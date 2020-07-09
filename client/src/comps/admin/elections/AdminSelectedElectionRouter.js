@@ -12,9 +12,10 @@ import useApi from '../../../tools/useApi';
 
 const AdminSelectedElectionRouter = ({ match }) => {
 	const { publicUrl } = useParams();
-	const { data: election, error, updateData } = useApi(
-		`/api/admin/elections/${publicUrl}`
-	);
+	const api = useApi(`/api/admin/elections/${publicUrl}`);
+	const error = api.error;
+	const election = api.data;
+	const updateData = api.updateData;
 
 	if (error?.response?.status === 404) {
 		return (
@@ -31,10 +32,6 @@ const AdminSelectedElectionRouter = ({ match }) => {
 		);
 	}
 
-	if (election === null) {
-		return <Loading />;
-	}
-
 	if (error) {
 		return (
 			<Retry
@@ -42,6 +39,10 @@ const AdminSelectedElectionRouter = ({ match }) => {
 				message={'There was an error getting the election information.'}
 			/>
 		);
+	}
+
+	if (election === null) {
+		return <Loading />;
 	}
 
 	const data = { ...election, reload: updateData };

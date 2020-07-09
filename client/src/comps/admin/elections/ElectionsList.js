@@ -1,17 +1,15 @@
 import React from 'react';
 import { List, SimpleListItem } from '@rmwc/list';
 import Title from '../../../typography/Title';
-import Loading from '../../utils/Loading';
-import Retry from '../../utils/Retry';
+
 import FlexCenter from '../../utils/FlexCenter';
 import { Button } from '@rmwc/button';
 import { Link } from 'react-router-dom';
 import useApi from '../../../tools/useApi';
 
 const ElectionsList = ({ match }) => {
-	const { data: elections, error, updateData } = useApi(
-		'/api/admin/elections'
-	);
+	const api = useApi('/api/admin/elections', []);
+	const elections = api.data;
 
 	return (
 		<div>
@@ -23,13 +21,7 @@ const ElectionsList = ({ match }) => {
 					<Button outlined>Create Election</Button>
 				</Link>
 			</FlexCenter>
-			{elections === null && !error && <Loading />}
-			{error && (
-				<Retry
-					onRetry={updateData}
-					message={'There was an error getting the elections'}
-				/>
-			)}
+
 			<List twoLine>
 				{Array.isArray(elections) &&
 					elections.map(election => {

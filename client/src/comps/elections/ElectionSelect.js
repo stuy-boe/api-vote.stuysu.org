@@ -3,8 +3,6 @@ import '@material/layout-grid/dist/mdc.layout-grid.css';
 import { Grid, GridCell } from '@rmwc/grid';
 import React from 'react';
 import { Helmet } from 'react-helmet';
-import Loading from '../utils/Loading';
-import Retry from '../utils/Retry';
 import { createUseStyles } from 'react-jss';
 import useApi from '../../tools/useApi';
 
@@ -13,20 +11,10 @@ import ElectionCard from './ElectionCard';
 const useStyles = createUseStyles({ ElectionsContainer: { maxWidth: '100%' } });
 
 const ElectionSelect = () => {
-	const { data: elections, error, updateData } = useApi('/api/elections');
+	const api = useApi('/api/elections', { active: [], completed: [] });
+	const elections = api.data;
 
-	if (elections === null) {
-		return <Loading />;
-	}
-
-	if (error) {
-		return (
-			<Retry
-				onRetry={updateData}
-				message={'There was an error getting the elections.'}
-			/>
-		);
-	}
+	console.log(api);
 
 	return (
 		<div>

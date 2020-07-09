@@ -6,7 +6,6 @@ import { API_URL } from '../../../constants';
 import { createUseStyles } from 'react-jss';
 
 import useApi from '../../../tools/useApi';
-import Loading from '../../utils/Loading';
 
 const useStyles = createUseStyles({
 	ImageCell: {
@@ -25,13 +24,10 @@ const useStyles = createUseStyles({
 
 const ElectionPicList = ({ activePic, setActivePic, uploadedPics }) => {
 	const classes = useStyles();
-	const { data: electionPics } = useApi('/api/admin/elections/pics');
-
-	if (electionPics === null) {
-		return <Loading />;
-	}
-
+	const api = useApi('/api/admin/elections/pics', []);
+	const electionPics = api.data;
 	const completePicsList = [...uploadedPics, ...electionPics];
+
 	return (
 		<Grid className={classes.ImageGrid}>
 			{completePicsList.map(src => {
