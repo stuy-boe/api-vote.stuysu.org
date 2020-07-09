@@ -1,3 +1,4 @@
+const errorReporter = require('./../utils/errorReporter');
 const RequestRefusalError = require('../utils/RequestRefusalError');
 
 const errorHandler = (err, req, res, next) => {
@@ -7,7 +8,34 @@ const errorHandler = (err, req, res, next) => {
 			error: { code: err.code, message: err.message }
 		});
 	} else {
-		console.error(err);
+		const {
+			originalUrl,
+			route,
+			path,
+			params,
+			query,
+			hostname,
+			body,
+			baseUrl,
+			protocol,
+			session
+		} = req;
+
+		errorReporter.notify(err, {
+			context: {
+				route,
+				path,
+				query,
+				hostname,
+				body,
+				baseUrl,
+				protocol,
+				env: process.env
+			},
+			url: originalUrl,
+			session,
+			params
+		});
 
 		res.status(500).json({
 			success: false,
