@@ -1,4 +1,5 @@
 const router = require('express').Router({ mergeParams: true });
+const { elections } = require('./../../../database');
 
 router.use('/', async (req, res, next) => {
 	req.election = await elections.findOne({
