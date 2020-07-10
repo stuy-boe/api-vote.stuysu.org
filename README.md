@@ -2,9 +2,9 @@
 
 The backend api for the Stuyvesant High School Board of Elections Voting Site.
 
-[![CircleCI Badge](https://circleci.com/gh/stuy-boe/api-vote.stuysu.org.svg?style=svg)](https://github.com/stuy-boe/api.vote.stuysu.org)
+[![CircleCI Badge](https://circleci.com/gh/stuy-boe/vote.stuysu.org.svg?style=svg)](https://github.com/stuy-boe/vote.stuysu.org)
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/e9f69db0365f4714aea2accf8b159133)](https://app.codacy.com/gh/stuy-boe/api-vote.stuysu.org?utm_source=github.com&utm_medium=referral&utm_content=stuy-boe/api-vote.stuysu.org&utm_campaign=Badge_Grade_Dashboard)
-[![Coverage Status](https://coveralls.io/repos/github/stuy-boe/api-vote.stuysu.org/badge.svg?branch=master)](https://coveralls.io/github/stuy-boe/api-vote.stuysu.org?branch=master)
+[![Coverage Status](https://coveralls.io/repos/github/stuy-boe/vote.stuysu.org/badge.svg?branch=master)](https://coveralls.io/github/stuy-boe/vote.stuysu.org?branch=master)
 [![code style: prettier](https://img.shields.io/badge/code_style-prettier-ff69b4.svg?style=flat-square)](https://github.com/prettier/prettier)
 
 ## Getting Started
