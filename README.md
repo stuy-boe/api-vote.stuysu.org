@@ -1,6 +1,8 @@
 # api-vote.stuysu.org
 
-The backend api for the Stuyvesant High School Board of Elections Voting Site.
+The Stuyvesant High School Board of Elections Voting Site.
+
+Vector graphics provided generously by [Icons8](https://icons8.com/ouch) :heart:
 
 [![CircleCI Badge](https://circleci.com/gh/stuy-boe/vote.stuysu.org.svg?style=svg)](https://github.com/stuy-boe/vote.stuysu.org)
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/e9f69db0365f4714aea2accf8b159133)](https://app.codacy.com/gh/stuy-boe/api-vote.stuysu.org?utm_source=github.com&utm_medium=referral&utm_content=stuy-boe/api-vote.stuysu.org&utm_campaign=Badge_Grade_Dashboard)
