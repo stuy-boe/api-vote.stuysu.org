@@ -46,7 +46,7 @@
 		"nunjucks": "^3.2.2",
 		"sequelize": "^6.3.4",
 		"set-cookie-parser": "^2.4.6",
-		"sinon": "^9.0.2",
+		"sinon": "^9.0.3",
 		"sinon-chai": "^3.5.0",
 		"sqlite3": "^5.0.0",
 		"supertest": "^4.0.2",
