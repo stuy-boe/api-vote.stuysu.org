@@ -24,7 +24,7 @@
 	"homepage": "https://github.com/stuy-boe/api.vote.stuysu.org#readme",
 	"dependencies": {
 		"body-parser": "latest",
-		"cloudinary": "^1.22.0",
+		"cloudinary": "^1.23.0",
 		"compression": "^1.7.4",
 		"connect-session-sequelize": "^7.0.1",
 		"cookie-parser": "^1.4.5",
