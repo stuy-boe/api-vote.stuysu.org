@@ -43,6 +43,10 @@ app.use(sessionValidator);
 // API Routes
 app.use('/api', require('./api'));
 
+const apolloServer = require('./graphql');
+apolloServer.applyMiddleware({app, path: '/graphql', cors: false});
+
+
 // Catch-all handler to serve the react index page
 if (process.env.SERVE_FRONT_END === 'true') {
 	const opengraph = require('./opengraph');
