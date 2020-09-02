@@ -24,7 +24,7 @@
 	"homepage": "https://github.com/stuy-boe/api.vote.stuysu.org#readme",
 	"dependencies": {
 		"body-parser": "latest",
-		"cloudinary": "^1.22.0",
+		"cloudinary": "^1.23.0",
 		"compression": "^1.7.4",
 		"connect-session-sequelize": "^7.0.1",
 		"cookie-parser": "^1.4.5",
@@ -64,7 +64,7 @@
 		"pg": "^8.3.2",
 		"pg-native": "^3.0.0",
 		"portscanner": "^2.2.0",
-		"prettier": "^2.0.5",
+		"prettier": "^2.1.1",
 		"request": "^2.88.2",
 		"sequelize-cli": "^6.2.0"
 	},
