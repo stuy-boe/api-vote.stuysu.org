@@ -31,6 +31,8 @@ const apolloServer = new ApolloServer({
 
 		// This is an unexpected error and might have secrets
 		if (!safeError) {
+			console.log(err);
+
 			return new Error('There was an unknown error on the server');
 		}
 

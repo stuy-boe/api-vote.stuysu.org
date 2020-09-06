@@ -1,3 +1,12 @@
-module.exports = (root, { id }, context) => {
-	return context.models.users.findOne({ where: { id } });
+const mongoose = require('mongoose');
+const User = mongoose.model('User');
+
+module.exports = (root, { id, email }) => {
+	if (id) {
+		return User.findById(id).exec();
+	}
+
+	if (email) {
+		return User.findOne({ email }).exec();
+	}
 };

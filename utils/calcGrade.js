@@ -1,4 +1,4 @@
-const calcGrade = (gradYear ) => {
+const calcGrade = gradYear => {
 	const graduationDate = new Date(`June 28, ${gradYear}`);
 	const millisecondsInAYear = 1000 * 60 * 60 * 24 * 365;
 	const now = new Date();
@@ -15,4 +15,6 @@ const calcGrade = (gradYear ) => {
 	}
 
 	return seniorGrade - yearsLeft;
-}
+};
+
+module.exports = calcGrade;

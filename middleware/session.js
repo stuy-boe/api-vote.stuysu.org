@@ -1,11 +1,9 @@
-const db = require('./../database');
-
+const mongoose = require('mongoose');
 const expressSession = require('express-session');
-const SequelizeConnectSession = require('connect-session-sequelize')(
-	expressSession.Store
-);
-const sequelizeStore = new SequelizeConnectSession({
-	db: db.sequelize
+const MongoStore = require('connect-mongo')(expressSession);
+
+const sequelizeStore = new MongoStore({
+	mongooseConnection: mongoose.connection
 });
 const cookieSecret = process.env.SESSION_SECRET || 'some_semi_permanent_secret';
 
@@ -29,7 +27,5 @@ if (process.env.NODE_ENV === 'production') {
 }
 
 const session = expressSession(sessionOptions);
-
-sequelizeStore.sync();
 
 module.exports = session;

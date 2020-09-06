@@ -3,7 +3,7 @@ module.exports = (sequelize, DataTypes) => {
 	const adminPrivileges = sequelize.define(
 		'adminPrivileges',
 		{
-			userId: DataTypes.STRING,
+			userId: DataTypes.INTEGER,
 			privilege: DataTypes.STRING
 		},
 		{}
