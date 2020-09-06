@@ -11,10 +11,14 @@ const models = require('../database');
 const apolloServer = new ApolloServer({
 	typeDefs,
 	resolvers,
-	context: ({ req }) => {
+	context: ({ req, res }) => {
 		return {
 			session: req.session,
-			models
+			cookies: req.cookies,
+			sessionId: req.sessionID,
+			signedCookies: req.signedCookies,
+			models,
+			res
 		};
 	},
 	introspection: true,

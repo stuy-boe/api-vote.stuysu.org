@@ -33,7 +33,7 @@ router.use('*', (req, res, next) => {
 
 			req.session.getDecryptedUserId = () => {
 				return decryptHex(
-					req.session.encryptedUserId,
+					req.session.encryptedSub,
 					Buffer.from(req.signedCookies.decryptKey, 'hex'),
 					Buffer.from(req.signedCookies.decryptIv, 'hex')
 				);

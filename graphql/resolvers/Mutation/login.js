@@ -1,27 +1,20 @@
-const router = require('express').Router();
-
-const encryptString = require('../../utils/encryptString');
-const randomString = require('crypto-random-string');
+const { ForbiddenError, ApolloError } = require('apollo-server-errors');
+const encryptString = require('../../../utils/encryptString');
 const crypto = require('crypto');
+const mongoose = require('mongoose');
+const User = mongoose.model('User');
 
 const { OAuth2Client } = require('google-auth-library');
 const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
 
-const RequestRefusalError = require('../../utils/RequestRefusalError');
-
-router.get('/', (req, res, next) => {
-	req.idToken = req.query.idToken;
-	next();
-});
-
-router.post('/', (req, res, next) => {
-	req.idToken = req.body.idToken;
-	next();
-});
-
-router.use('/', async (req, res) => {
-	const idToken = req.idToken;
-	const isVotingStation = Boolean(req.cookies.isVotingStation);
+module.exports = async (
+	root,
+	{ idToken },
+	{ session, cookies, res, sessionId }
+) => {
+	if (session.signedIn) {
+		throw new ForbiddenError('You are already signed in.');
+	}
 
 	let payload;
 
@@ -33,23 +26,12 @@ router.use('/', async (req, res) => {
 
 		payload = ticket.getPayload();
 	} catch (e) {
-		throw new RequestRefusalError(
-			'The provided login token was invalid.',
-			'INVALID_ID_TOKEN'
-		);
-	}
-
-	if (req.session.signedIn) {
-		throw new RequestRefusalError(
-			'You are already signed in.',
-			'SIGNED_IN'
-		);
+		throw new ForbiddenError('The provided login token was invalid.');
 	}
 
 	if (!payload.email_verified) {
-		throw new RequestRefusalError(
-			'That email is not verified and cannot be used for sign in.',
-			'UNVERIFIED_EMAIL'
+		throw new ForbiddenError(
+			'That email is not verified and cannot be used for sign in.'
 		);
 	}
 
@@ -57,11 +39,24 @@ router.use('/', async (req, res) => {
 		payload.azp !== process.env.GOOGLE_CLIENT_ID ||
 		payload.aud !== process.env.GOOGLE_CLIENT_ID
 	) {
-		throw new RequestRefusalError(
+		throw new ForbiddenError(
 			'That login token was not generated for this app and cannot be used.',
 			'INVALID_ID_TOKEN'
 		);
 	}
+
+	const email = payload.email;
+	const user = await User.findOne({ email })
+		.sort({ gradYear: 'desc' })
+		.exec();
+
+	if (!user) {
+		throw new ApolloError(
+			'Your email address is not in the database. Contact stuyboe@gmail.com if you think this is a mistake.'
+		);
+	}
+
+	const isVotingStation = Boolean(cookies.isVotingStation);
 
 	// Create session now that info has been validated
 	// Generate a random key and salt to encrypt the user's sub (secret user id)
@@ -83,25 +78,14 @@ router.use('/', async (req, res) => {
 		options.sameSite = 'none';
 	}
 
-	req.session.signedIn = true;
-	req.session.email = payload.email;
-	req.session.name = payload.name;
-	req.session.cookie.expires = new Date(new Date().getTime() + maxAge);
-	req.session.encryptedSub = encryptString(
-		payload.sub,
-		encryptKey,
-		encryptIv
-	);
+	session.signedIn = true;
+	session.userId = user._id;
+	session.cookie.expires = new Date(new Date().getTime() + maxAge);
+	session.encryptedSub = encryptString(payload.sub, encryptKey, encryptIv);
 
 	res.cookie('decryptKey', encryptKey.toString('hex'), options);
 	res.cookie('decryptIv', encryptIv.toString('hex'), options);
-	res.cookie('session', req.sessionID, options);
+	res.cookie('session', sessionId, options);
 
-	if (req.query.redirect) {
-		res.redirect(req.query.redirect);
-	} else {
-		res.json({ success: true });
-	}
-});
-
-module.exports = router;
+	return user;
+};

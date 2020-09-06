@@ -31,11 +31,7 @@ describe('sessionValidator', () => {
 			req.session.email = 'email@example.com';
 			req.session.name = 'Example User';
 
-			req.session.encryptedUserId = encryptString(
-				originalUserId,
-				key,
-				iv
-			);
+			req.session.encryptedSub = encryptString(originalUserId, key, iv);
 
 			const options = {
 				signed: true,
