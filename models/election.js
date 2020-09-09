@@ -17,6 +17,7 @@ const ElectionSchema = new Schema({
 		publicId: String,
 		defaultUrl: String
 	},
+	allowedGradYears: [Number],
 	complete: { type: Boolean, default: false },
 	allowEdit: { type: Boolean, default: false },
 	allowDelete: { type: Boolean, default: false },

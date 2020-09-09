@@ -2,10 +2,10 @@ const router = require('express').Router();
 
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
-const cookieSecret = process.env.SESSION_SECRET || 'some_semi_permanent_secret';
+const { COOKIE_SECRET } = require('../constants');
 
 router.use(bodyParser.json());
 router.use(bodyParser.urlencoded({ extended: false }));
-router.use(cookieParser(cookieSecret));
+router.use(cookieParser(COOKIE_SECRET));
 
 module.exports = router;

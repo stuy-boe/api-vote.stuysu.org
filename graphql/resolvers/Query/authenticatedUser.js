@@ -3,6 +3,6 @@ const User = mongoose.model('User');
 
 module.exports = (root, params, { session }) => {
 	if (session.signedIn) {
-		return User.findById(session.userId);
+		return User.findOne({ _id: session.userId });
 	}
 };

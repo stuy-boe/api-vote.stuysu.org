@@ -6,19 +6,14 @@ const {
 const typeDefs = require('./schema');
 const resolvers = require('./resolvers');
 
-const models = require('../database');
-
 const apolloServer = new ApolloServer({
 	typeDefs,
 	resolvers,
 	context: ({ req, res }) => {
 		return {
-			session: req.session,
 			cookies: req.cookies,
-			sessionId: req.sessionID,
-			signedCookies: req.signedCookies,
-			models,
-			res
+			res,
+			jwt: req.jwt
 		};
 	},
 	introspection: true,

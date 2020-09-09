@@ -8,9 +8,14 @@ const CandidateSchema = new Schema({
 		type: String,
 		default: shortid.generate
 	},
+	electionId: String,
 	name: String,
 	url: String,
-	picture: {
+	profilePic: {
+		publicId: String,
+		defaultUrl: String
+	},
+	coverPic: {
 		publicId: String,
 		defaultUrl: String
 	},

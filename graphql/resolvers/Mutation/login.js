@@ -1,18 +1,14 @@
 const { ForbiddenError, ApolloError } = require('apollo-server-errors');
-const encryptString = require('../../../utils/encryptString');
-const crypto = require('crypto');
 const mongoose = require('mongoose');
+const { sign } = require('jsonwebtoken');
+const { COOKIE_SECRET, NODE_ENV } = require('../../../constants');
 const User = mongoose.model('User');
 
 const { OAuth2Client } = require('google-auth-library');
 const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
 
-module.exports = async (
-	root,
-	{ idToken },
-	{ session, cookies, res, sessionId }
-) => {
-	if (session.signedIn) {
+module.exports = async (root, { idToken }, { jwt, cookies, res }) => {
+	if (jwt) {
 		throw new ForbiddenError('You are already signed in.');
 	}
 
@@ -58,34 +54,20 @@ module.exports = async (
 
 	const isVotingStation = Boolean(cookies.isVotingStation);
 
-	// Create session now that info has been validated
-	// Generate a random key and salt to encrypt the user's sub (secret user id)
-	const encryptKey = crypto.randomBytes(32);
-	const encryptIv = crypto.randomBytes(16);
+	const token = sign(
+		{
+			user: {
+				id: user._id,
+				sub: payload.sub
+			},
+			audience: 'vote.stuysu.org',
+			issuer: 'vote.stuysu.org'
+		},
+		COOKIE_SECRET,
+		{ expiresIn: isVotingStation ? 5 * 60 : '14d' }
+	);
 
-	const maxAge = isVotingStation ? 1000 * 60 * 5 : 1000 * 86400 * 30;
+	res.cookie('auth-jwt', token);
 
-	// Create a user cookie to store the information needed to decrypt the user id
-	// The decryption keys only exist on the user side
-	const options = {
-		maxAge, // Normal cookie lasts for 30 days, voting station lasts 5 min
-		httpOnly: true, // The cookie only accessible by the web server
-		signed: true // Indicates if the cookie should be signed
-	};
-
-	if (process.env.NODE_ENV === 'production') {
-		options.secure = true;
-		options.sameSite = 'none';
-	}
-
-	session.signedIn = true;
-	session.userId = user._id;
-	session.cookie.expires = new Date(new Date().getTime() + maxAge);
-	session.encryptedSub = encryptString(payload.sub, encryptKey, encryptIv);
-
-	res.cookie('decryptKey', encryptKey.toString('hex'), options);
-	res.cookie('decryptIv', encryptIv.toString('hex'), options);
-	res.cookie('session', sessionId, options);
-
-	return user;
+	return token;
 };

@@ -4,8 +4,11 @@ module.exports = gql`
 	type Candidate {
 		id: String
 		name: String
+		electionId: String
+		election: Election
 		url: String
-		picture: CloudinaryPicture
+		profilePic: CloudinaryPicture
+		coverPic: CloudinaryPicture
 		active: Boolean
 	}
 `;
