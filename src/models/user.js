@@ -12,7 +12,10 @@ const UserSchema = new Schema({
 	lastName: { type: String, default: '' },
 	email: { type: String, default: '' },
 	gradYear: { type: Number, required: false },
-	adminRoles: [String]
+	adminRoles: [String],
+
+	// An array of ids of candidates that they are managers for
+	managesCandidates: [String]
 });
 
 mongoose.model('User', UserSchema);

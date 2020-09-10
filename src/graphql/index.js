@@ -1,6 +1,7 @@
 const {
 	ApolloServer,
 	ApolloError,
+	ForbiddenError,
 	ValidationError
 } = require('apollo-server-express');
 const typeDefs = require('./schema');
@@ -13,6 +14,10 @@ const apolloServer = new ApolloServer({
 		return {
 			cookies: req.cookies,
 			res,
+			authenticationRequired: req.authenticationRequired,
+			getUser: req.getUser,
+			adminRoleRequired: req.adminRoleRequired,
+			candidateManagerRequired: req.candidateManagerRequired,
 			jwt: req.jwt
 		};
 	},

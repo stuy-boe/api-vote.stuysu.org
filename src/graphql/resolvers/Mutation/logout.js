@@ -1,4 +1,8 @@
-module.exports = (root, args, { session }) => {
-	session.destroy();
+module.exports = (root, args, { res }) => {
+	res.cookie('auth-jwt', '', {
+		maxAge: 0,
+		overwrite: true
+	});
+
 	return true;
 };

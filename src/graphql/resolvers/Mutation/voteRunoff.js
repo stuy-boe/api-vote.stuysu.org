@@ -7,8 +7,12 @@ const Election = mongoose.model('Election');
 const Vote = mongoose.model('Vote');
 const User = mongoose.model('User');
 
-module.exports = async (root, { electionId, choices }, { session }) => {
-	session.authenticationRequired();
+module.exports = async (
+	root,
+	{ electionId, choices },
+	{ authenticationRequired, getUser, jwt }
+) => {
+	authenticationRequired();
 
 	const election = await Election.findById(electionId);
 
@@ -27,7 +31,7 @@ module.exports = async (root, { electionId, choices }, { session }) => {
 		);
 	}
 
-	const user = await User.findById(session.userId);
+	const user = await getUser();
 
 	if (
 		!election.allowedGradYears ||
@@ -40,7 +44,7 @@ module.exports = async (root, { electionId, choices }, { session }) => {
 
 	const voteId = crypto
 		.createHash('sha256')
-		.update(election.id + session.getDecryptedSub())
+		.update(election.id + jwt.user.sub)
 		.digest('hex');
 
 	const existingVote = await Vote.findById(voteId);

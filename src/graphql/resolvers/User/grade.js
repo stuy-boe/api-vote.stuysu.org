@@ -1,6 +1,8 @@
 const calcGrade = require('../../../utils/calcGrade');
 
-module.exports = user => {
+module.exports = (user, args, { authenticationRequired }) => {
+	authenticationRequired(['grade']);
+
 	if (typeof user.gradYear !== 'number') {
 		return null;
 	}

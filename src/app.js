@@ -23,7 +23,6 @@ app.use(cookieParser(COOKIE_SECRET));
 // vote.stuysu.org is served by cloudflare we have a custom proxy validator
 app.set('trust proxy', proxyValidator);
 
-// Express session & custom validator to check for decryption cookies
 app.use(jwtValidator);
 
 apolloServer.applyMiddleware({ app, path: '/graphql', cors: false });
