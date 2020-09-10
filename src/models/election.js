@@ -15,7 +15,9 @@ const ElectionSchema = new Schema({
 	end: Date,
 	picture: {
 		publicId: String,
-		defaultUrl: String
+		width: Number,
+		height: Number,
+		mimetype: String
 	},
 	allowedGradYears: [Number],
 	complete: { type: Boolean, default: false },

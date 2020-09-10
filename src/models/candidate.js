@@ -13,7 +13,9 @@ const CandidateSchema = new Schema({
 	url: String,
 	profilePic: {
 		publicId: String,
-		defaultUrl: String
+		width: Number,
+		height: Number,
+		mimetype: String
 	},
 	coverPic: {
 		publicId: String,
