@@ -6,7 +6,7 @@ const express = require('express');
 const app = express();
 const logger = require('./middleware/logger');
 const proxyValidator = require('./middleware/proxyValidator');
-
+const cors = require('./middleware/cors');
 const apolloServer = require('./graphql');
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
@@ -20,6 +20,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser(COOKIE_SECRET));
 
+app.use(cors);
 // vote.stuysu.org is served by cloudflare we have a custom proxy validator
 app.set('trust proxy', proxyValidator);
 

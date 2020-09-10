@@ -1,11 +1,12 @@
 const { ForbiddenError, ApolloError } = require('apollo-server-errors');
 const mongoose = require('mongoose');
+const { GOOGLE_CLIENT_ID } = require('../../../constants');
 const { sign } = require('jsonwebtoken');
 const { COOKIE_SECRET, NODE_ENV } = require('../../../constants');
 const User = mongoose.model('User');
 
 const { OAuth2Client } = require('google-auth-library');
-const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
+const client = new OAuth2Client(GOOGLE_CLIENT_ID);
 
 module.exports = async (root, { idToken }, { jwt, cookies, res }) => {
 	if (jwt) {
@@ -17,7 +18,7 @@ module.exports = async (root, { idToken }, { jwt, cookies, res }) => {
 	try {
 		const ticket = await client.verifyIdToken({
 			idToken,
-			audience: process.env.GOOGLE_CLIENT_ID
+			audience: GOOGLE_CLIENT_ID
 		});
 
 		payload = ticket.getPayload();
@@ -31,10 +32,7 @@ module.exports = async (root, { idToken }, { jwt, cookies, res }) => {
 		);
 	}
 
-	if (
-		payload.azp !== process.env.GOOGLE_CLIENT_ID ||
-		payload.aud !== process.env.GOOGLE_CLIENT_ID
-	) {
+	if (payload.azp !== GOOGLE_CLIENT_ID || payload.aud !== GOOGLE_CLIENT_ID) {
 		throw new ForbiddenError(
 			'That login token was not generated for this app and cannot be used.',
 			'INVALID_ID_TOKEN'
