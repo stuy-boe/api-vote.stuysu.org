@@ -1,5 +1,5 @@
-const fs = require("fs");
-const path = require("path");
+const fs = require('fs');
+const path = require('path');
 const schemas = [];
 const thisFile = path.resolve(__filename);
 
