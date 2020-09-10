@@ -44,7 +44,6 @@
 		"shortid": "^2.2.15",
 		"sinon": "^9.0.3",
 		"sinon-chai": "^3.5.0",
-		"sqlite3": "^5.0.0",
 		"supertest": "^4.0.2",
 		"sync-request": "^6.1.0",
 		"talos-js": "^1.1.1",

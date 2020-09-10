@@ -4,7 +4,7 @@ jobs:
   build-on-mongo:
     runs-on: ${{ matrix.os }}
     env:
-      MONGO_URL: mongodb://root:password@localhost/vote-stuysu-org
+      MONGO_URL: mongodb+srv://root:password@localhost:27017/vote-stuysu-org
       MONGO_INITDB_ROOT_USERNAME: root
       MONGO_INITDB_ROOT_PASSWORD: password
       MONGO_INITDB_DATABASE: vote-stuysu-org
