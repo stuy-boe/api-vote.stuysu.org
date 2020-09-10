@@ -12,7 +12,7 @@ module.exports = gql`
 		complete: Boolean
 		allowEdit: Boolean
 		allowDelete: Boolean
-		allowedGrade: [Int!]
+		allowedGradYears: [Int!]
 		candidates: [Candidate]
 
 		# This is only for a plurality election
