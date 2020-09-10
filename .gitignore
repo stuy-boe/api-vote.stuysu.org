@@ -69,3 +69,5 @@ typings/
 
 # Files uploaded to the server with multer
 /uploads
+
+.idea/
