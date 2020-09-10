@@ -1,4 +1,4 @@
-const app = require('./../app');
+const app = require('../src/app');
 
 describe('app', () => {
 	it('server runs without error', function (done) {

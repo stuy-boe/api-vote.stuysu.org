@@ -1,1 +1,0 @@
-const ElectionHandler = require('./index');
