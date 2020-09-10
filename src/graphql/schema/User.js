@@ -9,5 +9,6 @@ module.exports = gql`
 		gradYear: Int
 		grade: Int
 		email: String
+		adminRoles: [String!]
 	}
 `;
