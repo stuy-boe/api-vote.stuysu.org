@@ -1,9 +1,9 @@
 const { expect } = require('chai');
 const express = require('express');
 const app = express();
-const cors = require('./../../middleware/cors');
+const cors = require('../../src/middleware/cors');
 const request = require('supertest');
-const RequestRefusalError = require('./../../utils/RequestRefusalError');
+const RequestRefusalError = require('../../src/utils/RequestRefusalError');
 
 describe('cors', () => {
 	before(() => {

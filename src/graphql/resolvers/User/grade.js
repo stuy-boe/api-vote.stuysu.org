@@ -1,4 +1,4 @@
-const calcGrade = require('./../../../utils/calcGrade');
+const calcGrade = require('../../../utils/calcGrade');
 
 module.exports = user => {
 	if (typeof user.gradYear !== 'number') {

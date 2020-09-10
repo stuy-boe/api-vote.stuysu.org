@@ -2,10 +2,10 @@
 	"name": "api.vote.stuysu.org",
 	"version": "1.0.0",
 	"description": "The latest version of the Stuyvesant High School Board of Elections Voting Site.",
-	"main": "index.js",
+	"main": "src/index.js",
 	"scripts": {
-		"start": "node index.js",
-		"dev": "npx nodemon index.js",
+		"start": "node src/index.js",
+		"dev": "npx nodemon src/index.js",
 		"test": "nyc mocha",
 		"coverage": "nyc report --reporter=text-lcov | coveralls"
 	},

@@ -1,5 +1,5 @@
 const { verify } = require('jsonwebtoken');
-const { COOKIE_SECRET } = require('./../constants');
+const { COOKIE_SECRET } = require('../constants');
 
 const jwtValidator = async (req, res, next) => {
 	let token =
