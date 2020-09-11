@@ -11,6 +11,7 @@ module.exports = gql`
 		coverPic: CloudinaryPicture
 		updates: [Update]
 
+		isManager: Boolean
 		active: Boolean
 	}
 `;
