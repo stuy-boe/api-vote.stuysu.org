@@ -15,6 +15,8 @@ module.exports = gql`
 		allowedGradYears: [Int!]
 		candidates: [Candidate]
 
+		updates: [Update]
+
 		votes: [Vote]
 		runoffResults: RunoffResult
 		pluralityResults: PluralityResult

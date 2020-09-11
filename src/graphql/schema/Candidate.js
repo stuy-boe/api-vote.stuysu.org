@@ -9,6 +9,8 @@ module.exports = gql`
 		url: String
 		profilePic: CloudinaryPicture
 		coverPic: CloudinaryPicture
+		updates: [Update]
+
 		active: Boolean
 	}
 `;
