@@ -6,6 +6,14 @@ module.exports = gql`
 		login(idToken: String!): String
 		logout: Boolean
 
+		createUpdate(
+			title: String!
+			content: String!
+			link: String
+			pictures: [Upload!]
+			candidateId: String!
+		): Update
+
 		voteRunoff(electionId: String!, choices: [String!]!): Vote
 	}
 `;

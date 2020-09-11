@@ -15,14 +15,13 @@ const UpdateSchema = new Schema({
 	showOnHome: Boolean,
 	title: String,
 	content: String,
-	links: [
-		{
-			title: String,
-			picture: String,
-			url: String,
-			siteName: String
-		}
-	],
+	link: {
+		title: String,
+		description: String,
+		picture: String,
+		url: String,
+		siteName: String
+	},
 	pictures: [
 		{
 			publicId: String,

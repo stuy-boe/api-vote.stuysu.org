@@ -6,6 +6,14 @@ const {
 const typeDefs = require('./schema');
 const resolvers = require('./resolvers');
 
+const { createComplexityLimitRule } = require('graphql-validation-complexity');
+
+const ComplexityLimitRule = createComplexityLimitRule(75000, {
+	scalarCost: 1,
+	objectCost: 5,
+	listFactor: 10
+});
+
 const apolloServer = new ApolloServer({
 	typeDefs,
 	resolvers,
@@ -20,6 +28,7 @@ const apolloServer = new ApolloServer({
 			jwt: req.jwt
 		};
 	},
+	validationRules: [ComplexityLimitRule],
 	introspection: true,
 	playground: {
 		settings: {

@@ -4,6 +4,7 @@ require('./models');
 const { COOKIE_SECRET } = require('./constants');
 const express = require('express');
 const app = express();
+const { graphqlUploadExpress } = require('graphql-upload');
 const logger = require('./middleware/logger');
 const proxyValidator = require('./middleware/proxyValidator');
 const cors = require('./middleware/cors');
@@ -25,6 +26,8 @@ app.use(cors);
 app.set('trust proxy', proxyValidator);
 
 app.use(jwtValidator);
+
+app.use(graphqlUploadExpress({ maxFileSize: 5000000, maxFiles: 5 }));
 
 apolloServer.applyMiddleware({ app, path: '/graphql', cors: false });
 
