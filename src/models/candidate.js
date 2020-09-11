@@ -38,6 +38,10 @@ CandidateSchema.methods.getElection = function () {
 	return mongoose.model('Election').idLoader.load(this.electionId);
 };
 
+CandidateSchema.methods.getUpdates = function () {
+	return mongoose.model('Update').candidateIdLoader.load(this._id);
+};
+
 CandidateSchema.statics.idLoader = findOneLoader('Candidate', '_id');
 CandidateSchema.statics.electionIdLoader = findManyLoader(
 	'Candidate',

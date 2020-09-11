@@ -35,6 +35,128 @@ ElectionSchema.methods.getVotes = function () {
 	return mongoose.model('Vote').electionIdLoader.load(this._id);
 };
 
+ElectionSchema.methods.getUpdates = function () {
+	return mongoose.model('Update').electionIdLoader.load(this._id);
+};
+
+ElectionSchema.methods.calculateRunoffResults = async function () {
+	const votes = await mongoose.model('Vote').electionIdLoader.load(this._id);
+	const numEligibleVoters = await mongoose.model('User').count({
+		gradYear: { $in: this.allowedGradYears }
+	});
+	const candidates = await mongoose
+		.model('Candidate')
+		.electionIdLoader.load(this._id);
+
+	const rounds = [];
+	let winner = null;
+	let isTie = false;
+	let numVotes = votes.length;
+
+	const eliminated = [];
+
+	if (votes.length > 0) {
+		let complete = false;
+		let number = 0;
+		while (!complete) {
+			number++;
+			let numVotesThisRound = 0;
+
+			let voteCountsThisRound = {};
+
+			if (number === 1) {
+				candidates.forEach(candidate => {
+					voteCountsThisRound[candidate._id] = 0;
+				});
+			}
+
+			const eliminatedThisRound = [];
+
+			votes.forEach(vote => {
+				const activeVote = vote.choices.find(
+					choice => !eliminated.includes(choice)
+				);
+
+				if (activeVote) {
+					numVotesThisRound++;
+					// init counter if not already done this round
+					if (!voteCountsThisRound[activeVote]) {
+						voteCountsThisRound[activeVote] = 0;
+					}
+
+					voteCountsThisRound[activeVote]++;
+				}
+			});
+
+			const candidateIdsThisRound = Object.keys(voteCountsThisRound);
+
+			let minVotes = voteCountsThisRound[candidateIdsThisRound[0]];
+
+			candidateIdsThisRound.forEach(candidateId => {
+				const currentCandidateNumVotes =
+					voteCountsThisRound[candidateId];
+
+				if (currentCandidateNumVotes < minVotes) {
+					minVotes = currentCandidateNumVotes;
+				}
+			});
+
+			const results = candidateIdsThisRound.map(id => {
+				const candidateNumVotesThisRound = voteCountsThisRound[id];
+				const isEliminated = candidateNumVotesThisRound === minVotes;
+				const percentage =
+					Math.round(
+						(candidateNumVotesThisRound * 10000) / numVotesThisRound
+					) / 100;
+
+				if (isEliminated) {
+					eliminated.push(id);
+					eliminatedThisRound.push(id);
+				}
+
+				if (percentage >= 50) {
+					if (winner) {
+						// This means a tie
+						winner = null;
+						complete = false;
+						isTie = true;
+					} else {
+						winner = id;
+						complete = true;
+						isTie = false;
+					}
+				}
+
+				return {
+					candidate: id,
+					eliminated: isEliminated,
+					percentage,
+					numVotes: candidateNumVotesThisRound
+				};
+			});
+
+			if (numVotesThisRound) {
+				rounds.push({
+					number,
+					numVotes: numVotesThisRound,
+					results,
+					eliminatedCandidates: eliminatedThisRound
+				});
+			} else {
+				complete = true;
+			}
+		}
+	}
+
+	return {
+		rounds,
+		winner,
+		numVotes,
+		isTie,
+		numEligibleVoters
+	};
+};
+
 ElectionSchema.statics.idLoader = findOneLoader('Election', '_id');
 
 mongoose.model('Election', ElectionSchema);

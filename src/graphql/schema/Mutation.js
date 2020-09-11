@@ -6,6 +6,6 @@ module.exports = gql`
 		login(idToken: String!): String
 		logout: Boolean
 
-		voteRunoff(electionId: String!, choices: [String!]!): RunoffVote
+		voteRunoff(electionId: String!, choices: [String!]!): Vote
 	}
 `;

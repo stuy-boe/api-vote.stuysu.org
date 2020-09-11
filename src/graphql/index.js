@@ -1,7 +1,6 @@
 const {
 	ApolloServer,
 	ApolloError,
-	ForbiddenError,
 	ValidationError
 } = require('apollo-server-express');
 const typeDefs = require('./schema');
