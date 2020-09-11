@@ -1,5 +1,7 @@
 const mongoose = require('mongoose');
 const shortid = require('shortid');
+const findOneLoader = require('../utils/findOneLoder');
+const findManyLoader = require('../utils/findManyLoader');
 
 const Schema = mongoose.Schema;
 
@@ -31,5 +33,15 @@ const CandidateSchema = new Schema({
 		instagram: String
 	}
 });
+
+CandidateSchema.methods.getElection = function () {
+	return mongoose.model('Election').idLoader.load(this.electionId);
+};
+
+CandidateSchema.statics.idLoader = findOneLoader('Candidate', '_id');
+CandidateSchema.statics.electionIdLoader = findManyLoader(
+	'Candidate',
+	'electionId'
+);
 
 mongoose.model('Candidate', CandidateSchema);

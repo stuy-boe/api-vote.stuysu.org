@@ -42,10 +42,13 @@ module.exports = async (
 		);
 	}
 
-	const voteId = crypto
-		.createHash('sha256')
-		.update(election.id + jwt.user.sub)
-		.digest('hex');
+	// The 'r-' prefix identifies a runoff vote
+	const voteId =
+		'r-' +
+		crypto
+			.createHash('sha256')
+			.update(election.id + jwt.user.sub)
+			.digest('hex');
 
 	const existingVote = await Vote.findById(voteId);
 

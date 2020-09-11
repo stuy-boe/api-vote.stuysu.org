@@ -70,7 +70,7 @@ const jwtValidator = async (req, res, next) => {
 	req.candidateManagerRequired = async (candidateId, fields) => {
 		const user = await req.getUser();
 
-		if (!user?.managesCandidates?.includes(candidateId)) {
+		if (!user?.candidatesManaged?.includes(candidateId)) {
 			if (fields) {
 				throw new ForbiddenError(
 					'You do not have permission to access one or more fields: ' +

@@ -1,6 +1,8 @@
 const { gql } = require('apollo-server-express');
 
 module.exports = gql`
+	union Vote = RunoffVote | PluralityVote
+
 	type Election {
 		id: String!
 		name: String
@@ -14,6 +16,9 @@ module.exports = gql`
 		allowDelete: Boolean
 		allowedGradYears: [Int!]
 		candidates: [Candidate]
+
+		userVote: Vote
+		canVote: Boolean
 
 		# This is only for a plurality election
 		numChoices: Int
