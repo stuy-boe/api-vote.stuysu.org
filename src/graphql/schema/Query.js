@@ -13,5 +13,7 @@ module.exports = gql`
 		authenticatedUser: User
 
 		date: DateTime
+
+		linkPreview(url: String!): LinkPreview
 	}
 `;

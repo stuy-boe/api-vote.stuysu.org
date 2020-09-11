@@ -19,9 +19,17 @@ const CandidateSchema = new Schema({
 	},
 	coverPic: {
 		publicId: String,
-		defaultUrl: String
+		width: Number,
+		height: Number,
+		mimetype: String
 	},
-	active: Boolean
+	active: Boolean,
+	social: {
+		facebook: String,
+		website: String,
+		email: String,
+		instagram: String
+	}
 });
 
 mongoose.model('Candidate', CandidateSchema);
