@@ -18,7 +18,7 @@ module.exports = gql`
 	type RunoffResult {
 		rounds: [RunoffRound]
 		winner: Candidate
-		numVotes: Int
+		numPeopleVoted: Int
 		isTie: Boolean
 		numEligibleVoters: Int
 	}

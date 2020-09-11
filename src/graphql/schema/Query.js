@@ -8,7 +8,7 @@ module.exports = gql`
 		election(id: String, url: String): Election
 
 		candidates(electionId: String!): [Candidate]
-		candidate(id: String, url: String): Candidate
+		candidate(id: String!): Candidate
 
 		authenticatedUser: User
 

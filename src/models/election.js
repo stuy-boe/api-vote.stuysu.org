@@ -51,7 +51,7 @@ ElectionSchema.methods.calculateRunoffResults = async function () {
 	const rounds = [];
 	let winner = null;
 	let isTie = false;
-	let numVotes = votes.length;
+	let numPeopleVoted = votes.length;
 
 	const eliminated = [];
 
@@ -151,8 +151,69 @@ ElectionSchema.methods.calculateRunoffResults = async function () {
 	return {
 		rounds,
 		winner,
-		numVotes,
+		numPeopleVoted,
 		isTie,
+		numEligibleVoters
+	};
+};
+
+ElectionSchema.methods.calculatePluralityResults = async function () {
+	const votes = await mongoose.model('Vote').electionIdLoader.load(this._id);
+	const numEligibleVoters = await mongoose.model('User').count({
+		gradYear: { $in: this.allowedGradYears }
+	});
+
+	let winner = null;
+	let isTie = false;
+
+	const candidates = await mongoose
+		.model('Candidate')
+		.electionIdLoader.load(this._id);
+
+	const candidateVoteMap = {};
+
+	candidates.forEach(candidate => {
+		candidateVoteMap[candidate._id] = 0;
+	});
+
+	let numVotes = 0;
+	const numPeopleVoted = votes.length;
+
+	votes.forEach(vote => {
+		vote.choices.forEach(id => {
+			candidateVoteMap[id]++;
+			numVotes++;
+		});
+	});
+
+	let mostVotes = 0;
+
+	const results = candidates.map(candidate => {
+		const voteCount = candidateVoteMap[candidate._id];
+
+		if (voteCount === mostVotes) {
+			isTie = true;
+			winner = null;
+		}
+
+		if (voteCount > mostVotes) {
+			isTie = false;
+			winner = candidate._id;
+		}
+
+		return {
+			candidate: candidate._id,
+			numVotes: voteCount,
+			percentage: Math.floor((voteCount * 10000) / numVotes) / 100
+		};
+	});
+
+	return {
+		winner,
+		isTie,
+		results,
+		numVotes,
+		numPeopleVoted,
 		numEligibleVoters
 	};
 };

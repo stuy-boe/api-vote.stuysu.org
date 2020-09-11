@@ -10,7 +10,9 @@ module.exports = gql`
 	type PluralityResult {
 		results: [PluralityCandidateResult]
 		winner: Candidate
+		isTie: Boolean
 		numVotes: Int
+		numPeopleVoted: Int
 		numEligibleVoters: Int
 	}
 `;
