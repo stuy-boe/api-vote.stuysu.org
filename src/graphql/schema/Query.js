@@ -12,6 +12,8 @@ module.exports = gql`
 
 		authenticatedUser: User
 
+		updates(electionId: String, candidateId: String): [Update]
+
 		date: DateTime
 
 		linkPreview(url: String!): LinkPreview
