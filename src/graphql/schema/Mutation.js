@@ -22,7 +22,7 @@ module.exports = gql`
 
 		alterUpdateApproval(
 			updateId: String!
-			approval: String!
+			status: String!
 			message: String
 		): Update
 
