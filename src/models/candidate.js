@@ -31,7 +31,12 @@ const CandidateSchema = new Schema({
 		website: String,
 		email: String,
 		instagram: String
-	}
+	},
+	followers: [
+		{
+			userId: String
+		}
+	]
 });
 
 CandidateSchema.methods.getElection = function () {

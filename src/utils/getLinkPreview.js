@@ -1,41 +1,39 @@
 const normalizeUrl = require('normalize-url');
-const { getLinkPreview: getPreview } = require('link-preview-js');
+const ogs = require('open-graph-scraper');
+const { resolve: resolveUrl } = require('url');
 
 const getLinkPreview = url => {
-	let resolved = false;
-
-	url = normalizeUrl(url);
+	const normalizedUrl = normalizeUrl(url);
 
 	return new Promise(resolve => {
-		setTimeout(() => {
-			// If the result isn't returned in 5 seconds just send null to the user
-			// The function doesn't give us a way to set a timeout directly
-			if (!resolved) {
-				resolved = true;
-				resolve(null);
-			}
-		}, 5000);
+		ogs(
+			{
+				url: normalizedUrl,
+				// for some reason a timeout of 1000 equates to a timeout of 6 seconds
+				timeout: 1000,
+				headers: { 'user-agent': 'googlebot' }
+			},
+			(error, results) => {
+				const title = results?.ogTitle;
+				const description = results?.ogDescription;
+				const url = results?.requestUrl;
+				const ogImage = results?.ogImage?.url;
 
-		getPreview(url, {
-			imagesPropertyType: 'og',
-			headers: {
-				'user-agent': 'googlebot',
-				'Accept-Language': 'en-US',
-				'Keep-Alive': 'timeout=5, max=5'
+				const image = ogImage ? resolveUrl(
+					results?.requestUrl,
+					results?.ogImage?.url
+				) : undefined;
+				const siteName = results?.ogSiteName;
+
+				resolve({
+					title,
+					description,
+					url,
+					image,
+					siteName
+				});
 			}
-		})
-			.then(data => {
-				if (!resolved) {
-					resolved = true;
-					resolve(data);
-				}
-			})
-			.catch(er => {
-				if (!resolved) {
-					resolved = true;
-					resolve(null);
-				}
-			});
+		);
 	});
 };
 

@@ -18,7 +18,7 @@ const UpdateSchema = new Schema({
 	link: {
 		title: String,
 		description: String,
-		picture: String,
+		image: String,
 		url: String,
 		siteName: String
 	},

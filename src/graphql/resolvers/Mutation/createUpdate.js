@@ -4,13 +4,13 @@ const uploadPicStream = require('../../../utils/uploadPicStream');
 const { CLOUDINARY_PREFIX } = require('../../../constants');
 const Update = mongoose.model('Update');
 const Candidate = mongoose.model('Candidate');
-const { UserInputError } = require('apollo-server-express');
+const { UserInputError, ApolloError } = require('apollo-server-express');
 const shortid = require('shortid');
 
 module.exports = async (
 	root,
 	{ title, content, link, pictures, candidateId },
-	{ jwt, authenticationRequired, candidateManagerRequired }
+	{ authenticationRequired, candidateManagerRequired }
 ) => {
 	authenticationRequired();
 	await candidateManagerRequired(candidateId);
@@ -29,23 +29,10 @@ module.exports = async (
 
 	const candidate = await Candidate.idLoader.load(candidateId);
 
-	const linkPreview = await getLinkPreview(link);
-
-	if (linkPreview) {
-		const { title, description, siteName, images } = linkPreview;
-		link = {
-			title,
-			description,
-			siteName,
-			picture: (images || [])[0]
-		};
-	} else {
-		link = undefined;
-	}
-
+	let linkPreview;
 	const uploadedPics = [];
 
-	if (pictures) {
+	if (pictures?.length) {
 		pictures = await pictures;
 
 		for (let i = 0; i < pictures.length; i++) {
@@ -73,6 +60,15 @@ module.exports = async (
 				mimetype: pic.mimetype
 			});
 		}
+	} else {
+		// Then check to see if we can add a link preview to the request
+		if(link){
+			const preview = await getLinkPreview(link);
+			// These two fields are mandatory and we won't accept link previews that don't have them
+			if( preview.title && preview.image){
+				linkPreview = preview;
+			}
+		}
 	}
 
 	return await Update.create({
@@ -81,7 +77,7 @@ module.exports = async (
 		showOnHome: true,
 		title,
 		content,
-		link,
+		link: linkPreview,
 		pictures: uploadedPics,
 		// Status is either 'approved', 'rejected', or 'pending'
 		approval: {
