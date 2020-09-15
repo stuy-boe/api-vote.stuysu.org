@@ -3,7 +3,6 @@ const calcGrade = require('../../../utils/calcGrade');
 
 const mongoose = require('mongoose');
 const Election = mongoose.model('Election');
-const Candidate = mongoose.model('Candidate');
 
 module.exports = async (
 	root,
@@ -13,7 +12,7 @@ module.exports = async (
 	authenticationRequired();
 
 	const election = await Election.findOne({ _id: electionId })
-		.select('+runoffVotes')
+		.select('+pluralityVotes')
 		.exec();
 
 	if (!election) {
@@ -23,9 +22,9 @@ module.exports = async (
 		);
 	}
 
-	if (election.type !== 'runoff') {
+	if (election.type !== 'plurality') {
 		throw new ForbiddenError(
-			'This is not a runoff election and you cannot submit a runoff vote for it.'
+			'This is not a plurality election and you cannot submit a plurality vote for it.'
 		);
 	}
 
@@ -55,29 +54,32 @@ module.exports = async (
 		);
 	}
 
-	const candidates = await Candidate.find({ electionId });
+	const candidates = await election.getCandidates();
 
-	// Get rid of candidates that don't exist
-	const cleanChoices = choices.filter(choice =>
+	let cleanChoices;
+
+	if (!election.countDuplicates) {
+		cleanChoices = Array.from(new Set(choices));
+	}
+
+	cleanChoices = cleanChoices.filter(choice =>
 		candidates.some(candidate => candidate._id === choice)
 	);
 
-	if (!cleanChoices.length) {
+	if (cleanChoices.length > election.numChoices) {
 		throw new ForbiddenError(
-			'You must select at least one candidate to vote for'
+			`You are only allowed to vote for at most ${election.numChoices} candidates in this election.`
 		);
 	}
 
-	if (!election.runoffVotes) {
-		election.runoffVotes = [];
+	if (!election.pluralityVotes) {
+		election.pluralityVotes = [];
 	}
 
-	const vote = {
+	election.pluralityVotes.push({
 		grade: calcGrade(user.gradYear),
 		choices: cleanChoices
-	};
-
-	election.runoffVotes.push(vote);
+	});
 
 	await election.save();
 

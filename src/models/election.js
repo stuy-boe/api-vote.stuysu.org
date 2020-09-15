@@ -23,6 +23,10 @@ const ElectionSchema = new Schema({
 	runoffVotes: {
 		type: [
 			{
+				_id: {
+					type: String,
+					default: shortid.generate
+				},
 				grade: Number,
 				choices: [String]
 			}
@@ -32,6 +36,10 @@ const ElectionSchema = new Schema({
 	pluralityVotes: {
 		type: [
 			{
+				_id: {
+					type: String,
+					default: shortid.generate
+				},
 				grade: Number,
 				choices: [String]
 			}
@@ -40,8 +48,17 @@ const ElectionSchema = new Schema({
 	},
 	allowedGradYears: [Number],
 	complete: { type: Boolean, default: false },
-	numChoices: Number
+	numChoices: Number,
+	countDuplicates: {
+		type: Boolean,
+		default: false
+	}
 });
+
+ElectionSchema.methods.isVotingPeriod = function () {
+	const now = new Date();
+	return this.start < now && this.end > now;
+};
 
 ElectionSchema.methods.getCandidates = function () {
 	return mongoose.model('Candidate').electionIdLoader.load(this._id);
@@ -51,19 +68,25 @@ ElectionSchema.methods.getUpdates = function () {
 	return mongoose.model('Update').electionIdLoader.load(this._id);
 };
 
+ElectionSchema.methods.getNumEligibleVoters = function () {
+	return mongoose.model('User').countDocuments({
+		gradYear: { $in: this.allowedGradYears }
+	});
+};
+
 ElectionSchema.methods.calculateRunoffResults = async function () {
 	let votes = this.runoffVotes;
 	if (!votes) {
-		let election = await ElectionSchema.findOne({ _id: this._id })
+		let election = await mongoose
+			.model('Election')
+			.findOne({ _id: this._id })
 			.select('+runoffVotes')
 			.exec();
 
-		votes = election.runoffVotes;
+		votes = election.runoffVotes || [];
 	}
 
-	const numEligibleVoters = await mongoose.model('User').count({
-		gradYear: { $in: this.allowedGradYears }
-	});
+	const numEligibleVoters = await this.getNumEligibleVoters();
 	const candidates = await mongoose
 		.model('Candidate')
 		.electionIdLoader.load(this._id);
@@ -180,16 +203,15 @@ ElectionSchema.methods.calculateRunoffResults = async function () {
 ElectionSchema.methods.calculatePluralityResults = async function () {
 	let votes = this.pluralityVotes;
 	if (!votes) {
-		let election = await ElectionSchema.findOne({ _id: this._id })
+		let election = await mongoose
+			.model('Election')
+			.findOne({ _id: this._id })
 			.select('+pluralityVotes')
 			.exec();
 
-		votes = election.runoffVotes;
+		votes = election.pluralityVotes || [];
 	}
-	const numEligibleVoters = await mongoose.model('User').count({
-		gradYear: { $in: this.allowedGradYears }
-	});
-
+	const numEligibleVoters = await this.getNumEligibleVoters();
 	let winner = null;
 	let isTie = false;
 
@@ -226,6 +248,7 @@ ElectionSchema.methods.calculatePluralityResults = async function () {
 		if (voteCount > mostVotes) {
 			isTie = false;
 			winner = candidate._id;
+			mostVotes = voteCount;
 		}
 
 		return {

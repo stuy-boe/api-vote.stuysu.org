@@ -38,4 +38,13 @@ UserSchema.methods.getCandidatesManaged = function () {
 	);
 };
 
+UserSchema.methods.saveHasVoted = function (electionId) {
+	if (!this.votedFor) {
+		this.votedFor = [];
+	}
+
+	this.votedFor.push(electionId);
+	return this.save();
+};
+
 mongoose.model('User', UserSchema);
