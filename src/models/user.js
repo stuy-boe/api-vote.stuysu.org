@@ -15,6 +15,9 @@ const UserSchema = new Schema({
 	gradYear: { type: Number, required: false },
 	adminRoles: [String],
 
+	// Array of elections the user has voted for
+	votedFor: [String],
+
 	// An array of ids of candidates that they are managers for
 	candidatesManaged: [String]
 });

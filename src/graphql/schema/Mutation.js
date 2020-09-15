@@ -26,8 +26,7 @@ module.exports = gql`
 			message: String
 		): Update
 
-		voteRunoff(electionId: String!, choices: [String!]!): Vote
-
+		voteRunoff(electionId: String!, choices: [String!]!): Boolean
 		follow(candidateId: String!): Boolean
 		unfollow(candidateId: String!): Boolean
 	}

@@ -20,10 +20,26 @@ const ElectionSchema = new Schema({
 		height: Number,
 		mimetype: String
 	},
+	runoffVotes: {
+		type: [
+			{
+				grade: Number,
+				choices: [String]
+			}
+		],
+		select: false
+	},
+	pluralityVotes: {
+		type: [
+			{
+				grade: Number,
+				choices: [String]
+			}
+		],
+		select: false
+	},
 	allowedGradYears: [Number],
 	complete: { type: Boolean, default: false },
-	allowEdit: { type: Boolean, default: false },
-	allowDelete: { type: Boolean, default: false },
 	numChoices: Number
 });
 
@@ -31,16 +47,20 @@ ElectionSchema.methods.getCandidates = function () {
 	return mongoose.model('Candidate').electionIdLoader.load(this._id);
 };
 
-ElectionSchema.methods.getVotes = function () {
-	return mongoose.model('Vote').electionIdLoader.load(this._id);
-};
-
 ElectionSchema.methods.getUpdates = function () {
 	return mongoose.model('Update').electionIdLoader.load(this._id);
 };
 
 ElectionSchema.methods.calculateRunoffResults = async function () {
-	const votes = await mongoose.model('Vote').electionIdLoader.load(this._id);
+	let votes = this.runoffVotes;
+	if (!votes) {
+		let election = await ElectionSchema.findOne({ _id: this._id })
+			.select('+runoffVotes')
+			.exec();
+
+		votes = election.runoffVotes;
+	}
+
 	const numEligibleVoters = await mongoose.model('User').count({
 		gradYear: { $in: this.allowedGradYears }
 	});
@@ -158,7 +178,14 @@ ElectionSchema.methods.calculateRunoffResults = async function () {
 };
 
 ElectionSchema.methods.calculatePluralityResults = async function () {
-	const votes = await mongoose.model('Vote').electionIdLoader.load(this._id);
+	let votes = this.pluralityVotes;
+	if (!votes) {
+		let election = await ElectionSchema.findOne({ _id: this._id })
+			.select('+pluralityVotes')
+			.exec();
+
+		votes = election.runoffVotes;
+	}
 	const numEligibleVoters = await mongoose.model('User').count({
 		gradYear: { $in: this.allowedGradYears }
 	});

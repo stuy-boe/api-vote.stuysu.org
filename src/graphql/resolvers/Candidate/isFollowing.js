@@ -3,7 +3,7 @@ module.exports = (candidate, args, jwt) => {
 		return null;
 	}
 
-	return candidate.followers.some(
+	return candidate.followers?.some(
 		follower => follower.userId === jwt.user.id
 	);
 };

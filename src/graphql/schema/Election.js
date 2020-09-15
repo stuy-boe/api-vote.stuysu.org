@@ -10,8 +10,6 @@ module.exports = gql`
 		end: DateTime
 		picture: CloudinaryPicture
 		complete: Boolean
-		allowEdit: Boolean
-		allowDelete: Boolean
 		allowedGradYears: [Int!]
 		candidates: [Candidate]
 
@@ -21,7 +19,7 @@ module.exports = gql`
 		runoffResults: RunoffResult
 		pluralityResults: PluralityResult
 
-		userVote: Vote
+		hasVoted: Boolean
 
 		# This is only for a plurality election
 		numChoices: Int

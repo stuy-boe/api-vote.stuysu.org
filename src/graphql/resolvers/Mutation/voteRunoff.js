@@ -1,20 +1,20 @@
 const { ApolloError, ForbiddenError } = require('apollo-server-express');
-const crypto = require('crypto');
 const calcGrade = require('../../../utils/calcGrade');
 
 const mongoose = require('mongoose');
 const Election = mongoose.model('Election');
-const Vote = mongoose.model('Vote');
-const User = mongoose.model('User');
+const Candidate = mongoose.model('Candidate');
 
 module.exports = async (
 	root,
 	{ electionId, choices },
-	{ authenticationRequired, getUser, jwt }
+	{ authenticationRequired, getUser }
 ) => {
 	authenticationRequired();
 
-	const election = await Election.findById(electionId);
+	const election = await Election.findOne({ _id: electionId })
+		.select('+runoffVotes')
+		.exec();
 
 	if (!election) {
 		throw new ApolloError(
@@ -42,15 +42,7 @@ module.exports = async (
 		);
 	}
 
-	// The 'r-' prefix identifies a runoff vote
-	const voteId =
-		'r-' +
-		crypto
-			.createHash('sha256')
-			.update(election.id + jwt.user.sub)
-			.digest('hex');
-
-	const existingVote = await Vote.findById(voteId);
+	const existingVote = await user?.votedFor?.includes(election._id);
 
 	if (existingVote) {
 		throw new ApolloError(
@@ -59,10 +51,31 @@ module.exports = async (
 		);
 	}
 
-	return Vote.create({
-		_id: voteId,
-		choices,
-		electionId: election.id,
-		grade: calcGrade(user.gradYear)
-	});
+	const candidates = await Candidate.find({ electionId });
+
+	// Get rid of candidates that don't exist
+	const cleanChoices = choices.filter(choice =>
+		candidates.some(candidate => candidate._id === choice)
+	);
+
+	if (!cleanChoices.length) {
+		throw new ForbiddenError(
+			'You must select at least one candidate to vote for'
+		);
+	}
+
+	if (!election.runoffVotes) {
+		election.runoffVotes = [];
+	}
+
+	const vote = {
+		grade: calcGrade(user.gradYear),
+		choices: cleanChoices
+	};
+
+	election.runoffVotes.push(vote);
+
+	await election.save();
+
+	return vote;
 };
