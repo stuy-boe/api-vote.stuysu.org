@@ -11,6 +11,8 @@ module.exports = gql`
 		coverPic: CloudinaryPicture
 		updates: [Update]
 
+		isFollowing: Boolean
+
 		isManager: Boolean
 		active: Boolean
 	}
