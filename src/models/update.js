@@ -30,6 +30,8 @@ const UpdateSchema = new Schema({
 			mimetype: String
 		}
 	],
+	official: Boolean,
+	pinned: Boolean,
 	// Status is either 'approved', 'rejected', or 'pending'
 	approval: {
 		status: String,

@@ -11,7 +11,19 @@ module.exports = gql`
 			content: String!
 			link: String
 			pictures: [Upload!]
-			candidateId: String!
+			candidateId: String
+
+			# Only for official posts
+			electionId: String
+			official: Boolean
+			# This option will only be respected if the post is made by an admin
+			pinned: Boolean
+		): Update
+
+		alterUpdateApproval(
+			updateId: String!
+			approval: String!
+			message: String
 		): Update
 
 		voteRunoff(electionId: String!, choices: [String!]!): Vote

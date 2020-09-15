@@ -14,6 +14,8 @@ module.exports = gql`
 		showOnHome: Boolean
 		title: String
 		content: String
+		official: Boolean
+		pinned: Boolean
 		link: LinkPreview
 		pictures: [CloudinaryPicture]
 		approval: UpdateApproval
