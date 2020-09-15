@@ -23,5 +23,10 @@ module.exports = async (
 	);
 
 	if (followIndex !== -1) {
+		candidate.followers.splice(followIndex, 1);
 	}
+
+	await candidate.save();
+
+	return true;
 };
