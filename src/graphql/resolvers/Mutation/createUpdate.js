@@ -83,14 +83,14 @@ module.exports = async (
 				mimetype: pic.mimetype
 			});
 		}
-	} else {
-		// Then check to see if we can add a link preview to the request
-		if (link) {
-			const preview = await getLinkPreview(link);
-			// These two fields are mandatory and we won't accept link previews that don't have them
-			if (preview.title && preview.image) {
-				linkPreview = preview;
-			}
+	}
+
+	// Check to see if we can add a link preview to the request
+	if (link) {
+		const preview = await getLinkPreview(link);
+		// These two fields are mandatory and we won't accept link previews that don't have them
+		if (preview.title && preview.image) {
+			linkPreview = preview;
 		}
 	}
 
