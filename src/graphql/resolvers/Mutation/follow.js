@@ -7,8 +7,6 @@ module.exports = async (
 	{ candidateId },
 	{ jwt, autheticationRequired }
 ) => {
-	blocked;
-
 	autheticationRequired();
 
 	const candidate = await Candidate.findById(candidateId);
