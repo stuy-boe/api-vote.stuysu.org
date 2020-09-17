@@ -4,29 +4,27 @@ jobs:
   build-on-mongo:
     runs-on: ${{ matrix.os }}
     env:
-      MONGO_URL: mongodb+srv://root:password@localhost:27017/vote-stuysu-org
       MONGO_INITDB_ROOT_USERNAME: root
       MONGO_INITDB_ROOT_PASSWORD: password
       MONGO_INITDB_DATABASE: vote-stuysu-org
-
     services:
       mongo:
         image: mongo
         ports:
           # Maps tcp port 5432 on service container to the host
           - 27017:27017
-
     strategy:
       matrix:
-        node-version: [14.7]
         os: [ubuntu-20.04]
     steps:
       - uses: actions/checkout@v2
-
+      - uses: actions/setup-node@v1
+        with:
+          node-version: '14.x'
       - name: Cache node modules
         uses: actions/cache@v1
         env:
-          cache-name: cache-node-modules-postgres
+          cache-name: cache-node-modules
         with:
           path: ~/.npm # npm cache files are stored in `~/.npm` on Linux/macOS
           key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/package-lock.json') }}
@@ -39,3 +37,5 @@ jobs:
 
       - name: Test
         run: npm test
+        env:
+          MONGO_URL: mongodb://root:password@localhost:27017/vote-stuysu-org
