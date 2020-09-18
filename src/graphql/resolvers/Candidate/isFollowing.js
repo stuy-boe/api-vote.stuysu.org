@@ -1,4 +1,4 @@
-module.exports = (candidate, args, jwt) => {
+module.exports = (candidate, args, { jwt }) => {
 	if (!jwt) {
 		return null;
 	}
