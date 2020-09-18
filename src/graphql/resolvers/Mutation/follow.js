@@ -5,9 +5,9 @@ const Candidate = mongoose.model('Candidate');
 module.exports = async (
 	root,
 	{ candidateId },
-	{ jwt, autheticationRequired }
+	{ jwt, authenticationRequired }
 ) => {
-	autheticationRequired();
+	authenticationRequired();
 
 	const candidate = await Candidate.findById(candidateId);
 
