@@ -17,6 +17,7 @@ const ComplexityLimitRule = createComplexityLimitRule(75000, {
 const apolloServer = new ApolloServer({
 	typeDefs,
 	resolvers,
+	uploads: false,
 	context: ({ req, res }) => {
 		return {
 			cookies: req.cookies,

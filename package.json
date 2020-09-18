@@ -37,6 +37,7 @@
 		"honeybadger": "^1.4.0",
 		"ip-range-check": "^0.2.0",
 		"jsonwebtoken": "^8.5.1",
+		"linkifyjs": "^2.1.9",
 		"moment": "^2.28.0",
 		"moment-timezone": "^0.5.31",
 		"mongoose": "^5.10.5",
