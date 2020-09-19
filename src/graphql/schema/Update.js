@@ -19,5 +19,6 @@ module.exports = gql`
 		link: LinkPreview
 		pictures: [CloudinaryPicture]
 		approval: UpdateApproval
+		createdAt: DateTime
 	}
 `;
