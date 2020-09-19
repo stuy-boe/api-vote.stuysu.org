@@ -9,10 +9,9 @@ module.exports = async (root, { electionId, candidateId }) => {
 	}
 
 	if (candidateId) {
-		return Update.find(
-			{ candidateId },
-			{ sort: { createdAt: 'desc' } }
-		).exec();
+		return await Update.find({ candidateId }, null, {
+			sort: { createdAt: 'desc' }
+		}).exec();
 	}
 
 	let updates = await Update.find(queryObj);
