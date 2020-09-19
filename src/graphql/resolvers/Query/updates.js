@@ -9,7 +9,10 @@ module.exports = async (root, { electionId, candidateId }) => {
 	}
 
 	if (candidateId) {
-		queryObj.candidateId = candidateId;
+		return Update.find(
+			{ candidateId },
+			{ sort: { createdAt: 'desc' } }
+		).exec();
 	}
 
 	let updates = await Update.find(queryObj);
