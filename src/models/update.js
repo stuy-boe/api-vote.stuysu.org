@@ -45,7 +45,9 @@ UpdateSchema.statics.idLoader = findOneLoader('Update', '_id');
 UpdateSchema.statics.electionIdLoader = findManyLoader('Update', 'electionId');
 UpdateSchema.statics.candidateIdLoader = findManyLoader(
 	'Update',
-	'candidateId'
+	'candidateId',
+	{},
+	[null, { sort: { createdAt: 'desc' } }]
 );
 
 UpdateSchema.methods.getElection = function () {

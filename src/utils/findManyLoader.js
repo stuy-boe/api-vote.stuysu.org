@@ -1,7 +1,7 @@
 const Dataloader = require('dataloader');
 const mongoose = require('mongoose');
 
-const findManyLoader = (model, field, conditions = {}) =>
+const findManyLoader = (model, field, conditions = {}, extraParams = []) =>
 	new Dataloader(
 		async keys => {
 			const Model = mongoose.model(model);
@@ -9,10 +9,13 @@ const findManyLoader = (model, field, conditions = {}) =>
 			const keyMap = {};
 
 			const uniqueKeys = [...new Set(keys)];
-			const entries = await Model.find({
-				[field]: { $in: uniqueKeys },
-				...conditions
-			});
+			const entries = await Model.find(
+				{
+					[field]: { $in: uniqueKeys },
+					...conditions
+				},
+				...extraParams
+			);
 
 			for (let x = 0; x < entries.length; x++) {
 				const entry = entries[x];
