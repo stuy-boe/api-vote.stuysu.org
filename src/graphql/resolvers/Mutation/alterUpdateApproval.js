@@ -18,7 +18,7 @@ module.exports = async (
 	authenticationRequired();
 	await adminRoleRequired('updates');
 
-	const update = Update.findById(updateId);
+	const update = await Update.findById(updateId);
 
 	if (!update) {
 		throw new ApolloError("There's no update with that ID", 'ID_NOT_FOUND');
@@ -28,6 +28,10 @@ module.exports = async (
 		throw new UserInputError('That status is not valid. ', {
 			invalidArgs: ['status']
 		});
+	}
+
+	if (!update.approval) {
+		update.approval = {};
 	}
 
 	update.approval.status = status;

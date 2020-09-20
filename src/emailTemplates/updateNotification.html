@@ -3,8 +3,9 @@
 	<body>
 		<div style="text-align: center;">
 			<img
-				src="{{ PUBLIC_URL }}/img/logo192.png"
+				src="{{ PUBLIC_URL }}/img/logo512.png"
 				alt="Board of Elections Logo"
+				style="width: 200px; max-width: 70%;"
 			/>
 		</div>
 		<h3>Hi {{ user.firstName }}</h3>
@@ -16,7 +17,7 @@
 			>. Here is a preview of the update:
 		</p>
 
-		{{ preview }}
+		{{ preview | safe }}
 		<footer style="text-align: center;">
 			<p style="font-size: small; color: grey;">
 				You received this email because you are following {{
