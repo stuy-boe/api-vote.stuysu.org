@@ -26,6 +26,9 @@ module.exports = gql`
 			message: String
 		): Update
 
+		alterProfilePic(candidateId: String!, picture: Upload!): Candidate
+		alterCoverPic(candidateId: String!, picture: Upload!): Candidate
+
 		voteRunoff(electionId: String!, choices: [String!]!): Boolean
 		votePlurality(electionId: String!, choices: [String!]!): Boolean
 
