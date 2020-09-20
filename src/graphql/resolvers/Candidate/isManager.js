@@ -5,5 +5,5 @@ module.exports = async (candidate, args, { getUser, jwt }) => {
 
 	const user = await getUser();
 
-	return user.candidatesManaged.includes(candidate._id);
+	return user?.candidatesManaged?.includes(candidate._id) || false;
 };
