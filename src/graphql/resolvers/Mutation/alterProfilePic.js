@@ -14,7 +14,7 @@ module.exports = async (
 	await candidateManagerRequired(candidateId);
 	const pic = await picture;
 
-	const candidate = Candidate.findById(candidateId);
+	const candidate = await Candidate.findById(candidateId);
 
 	if (!pic.mimetype || !pic.mimetype.startsWith('image/')) {
 		throw new UserInputError(
