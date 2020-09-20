@@ -11,3 +11,5 @@ exports.GOOGLE_CLIENT_ID =
 exports.NODE_ENV = process.env.NODE_ENV || 'development';
 
 exports.CLOUDINARY_PREFIX = process.env.CLOUDINARY_PREFIX || 'vote.stuysu.org';
+
+exports.MAILER_URL = process.env.MAILER_URL;

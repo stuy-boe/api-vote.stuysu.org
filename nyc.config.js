@@ -1,3 +1,3 @@
 module.exports = {
-	exclude: ['client/', 'database/index.js']
+	exclude: ['database/index.js']
 };
