@@ -13,3 +13,5 @@ exports.NODE_ENV = process.env.NODE_ENV || 'development';
 exports.CLOUDINARY_PREFIX = process.env.CLOUDINARY_PREFIX || 'vote.stuysu.org';
 
 exports.MAILER_URL = process.env.MAILER_URL;
+
+exports.PUBLIC_URL = process.env.PUBLIC_URL || 'https://vote.stuysu.org';

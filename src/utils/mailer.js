@@ -1,5 +1,5 @@
 const nodemailer = require('nodemailer');
-const { MAILER_URL } = require('../constants');
+const { MAILER_URL, PUBLIC_URL } = require('../constants');
 const nunjucks = require('nunjucks');
 const path = require('path');
 const { parse } = require('node-html-parser');
@@ -25,7 +25,6 @@ class Mailer {
 
 				const testAccount = await nodemailer.createTestAccount();
 
-				// create reusable transporter object using the default SMTP transport
 				this.transporter = nodemailer.createTransport({
 					host: 'smtp.ethereal.email',
 					port: 465,
@@ -59,7 +58,11 @@ class Mailer {
 		const transporter = await this.getTransporter();
 
 		const { to, subject, cc, bcc } = options;
-		const html = nunjucks.render(template, context);
+		const html = nunjucks.render(template, {
+			PUBLIC_URL,
+			...context
+		});
+
 		const text = parse(html).structuredText;
 
 		transporter.sendMail({
