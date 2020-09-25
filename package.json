@@ -42,6 +42,7 @@
 		"moment": "^2.28.0",
 		"moment-timezone": "^0.5.31",
 		"mongoose": "^5.10.6",
+		"mongoose-int32": "^0.4.1",
 		"morgan": "^1.10.0",
 		"node-html-parser": "^1.2.20",
 		"nodemailer": "^6.4.11",

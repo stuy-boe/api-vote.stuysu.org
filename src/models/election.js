@@ -69,8 +69,13 @@ ElectionSchema.methods.getUpdates = function () {
 };
 
 ElectionSchema.methods.getNumEligibleVoters = function () {
+	const allowedGradYears = [
+		...this.allowedGradYears,
+		...this.allowedGradYears.map(i => i.toString())
+	];
+
 	return mongoose.model('User').countDocuments({
-		gradYear: { $in: this.allowedGradYears }
+		gradYear: { $in: allowedGradYears }
 	});
 };
 
