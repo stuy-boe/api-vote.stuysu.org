@@ -46,7 +46,7 @@
 		"morgan": "^1.10.0",
 		"node-html-parser": "^1.2.20",
 		"nodemailer": "^6.4.11",
-		"normalize-url": "^5.1.0",
+		"normalize-url": "^5.2.0",
 		"nunjucks": "^3.2.2",
 		"open-graph-scraper": "^4.6.0",
 		"set-cookie-parser": "^2.4.6",
