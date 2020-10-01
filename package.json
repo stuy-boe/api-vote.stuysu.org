@@ -45,7 +45,7 @@
 		"mongoose-int32": "^0.4.1",
 		"morgan": "^1.10.0",
 		"node-html-parser": "^1.2.20",
-		"nodemailer": "^6.4.11",
+		"nodemailer": "^6.4.12",
 		"normalize-url": "^5.1.0",
 		"nunjucks": "^3.2.2",
 		"open-graph-scraper": "^4.6.0",
