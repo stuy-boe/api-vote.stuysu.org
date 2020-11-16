@@ -184,6 +184,8 @@ ElectionSchema.methods.calculateRunoffResults = async function () {
 			});
 
 			if (numVotesThisRound) {
+				results.sort((a, b) => b.numVotes - a.numVotes);
+
 				rounds.push({
 					number,
 					numVotes: numVotesThisRound,
