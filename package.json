@@ -51,7 +51,7 @@
 		"open-graph-scraper": "^4.7.0",
 		"set-cookie-parser": "^2.4.6",
 		"shortid": "^2.2.16",
-		"sinon": "^9.2.1",
+		"sinon": "^9.2.2",
 		"sinon-chai": "^3.5.0",
 		"supertest": "^6.0.1",
 		"sync-request": "^6.1.0",
