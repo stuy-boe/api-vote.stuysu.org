@@ -41,7 +41,7 @@
 		"markdown-it": "^12.0.2",
 		"moment": "^2.29.1",
 		"moment-timezone": "^0.5.31",
-		"mongoose": "^5.10.14",
+		"mongoose": "^5.12.6",
 		"mongoose-int32": "^0.4.1",
 		"morgan": "^1.10.0",
 		"nodemailer": "^6.4.14",
